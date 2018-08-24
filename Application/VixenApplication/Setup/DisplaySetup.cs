@@ -135,7 +135,7 @@ namespace VixenApplication
 
 			tableLayoutPanelPatchingSetup.Controls.Clear();
 			tableLayoutPanelPatchingSetup.Controls.Add(control.SetupPatchingControl);
-
+			control.SetupPatchingControl.Dock = DockStyle.Fill;
 
 			if (_currentControllersControl == null) {
 				control.UpdateControllerSelection(new ControllersAndOutputsSet());
@@ -180,6 +180,7 @@ namespace VixenApplication
 
 			//tableLayoutPanelControllerSetup.Controls.Clear();
 			tableLayoutPanelControllerSetup.Controls.Add(control.SetupControllersControl,0,2);
+			control.SetupControllersControl.Dock = DockStyle.Fill;
 
 			//control.UpdatePatching();  //On load does this 
 		}

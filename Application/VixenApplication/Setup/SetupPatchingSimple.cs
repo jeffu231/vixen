@@ -635,7 +635,6 @@ namespace VixenApplication.Setup
 		{
 			ThemeGroupBoxRenderer.GroupBoxesDrawBorder(sender, e, Font);
 		}
-
 	}
 
 	public class PatchStatusItem<T>

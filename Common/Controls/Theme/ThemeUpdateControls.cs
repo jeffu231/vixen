@@ -28,6 +28,7 @@ namespace Common.Controls.Theme
 			control.Font = StandardFont;
 			control.ForeColor = ThemeColorTable.ForeColor;
 			control.BackColor = ThemeColorTable.BackgroundColor;
+			control.Font = StandardFont;
 			foreach (Control c in control.Controls)
 			{
 				if (excludes != null && excludes.Contains(c)) continue;

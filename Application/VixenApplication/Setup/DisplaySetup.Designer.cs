@@ -33,14 +33,11 @@
 			this.elementLabel = new System.Windows.Forms.Label();
 			this.elementHeaderLineDivider = new System.Windows.Forms.Label();
 			this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-			this.patchingPaneFlowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
 			this.patchingHeaderTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
 			this.patchingHeaderLabel = new System.Windows.Forms.Label();
-			this.patchingHeaderLineDivider = new System.Windows.Forms.Label();
 			this.patchingHeaderViewChoiceTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
 			this.radioButtonPatchingSimple = new System.Windows.Forms.RadioButton();
 			this.radioButtonPatchingGraphical = new System.Windows.Forms.RadioButton();
-			this.tableLayoutPanelPatchingSetup = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanelControllerSetup = new System.Windows.Forms.TableLayoutPanel();
 			this.controllerHeaderTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
 			this.controllersHeaderLabel = new System.Windows.Forms.Label();
@@ -49,6 +46,9 @@
 			this.buttonOk = new System.Windows.Forms.Button();
 			this.buttonCancel = new System.Windows.Forms.Button();
 			this.controllerHeaderLineDivider = new System.Windows.Forms.Label();
+			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.tableLayoutPanelPatchingSetup = new System.Windows.Forms.TableLayoutPanel();
+			this.patchingHeaderLineDivider = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.Panel2.SuspendLayout();
@@ -59,12 +59,12 @@
 			this.splitContainer2.Panel1.SuspendLayout();
 			this.splitContainer2.Panel2.SuspendLayout();
 			this.splitContainer2.SuspendLayout();
-			this.patchingPaneFlowLayoutPanel.SuspendLayout();
 			this.patchingHeaderTableLayoutPanel.SuspendLayout();
 			this.patchingHeaderViewChoiceTableLayoutPanel.SuspendLayout();
 			this.tableLayoutPanelControllerSetup.SuspendLayout();
 			this.controllerHeaderTableLayoutPanel.SuspendLayout();
 			this.formOkCancelTableLayoutPanel.SuspendLayout();
+			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// splitContainer1
@@ -150,7 +150,7 @@
 			// 
 			// splitContainer2.Panel1
 			// 
-			this.splitContainer2.Panel1.Controls.Add(this.patchingPaneFlowLayoutPanel);
+			this.splitContainer2.Panel1.Controls.Add(this.tableLayoutPanel1);
 			// 
 			// splitContainer2.Panel2
 			// 
@@ -160,86 +160,58 @@
 			this.splitContainer2.SplitterWidth = 5;
 			this.splitContainer2.TabIndex = 0;
 			// 
-			// patchingPaneFlowLayoutPanel
-			// 
-			this.patchingPaneFlowLayoutPanel.AutoScroll = true;
-			this.patchingPaneFlowLayoutPanel.AutoSize = true;
-			this.patchingPaneFlowLayoutPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.patchingPaneFlowLayoutPanel.Controls.Add(this.patchingHeaderTableLayoutPanel);
-			this.patchingPaneFlowLayoutPanel.Controls.Add(this.patchingHeaderLineDivider);
-			this.patchingPaneFlowLayoutPanel.Controls.Add(this.patchingHeaderViewChoiceTableLayoutPanel);
-			this.patchingPaneFlowLayoutPanel.Controls.Add(this.tableLayoutPanelPatchingSetup);
-			this.patchingPaneFlowLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.patchingPaneFlowLayoutPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.patchingPaneFlowLayoutPanel.Location = new System.Drawing.Point(0, 0);
-			this.patchingPaneFlowLayoutPanel.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.patchingPaneFlowLayoutPanel.Name = "patchingPaneFlowLayoutPanel";
-			this.patchingPaneFlowLayoutPanel.Size = new System.Drawing.Size(519, 733);
-			this.patchingPaneFlowLayoutPanel.TabIndex = 9;
-			this.patchingPaneFlowLayoutPanel.WrapContents = false;
-			// 
 			// patchingHeaderTableLayoutPanel
 			// 
-			this.patchingHeaderTableLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
 			this.patchingHeaderTableLayoutPanel.AutoSize = true;
+			this.patchingHeaderTableLayoutPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.patchingHeaderTableLayoutPanel.ColumnCount = 3;
 			this.patchingHeaderTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
 			this.patchingHeaderTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
 			this.patchingHeaderTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
 			this.patchingHeaderTableLayoutPanel.Controls.Add(this.patchingHeaderLabel, 1, 0);
+			this.patchingHeaderTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.patchingHeaderTableLayoutPanel.Location = new System.Drawing.Point(3, 0);
 			this.patchingHeaderTableLayoutPanel.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
 			this.patchingHeaderTableLayoutPanel.Name = "patchingHeaderTableLayoutPanel";
 			this.patchingHeaderTableLayoutPanel.RowCount = 1;
 			this.patchingHeaderTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.patchingHeaderTableLayoutPanel.Size = new System.Drawing.Size(234, 25);
+			this.patchingHeaderTableLayoutPanel.Size = new System.Drawing.Size(513, 25);
 			this.patchingHeaderTableLayoutPanel.TabIndex = 8;
 			// 
 			// patchingHeaderLabel
 			// 
 			this.patchingHeaderLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
 			this.patchingHeaderLabel.AutoSize = true;
-			this.patchingHeaderLabel.Location = new System.Drawing.Point(90, 0);
+			this.patchingHeaderLabel.Location = new System.Drawing.Point(229, 0);
 			this.patchingHeaderLabel.Margin = new System.Windows.Forms.Padding(3, 0, 3, 10);
 			this.patchingHeaderLabel.Name = "patchingHeaderLabel";
 			this.patchingHeaderLabel.Size = new System.Drawing.Size(54, 15);
 			this.patchingHeaderLabel.TabIndex = 4;
 			this.patchingHeaderLabel.Text = "Patching";
 			// 
-			// patchingHeaderLineDivider
-			// 
-			this.patchingHeaderLineDivider.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.patchingHeaderLineDivider.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-			this.patchingHeaderLineDivider.Location = new System.Drawing.Point(3, 28);
-			this.patchingHeaderLineDivider.Name = "patchingHeaderLineDivider";
-			this.patchingHeaderLineDivider.Size = new System.Drawing.Size(234, 2);
-			this.patchingHeaderLineDivider.TabIndex = 6;
-			// 
 			// patchingHeaderViewChoiceTableLayoutPanel
 			// 
-			this.patchingHeaderViewChoiceTableLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
 			this.patchingHeaderViewChoiceTableLayoutPanel.AutoSize = true;
+			this.patchingHeaderViewChoiceTableLayoutPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.patchingHeaderViewChoiceTableLayoutPanel.ColumnCount = 2;
 			this.patchingHeaderViewChoiceTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.patchingHeaderViewChoiceTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.patchingHeaderViewChoiceTableLayoutPanel.Controls.Add(this.radioButtonPatchingSimple, 0, 0);
 			this.patchingHeaderViewChoiceTableLayoutPanel.Controls.Add(this.radioButtonPatchingGraphical, 1, 0);
+			this.patchingHeaderViewChoiceTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.patchingHeaderViewChoiceTableLayoutPanel.Location = new System.Drawing.Point(3, 44);
 			this.patchingHeaderViewChoiceTableLayoutPanel.Margin = new System.Windows.Forms.Padding(3, 14, 3, 3);
 			this.patchingHeaderViewChoiceTableLayoutPanel.Name = "patchingHeaderViewChoiceTableLayoutPanel";
 			this.patchingHeaderViewChoiceTableLayoutPanel.RowCount = 1;
 			this.patchingHeaderViewChoiceTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.patchingHeaderViewChoiceTableLayoutPanel.Size = new System.Drawing.Size(234, 25);
+			this.patchingHeaderViewChoiceTableLayoutPanel.Size = new System.Drawing.Size(513, 25);
 			this.patchingHeaderViewChoiceTableLayoutPanel.TabIndex = 5;
 			// 
 			// radioButtonPatchingSimple
 			// 
 			this.radioButtonPatchingSimple.Anchor = System.Windows.Forms.AnchorStyles.None;
 			this.radioButtonPatchingSimple.AutoSize = true;
-			this.radioButtonPatchingSimple.Location = new System.Drawing.Point(3, 3);
+			this.radioButtonPatchingSimple.Location = new System.Drawing.Point(72, 3);
 			this.radioButtonPatchingSimple.Name = "radioButtonPatchingSimple";
 			this.radioButtonPatchingSimple.Size = new System.Drawing.Size(111, 19);
 			this.radioButtonPatchingSimple.TabIndex = 3;
@@ -252,7 +224,7 @@
 			// 
 			this.radioButtonPatchingGraphical.Anchor = System.Windows.Forms.AnchorStyles.None;
 			this.radioButtonPatchingGraphical.AutoSize = true;
-			this.radioButtonPatchingGraphical.Location = new System.Drawing.Point(124, 3);
+			this.radioButtonPatchingGraphical.Location = new System.Drawing.Point(333, 3);
 			this.radioButtonPatchingGraphical.Name = "radioButtonPatchingGraphical";
 			this.radioButtonPatchingGraphical.Size = new System.Drawing.Size(103, 19);
 			this.radioButtonPatchingGraphical.TabIndex = 5;
@@ -260,18 +232,6 @@
 			this.radioButtonPatchingGraphical.Text = "Graphical View";
 			this.radioButtonPatchingGraphical.UseVisualStyleBackColor = true;
 			this.radioButtonPatchingGraphical.CheckedChanged += new System.EventHandler(this.radioButtonPatchingGraphical_CheckedChanged);
-			// 
-			// tableLayoutPanelPatchingSetup
-			// 
-			this.tableLayoutPanelPatchingSetup.AutoSize = true;
-			this.tableLayoutPanelPatchingSetup.ColumnCount = 1;
-			this.tableLayoutPanelPatchingSetup.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanelPatchingSetup.Location = new System.Drawing.Point(3, 75);
-			this.tableLayoutPanelPatchingSetup.Name = "tableLayoutPanelPatchingSetup";
-			this.tableLayoutPanelPatchingSetup.RowCount = 1;
-			this.tableLayoutPanelPatchingSetup.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanelPatchingSetup.Size = new System.Drawing.Size(0, 0);
-			this.tableLayoutPanelPatchingSetup.TabIndex = 7;
 			// 
 			// tableLayoutPanelControllerSetup
 			// 
@@ -395,6 +355,50 @@
 			this.controllerHeaderLineDivider.Size = new System.Drawing.Size(332, 2);
 			this.controllerHeaderLineDivider.TabIndex = 68;
 			// 
+			// tableLayoutPanel1
+			// 
+			this.tableLayoutPanel1.ColumnCount = 1;
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel1.Controls.Add(this.patchingHeaderLineDivider, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanelPatchingSetup, 0, 3);
+			this.tableLayoutPanel1.Controls.Add(this.patchingHeaderTableLayoutPanel, 0, 0);
+			this.tableLayoutPanel1.Controls.Add(this.patchingHeaderViewChoiceTableLayoutPanel, 0, 2);
+			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+			this.tableLayoutPanel1.RowCount = 4;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(519, 733);
+			this.tableLayoutPanel1.TabIndex = 10;
+			// 
+			// tableLayoutPanelPatchingSetup
+			// 
+			this.tableLayoutPanelPatchingSetup.AutoSize = true;
+			this.tableLayoutPanelPatchingSetup.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.tableLayoutPanelPatchingSetup.ColumnCount = 1;
+			this.tableLayoutPanelPatchingSetup.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanelPatchingSetup.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanelPatchingSetup.Location = new System.Drawing.Point(3, 75);
+			this.tableLayoutPanelPatchingSetup.MinimumSize = new System.Drawing.Size(50, 0);
+			this.tableLayoutPanelPatchingSetup.Name = "tableLayoutPanelPatchingSetup";
+			this.tableLayoutPanelPatchingSetup.RowCount = 1;
+			this.tableLayoutPanelPatchingSetup.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanelPatchingSetup.Size = new System.Drawing.Size(513, 655);
+			this.tableLayoutPanelPatchingSetup.TabIndex = 9;
+			// 
+			// patchingHeaderLineDivider
+			// 
+			this.patchingHeaderLineDivider.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.patchingHeaderLineDivider.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.patchingHeaderLineDivider.Location = new System.Drawing.Point(3, 28);
+			this.patchingHeaderLineDivider.Name = "patchingHeaderLineDivider";
+			this.patchingHeaderLineDivider.Size = new System.Drawing.Size(513, 2);
+			this.patchingHeaderLineDivider.TabIndex = 10;
+			// 
 			// DisplaySetup
 			// 
 			this.AcceptButton = this.buttonOk;
@@ -419,13 +423,10 @@
 			this.elementHeadertableLayoutPanel.ResumeLayout(false);
 			this.elementHeadertableLayoutPanel.PerformLayout();
 			this.splitContainer2.Panel1.ResumeLayout(false);
-			this.splitContainer2.Panel1.PerformLayout();
 			this.splitContainer2.Panel2.ResumeLayout(false);
 			this.splitContainer2.Panel2.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
 			this.splitContainer2.ResumeLayout(false);
-			this.patchingPaneFlowLayoutPanel.ResumeLayout(false);
-			this.patchingPaneFlowLayoutPanel.PerformLayout();
 			this.patchingHeaderTableLayoutPanel.ResumeLayout(false);
 			this.patchingHeaderTableLayoutPanel.PerformLayout();
 			this.patchingHeaderViewChoiceTableLayoutPanel.ResumeLayout(false);
@@ -435,6 +436,8 @@
 			this.controllerHeaderTableLayoutPanel.ResumeLayout(false);
 			this.controllerHeaderTableLayoutPanel.PerformLayout();
 			this.formOkCancelTableLayoutPanel.ResumeLayout(false);
+			this.tableLayoutPanel1.ResumeLayout(false);
+			this.tableLayoutPanel1.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -449,8 +452,6 @@
 		private System.Windows.Forms.RadioButton radioButtonPatchingGraphical;
 		private System.Windows.Forms.Label patchingHeaderLabel;
 		private System.Windows.Forms.RadioButton radioButtonPatchingSimple;
-		private System.Windows.Forms.Label patchingHeaderLineDivider;
-		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelPatchingSetup;
 		private System.Windows.Forms.Button buttonCancel;
 		private System.Windows.Forms.Button buttonOk;
 		private System.Windows.Forms.Button buttonHelp;
@@ -461,7 +462,9 @@
 		private System.Windows.Forms.Label controllerHeaderLineDivider;
 		private System.Windows.Forms.TableLayoutPanel elementHeadertableLayoutPanel;
 		private System.Windows.Forms.TableLayoutPanel patchingHeaderTableLayoutPanel;
-		private System.Windows.Forms.FlowLayoutPanel patchingPaneFlowLayoutPanel;
 		private System.Windows.Forms.TableLayoutPanel patchingHeaderViewChoiceTableLayoutPanel;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelPatchingSetup;
+		private System.Windows.Forms.Label patchingHeaderLineDivider;
 	}
 }

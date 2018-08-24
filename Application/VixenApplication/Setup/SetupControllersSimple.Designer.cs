@@ -59,11 +59,12 @@
 			// groupBoxSelectedController
 			// 
 			this.groupBoxSelectedController.AutoSize = true;
+			this.groupBoxSelectedController.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.groupBoxSelectedController.Controls.Add(this.panel1);
 			this.groupBoxSelectedController.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.groupBoxSelectedController.Location = new System.Drawing.Point(3, 486);
+			this.groupBoxSelectedController.Location = new System.Drawing.Point(3, 484);
 			this.groupBoxSelectedController.Name = "groupBoxSelectedController";
-			this.groupBoxSelectedController.Size = new System.Drawing.Size(249, 112);
+			this.groupBoxSelectedController.Size = new System.Drawing.Size(228, 112);
 			this.groupBoxSelectedController.TabIndex = 32;
 			this.groupBoxSelectedController.TabStop = false;
 			this.groupBoxSelectedController.Text = "Selected Controller";
@@ -71,6 +72,8 @@
 			// 
 			// panel1
 			// 
+			this.panel1.AutoSize = true;
+			this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.panel1.Controls.Add(this.labelOutputCount);
 			this.panel1.Controls.Add(this.buttonStopController);
 			this.panel1.Controls.Add(this.buttonStartController);
@@ -83,7 +86,7 @@
 			this.panel1.Controls.Add(this.buttonDeleteController);
 			this.panel1.Location = new System.Drawing.Point(8, 16);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(235, 77);
+			this.panel1.Size = new System.Drawing.Size(181, 77);
 			this.panel1.TabIndex = 46;
 			// 
 			// labelOutputCount
@@ -286,27 +289,32 @@
 			// 
 			// flowLayoutPanel1
 			// 
+			this.flowLayoutPanel1.AutoSize = true;
+			this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.flowLayoutPanel1.Controls.Add(this.buttonSelectSourceElements);
 			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 449);
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 448);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(249, 31);
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(228, 30);
 			this.flowLayoutPanel1.TabIndex = 41;
 			// 
 			// flowLayoutPanel2
 			// 
+			this.flowLayoutPanel2.AutoSize = true;
+			this.flowLayoutPanel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.flowLayoutPanel2.Controls.Add(this.label5);
 			this.flowLayoutPanel2.Controls.Add(this.comboBoxNewControllerType);
 			this.flowLayoutPanel2.Controls.Add(this.buttonAddController);
 			this.flowLayoutPanel2.Location = new System.Drawing.Point(3, 3);
 			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-			this.flowLayoutPanel2.Size = new System.Drawing.Size(244, 34);
+			this.flowLayoutPanel2.Size = new System.Drawing.Size(228, 33);
 			this.flowLayoutPanel2.TabIndex = 42;
 			this.flowLayoutPanel2.WrapContents = false;
 			// 
 			// tableLayoutPanel1
 			// 
 			this.tableLayoutPanel1.AutoSize = true;
+			this.tableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.tableLayoutPanel1.ColumnCount = 1;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel2, 0, 0);
@@ -321,7 +329,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(255, 601);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(234, 599);
 			this.tableLayoutPanel1.TabIndex = 43;
 			// 
 			// controllerTree
@@ -330,9 +338,9 @@
 			this.controllerTree.AutoSize = true;
 			this.controllerTree.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.controllerTree.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.controllerTree.Location = new System.Drawing.Point(3, 43);
+			this.controllerTree.Location = new System.Drawing.Point(3, 42);
 			this.controllerTree.Name = "controllerTree";
-			this.controllerTree.Size = new System.Drawing.Size(249, 400);
+			this.controllerTree.Size = new System.Drawing.Size(228, 400);
 			this.controllerTree.TabIndex = 36;
 			// 
 			// SetupControllersSimple
@@ -340,11 +348,13 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoSize = true;
+			this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.DoubleBuffered = true;
 			this.Name = "SetupControllersSimple";
-			this.Size = new System.Drawing.Size(255, 601);
+			this.Size = new System.Drawing.Size(234, 599);
 			this.groupBoxSelectedController.ResumeLayout(false);
+			this.groupBoxSelectedController.PerformLayout();
 			this.panel1.ResumeLayout(false);
 			this.panel1.PerformLayout();
 			this.flowLayoutPanel1.ResumeLayout(false);
