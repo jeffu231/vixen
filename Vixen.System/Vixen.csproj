@@ -186,6 +186,7 @@
     <Compile Include="Data\StateCombinator\StateCombinator.cs" />
     <Compile Include="Data\Value\DiscreteValue.cs" />
     <Compile Include="Data\Value\IntensityValue.cs" />
+    <Compile Include="Data\Value\BitmapValue.cs" />
     <Compile Include="Data\Value\RGBValue.cs" />
     <Compile Include="Delegates\Delegates.cs" />
     <Compile Include="Execution\ContextCurrentEffectsFull.cs" />
