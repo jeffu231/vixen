@@ -8,7 +8,7 @@ namespace Vixen.Data.Policy
 {
 	internal class SmartControllerDataPolicy : DataFlowDataDispatch
 	{
-		public IIntent[] OutputCurrentState;
+		public IIntentState[] OutputCurrentState;
 
 		public override void Handle(IntentsDataFlowData obj)
 		{
@@ -49,7 +49,7 @@ namespace Vixen.Data.Policy
 			get { return OutputCurrentState != null; }
 		}
 
-		private bool _OutputStateDiffersFrom(IEnumerable<IIntent> state)
+		private bool _OutputStateDiffersFrom(IEnumerable<IIntentState> state)
 		{
 			//*** test the effectiveness of this
 			return !OutputCurrentState.SequenceEqual(state);
