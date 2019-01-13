@@ -27,9 +27,12 @@ namespace VixenModules.Effect.Effect
 	/// commonly thought of as pixel effects.  
 	/// </summary>
 	public abstract class PixelEffectBase : BaseEffect
-	{
+    {
+        protected static TimeSpan UpdateInterval = VixenSystem.DefaultUpdateTimeSpan;
+        protected static short FrameTime = (short)UpdateInterval.TotalMilliseconds; //50;
 		protected static Logger Logging = LogManager.GetCurrentClassLogger();
 		protected readonly List<int> StringPixelCounts = new List<int>();
+        protected bool VideoElementDetected = false;
 		protected List<ElementLocation> ElementLocations; 
 
 		private EffectIntents _elementData;
@@ -483,8 +486,7 @@ namespace VixenModules.Effect.Effect
             int nFrames = GetNumberFrames();
             if (nFrames <= 0 | BufferWi == 0 || BufferHt == 0) return new EffectIntents();
             var buffer = new PixelVideoFrameBuffer(BufferWi, BufferHt, UseBaseColor ? BaseColor : Color.Transparent);
-            //int bufferSize = StringPixelCounts.Sum();
-            var updateInterval = VixenSystem.DefaultUpdateTimeSpan;
+            //var updateInterval = VixenSystem.DefaultUpdateTimeSpan;
             TimeSpan startTime = TimeSpan.Zero;
             
             // set up array to hold the generated bitmaps
@@ -514,7 +516,7 @@ namespace VixenModules.Effect.Effect
             // create the intents
             //var frameTs = new TimeSpan(0, 0, 0, 0, FrameTime);
             //If used this way, substitute FrameTime in place of UpdateInterval below.
-            IIntent intent = new StaticArrayIntent<BitmapValue>(updateInterval, frameArray, TimeSpan);
+            IIntent intent = new StaticArrayIntent<BitmapValue>(UpdateInterval, frameArray, TimeSpan);
             effectIntents.AddIntentForElement(node.Element.Id, intent, startTime);
 
             return effectIntents;
@@ -655,6 +657,11 @@ namespace VixenModules.Effect.Effect
         {
             //Get the property for this node to use the size dimensions.
             _frameSize = GetElementVideoSize(TargetNodes.FirstOrDefault());
+            VideoElementDetected = !FrameSize.IsEmpty;
+            SetBrowsable("TargetPositioning", FrameSize.IsEmpty);
+            SetBrowsable("Orientation", FrameSize.IsEmpty);
+            TypeDescriptor.Refresh(this);
+            if (TargetPositioning == TargetPositioningType.Video && FrameSize.IsEmpty) TargetPositioning = TargetPositioningType.Strings;
 	        return !_frameSize.IsEmpty;
         }
 
