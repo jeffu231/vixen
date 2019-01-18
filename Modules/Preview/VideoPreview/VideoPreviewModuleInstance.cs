@@ -113,7 +113,19 @@ namespace VixenModules.Preview.VideoPreview
 			
 			base.Dispose(disposing);
 		}
-		
+
+		/// <inheritdoc />
+		protected override void PlayerActivatedImpl()
+		{
+			
+		}
+
+		/// <inheritdoc />
+		protected override void PlayerDeactivatedImpl()
+		{
+			
+		}
+
 		protected override void Update()
 		{
 			var sw = Stopwatch.StartNew();
