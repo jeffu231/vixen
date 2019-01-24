@@ -79,11 +79,13 @@
   <ItemGroup>
     <Compile Include="DepthFilterModuleDescriptor.cs" />
     <Compile Include="DepthFilterModule.cs" />
-    <Compile Include="DepthFilterSetup.cs" />
+    <Compile Include="DepthFilterSetup.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="DepthFilterSetup.Designer.cs">
       <DependentUpon>DepthFilterSetup.cs</DependentUpon>
     </Compile>
-    <Compile Include="DepthFilterData.cs" />
+    <Compile Include="MaskAndFillData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
