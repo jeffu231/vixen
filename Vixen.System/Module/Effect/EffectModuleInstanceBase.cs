@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading;
 using NLog;
 using Vixen.Marks;
+using Vixen.Module.ElementNodeFilter;
 using Vixen.Module.Media;
 using Vixen.Services;
 using Vixen.Sys;
@@ -26,12 +27,14 @@ namespace Vixen.Module.Effect
 		ICustomTypeDescriptor
 	{
 		private ElementNode[] _targetNodes;
+		private ElementNode[] _unFilteredTargetNodes;
 		private List<IMediaModuleInstance> _media;
 		private TimeSpan _timeSpan;
 		private TimeSpan _startTime;
 		private DefaultValueArrayMember _parameterValues;
 		private static Logger Logging = LogManager.GetCurrentClassLogger();
 		private readonly Dictionary<string, bool> _browsableState = new Dictionary<string, bool>();
+		private List<IElementNodeFilter> _elementNodeFilters = new List<IElementNodeFilter>();
 
 		protected EffectModuleInstanceBase()
 		{
@@ -73,6 +76,21 @@ namespace Vixen.Module.Effect
 		}
 
 		[Browsable(false)]
+		public ElementNode[] UnFilteredTargetNodes
+		{
+			get => _unFilteredTargetNodes;
+			set
+			{
+				if (value != _unFilteredTargetNodes)
+				{
+					_unFilteredTargetNodes = value;
+					FilterNodes();
+					OnPropertyChanged();
+				}
+			}
+		}
+
+		[Browsable(false)]
 		public TimeSpan TimeSpan
 		{
 			get { return _timeSpan; }
@@ -101,12 +119,25 @@ namespace Vixen.Module.Effect
 		}
 
 		[Browsable(false)]
+		[Obsolete("This method has been deprecated and should no longer be used.")]
 		public object[] ParameterValues
 		{
 			get { return _parameterValues.Values; }
 			set
 			{
 				_parameterValues.Values = value;
+				IsDirty = true;
+			}
+		}
+
+		/// <summary>
+		/// This contains the target node filter chain
+		/// </summary>
+		public List<IElementNodeFilter> ElementNodeFilters {
+			get => _elementNodeFilters;
+			set
+			{
+				_elementNodeFilters = value;
 				IsDirty = true;
 			}
 		}
@@ -184,6 +215,21 @@ namespace Vixen.Module.Effect
 			effectIntents = EffectIntents.Restrict(effectIntents, restrictingOffsetTime,
 				restrictingOffsetTime + restrictingTimeSpan);
 			return effectIntents;
+		}
+
+		private void FilterNodes()
+		{
+			var filteredNodes = _unFilteredTargetNodes.ToArray();
+
+			if (ElementNodeFilters != null)
+			{
+				foreach (var elementNodeFilter in ElementNodeFilters)
+				{
+					filteredNodes = elementNodeFilter.Filter(filteredNodes);
+				}
+			}
+
+			TargetNodes = filteredNodes;
 		}
 
 		/// <summary>

@@ -64,7 +64,7 @@ namespace Common.Controls.Timeline
 			}
 			if (_origTargetNodes != _targetNodes)
 			{
-				EffectNode.Effect.TargetNodes = _targetNodes;
+				EffectNode.Effect.UnFilteredTargetNodes = _targetNodes;
 			}
 		}
 

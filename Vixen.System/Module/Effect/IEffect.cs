@@ -7,7 +7,6 @@ using System.Threading;
 using Vixen.Marks;
 using Vixen.Module.Media;
 using Vixen.Sys;
-using Vixen.Sys.LayerMixing;
 
 namespace Vixen.Module.Effect
 {
@@ -18,9 +17,14 @@ namespace Vixen.Module.Effect
 		bool IsDirty { get; }
 
 		/// <summary>
-		/// Nodes the effect is being applied to as a single collection.
+		/// Filtered Nodes the effect is being applied to as a single collection.
 		/// </summary>
 		ElementNode[] TargetNodes { get; set; }
+
+		/// <summary>
+		/// Nodes the effect is being applied to as a single collection.
+		/// </summary>
+		ElementNode[] UnFilteredTargetNodes { get; set; }
 
 		/// <summary>
 		/// The length of the entire effect.

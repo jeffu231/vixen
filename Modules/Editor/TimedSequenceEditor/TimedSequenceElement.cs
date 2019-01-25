@@ -47,7 +47,7 @@ namespace VixenModules.Editor.TimedSequenceEditor
 			{
 				if (EffectNode != null)
 				{
-					EffectNode.Effect.TargetNodes = TargetNodes;
+					EffectNode.Effect.UnFilteredTargetNodes = TargetNodes;
 				}
 				base.OnTargetNodesChanged();	
 			}

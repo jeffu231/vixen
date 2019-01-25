@@ -3669,7 +3669,7 @@ namespace VixenModules.Editor.TimedSequenceEditor
 			var targetNode = (ElementNode) row.Tag;
 
 			// populate the given effect instance with the appropriate target node and times, and wrap it in an effectNode
-			effectInstance.TargetNodes = new[] {targetNode};
+			effectInstance.UnFilteredTargetNodes = new[] {targetNode};
 			effectInstance.TimeSpan = timeSpan;
 			effectInstance.StartTime = startTime;
 			if (parameterValues != null) effectInstance.ParameterValues = parameterValues;
@@ -3735,7 +3735,7 @@ namespace VixenModules.Editor.TimedSequenceEditor
 				}
 				
 				TimedSequenceElement element = SetupNewElementFromNode(node);
-				foreach (ElementNode target in node.Effect.TargetNodes)
+				foreach (ElementNode target in node.Effect.UnFilteredTargetNodes)
 				{
 					if (_elementNodeToRows.ContainsKey(target))
 					{
@@ -3791,7 +3791,7 @@ namespace VixenModules.Editor.TimedSequenceEditor
 			TimedSequenceElement element = SetupNewElementFromNode(node);
 
 			// for the effect, make a single element and add it to every row that represents its target elements
-			node.Effect.TargetNodes.AsParallel().WithCancellation(_cancellationTokenSource.Token)
+			node.Effect.UnFilteredTargetNodes.AsParallel().WithCancellation(_cancellationTokenSource.Token)
 				.ForAll(target =>
 							{
 								if (_elementNodeToRows.ContainsKey(target))

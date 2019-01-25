@@ -310,7 +310,7 @@ namespace VixenModules.App.WebServer.Service
 			{
 				TimeSpan = seconds > 0 ? TimeSpan.FromSeconds(seconds) : TimeSpan.FromDays(30),
 				IntensityLevel = intensity / 100,
-				TargetNodes = new[] {node}
+				UnFilteredTargetNodes = new[] {node}
 			};
 
 			//TODO check the passed color against the element to see if the element supports it
@@ -429,7 +429,7 @@ namespace VixenModules.App.WebServer.Service
 		{
 			
 			// populate the given effect instance with the appropriate target node and times, and wrap it in an effectNode
-			effectInstance.TargetNodes = new[] { targetNode };
+			effectInstance.UnFilteredTargetNodes = new[] { targetNode };
 			effectInstance.TimeSpan = timeSpan;
 			effectInstance.StartTime = TimeSpan.Zero;
 			return new EffectNode(effectInstance, TimeSpan.Zero);
@@ -487,7 +487,7 @@ namespace VixenModules.App.WebServer.Service
 					Text_Line1 = text
 				},
 
-				TargetNodes = new[] { VixenSystem.Nodes.GetElementNode(elementId) }
+				UnFilteredTargetNodes = new[] { VixenSystem.Nodes.GetElementNode(elementId) }
 			};
 			nutcrackerEffect.NutcrackerData.Palette.SetColor(1, elementColor);
 

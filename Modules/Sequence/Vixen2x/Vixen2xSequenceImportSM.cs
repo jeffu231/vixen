@@ -155,7 +155,7 @@ namespace VixenModules.SequenceType.Vixen2x
 				}
 
 				// Clone() Doesn't work! :(
-				setLevelInstance.TargetNodes = new ElementNode[] { targetNode };
+				setLevelInstance.UnFilteredTargetNodes = new ElementNode[] { targetNode };
 
 				// calculate how long the event lasts
 				setLevelInstance.TimeSpan = TimeSpan.FromMilliseconds(EventDuration * (endEvent - startEvent + 1));
@@ -207,7 +207,7 @@ namespace VixenModules.SequenceType.Vixen2x
 				}
 				
 				// Clone() Doesn't work! :(
-				pulseInstance.TargetNodes = new ElementNode[] { targetNode };
+				pulseInstance.UnFilteredTargetNodes = new ElementNode[] { targetNode };
 				pulseInstance.TimeSpan = TimeSpan.FromMilliseconds(EventDuration * (endEvent - startEvent + 1));
 
 				if( null == (effectNode = new EffectNode(pulseInstance, TimeSpan.FromMilliseconds(EventDuration * startEvent))))

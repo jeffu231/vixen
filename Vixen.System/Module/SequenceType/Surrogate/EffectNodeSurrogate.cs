@@ -16,7 +16,7 @@ namespace Vixen.Module.SequenceType.Surrogate
 			TypeId = effectNode.Effect.Descriptor.TypeId;
 			InstanceId = effectNode.Effect.InstanceId;
 			TimeSpan = effectNode.Effect.TimeSpan;
-			TargetNodes = effectNode.Effect.TargetNodes.Select(x => new ChannelNodeReferenceSurrogate(x)).ToArray();
+			TargetNodes = effectNode.Effect.UnFilteredTargetNodes.Select(x => new ChannelNodeReferenceSurrogate(x)).ToArray();
 		}
 
 		public IEffectNode CreateEffectNode(Dictionary<Guid,ElementNode> elementNodes)
@@ -37,11 +37,11 @@ namespace Vixen.Module.SequenceType.Surrogate
 			ElementNode node;
 			if (elementNodes.TryGetValue(TargetNodes.First().NodeId, out node))
 			{
-				effect.TargetNodes = new[] {node};
+				effect.UnFilteredTargetNodes = new[] {node};
 			}
 			else
 			{
-				effect.TargetNodes = new ElementNode[]{};
+				effect.UnFilteredTargetNodes = new ElementNode[]{};
 			}
 			return new EffectNode(effect, StartTime);
 		}
