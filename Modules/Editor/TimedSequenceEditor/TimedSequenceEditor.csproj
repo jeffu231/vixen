@@ -213,6 +213,16 @@
     <Compile Include="AutomaticMusicDetection.Designer.cs">
       <DependentUpon>AutomaticMusicDetection.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\WPF\ElementFilterDocker\ElementNodeFilterEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\WPF\ElementFilterDocker\ElementNodeFilterEditor.Designer.cs">
+      <DependentUpon>ElementNodeFilterEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\WPF\ElementFilterDocker\ViewModels\ElementNodeFilterDockerViewModel.cs" />
+    <Compile Include="Forms\WPF\ElementFilterDocker\Views\ElementNodeFilterDockerView.xaml.cs">
+      <DependentUpon>ElementNodeFilterDockerView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\WPF\MarksDocker\Services\MarkImportExportService.cs" />
     <Compile Include="Forms\WPF\MarksDocker\ViewModels\CheckBoxStateBase.cs" />
     <Compile Include="Forms\WPF\MarksDocker\ViewModels\CollectionTypeCheckBoxState.cs" />
@@ -412,7 +422,10 @@
     <Compile Include="User32.cs" />
     <Compile Include="Shell32.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Forms\WPF\ElementFilterDocker\Models\" />
+    <Folder Include="Forms\WPF\ElementFilterDocker\Services\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\magnet.png" />
   </ItemGroup>
@@ -467,6 +480,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Form_CurveLibrary.resx">
       <DependentUpon>Form_CurveLibrary.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\WPF\ElementFilterDocker\ElementNodeFilterEditor.resx">
+      <DependentUpon>ElementNodeFilterEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="InvalidAudioPathDialog.resx">
       <DependentUpon>InvalidAudioPathDialog.cs</DependentUpon>
@@ -591,6 +607,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Forms\WPF\ElementFilterDocker\Views\ElementNodeFilterDockerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Forms\WPF\MarksDocker\Views\MarkCollectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
