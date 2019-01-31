@@ -5,14 +5,16 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Threading;
 using Vixen.Marks;
+using Vixen.Module.ElementNodeFilter;
 using Vixen.Module.Media;
 using Vixen.Sys;
+using Vixen.Sys.ElementNodeFilters;
 
 namespace Vixen.Module.Effect
 {
 	// Effect instances are no longer singletons that render for all, they now contain
 	// state necessary for rendering per-instance.
-	public interface IEffect: INotifyPropertyChanged
+	public interface IEffect : INotifyPropertyChanged
 	{
 		bool IsDirty { get; }
 
@@ -42,6 +44,7 @@ namespace Vixen.Module.Effect
 		object[] ParameterValues { get; set; }
 
 		void PreRender(CancellationTokenSource cancellationToken = null);
+
 		// Having two methods instead of a single one with default values so that the
 		// effect doesn't have to check to see if there is a time frame restriction
 		// with every call.
@@ -56,5 +59,6 @@ namespace Vixen.Module.Effect
 		bool SupportsMarks { get; }
 		ObservableCollection<IMarkCollection> MarkCollections { get; set; }
 
+		List<IChainableElementNodeFilter> ElementNodeFilters { get; set; }
 	}
 }

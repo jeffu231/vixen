@@ -70,7 +70,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converters\DebugConverter.cs" />
-    <Compile Include="Converters\HasSetupVisibilityConverter.cs" />
     <Compile Include="Converters\DefaultLayerVisibilityConverter.cs" />
     <Compile Include="LayerEditorView.cs" />
     <Compile Include="Input\LayerEditorCommands.cs" />

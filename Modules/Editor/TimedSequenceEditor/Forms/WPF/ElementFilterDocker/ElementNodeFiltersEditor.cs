@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using Common.Controls.Timeline;
+using Vixen.Sys.ElementNodeFilters;
 using VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.ViewModels;
 using VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.Views;
 using WeifenLuo.WinFormsUI.Docking;
@@ -16,7 +18,7 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker
 		private readonly List<Element> _elements = new List<Element>();
 		private readonly TimedSequenceEditorForm _sequenceEditorForm;
 		private readonly ElementNodeFilterDockerView _ElementNodeFiltersEditorView;
-		private readonly ElementNodeFilterDockerViewModel _vm;
+		private ElementNodeFilterDockerViewModel _vm;
 		
 		public ElementNodeFiltersEditor(TimedSequenceEditorForm sequenceEditorForm)
 		{
@@ -45,6 +47,7 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker
 			{
 				_elements.Clear();
 				_elements.AddRange(value);
+				_vm.Filters = new ObservableCollection<IChainableElementNodeFilter>(_elements.First().EffectNode.Effect.ElementNodeFilters);
 				//_effectPropertyEditorGridEffectEffectPropertiesEditor.SelectedObjects = _elements.Select(x => x.EffectNode.Effect).ToArray();
 			}
 		}

@@ -13,6 +13,7 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 	{
 		public ElementNodeFilterDockerViewModel()
 		{
+			Filters = new ObservableCollection<IChainableElementNodeFilter>();
 			InitializeStandardFilters();
 		}
 
@@ -25,9 +26,15 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 		public ObservableCollection<IChainableElementNodeFilter> Filters
 		{
 			get { return GetValue<ObservableCollection<IChainableElementNodeFilter>>(FiltersProperty); }
-			private set { SetValue(FiltersProperty, value); }
+			set { SetValue(FiltersProperty, value); }
 		}
 
+		/// <summary>
+		/// Filters property data.
+		/// </summary>
+		public static readonly PropertyData FiltersProperty = RegisterProperty("Filters", typeof(ObservableCollection<IChainableElementNodeFilter>));
+
+		#endregion
 
 		#region StandardFilters property
 
@@ -46,14 +53,6 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 		public static readonly PropertyData StandardFiltersProperty = RegisterProperty("StandardFilters", typeof(ObservableCollection<IElementNodeFilterInstance>));
 
 		#endregion
-
-		/// <summary>
-		/// Filters property data.
-		/// </summary>
-		public static readonly PropertyData FiltersProperty = RegisterProperty("Filters", typeof(ObservableCollection<IChainableElementNodeFilter>));
-
-		#endregion
-
 
 		private void InitializeStandardFilters()
 		{

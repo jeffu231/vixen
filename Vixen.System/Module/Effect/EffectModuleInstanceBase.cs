@@ -15,6 +15,7 @@ using Vixen.Module.ElementNodeFilter;
 using Vixen.Module.Media;
 using Vixen.Services;
 using Vixen.Sys;
+using Vixen.Sys.ElementNodeFilters;
 
 namespace Vixen.Module.Effect
 {
@@ -34,7 +35,7 @@ namespace Vixen.Module.Effect
 		private DefaultValueArrayMember _parameterValues;
 		private static Logger Logging = LogManager.GetCurrentClassLogger();
 		private readonly Dictionary<string, bool> _browsableState = new Dictionary<string, bool>();
-		private List<IElementNodeFilter> _elementNodeFilters = new List<IElementNodeFilter>();
+		private List<IChainableElementNodeFilter> _elementNodeFilters = new List<IChainableElementNodeFilter>();
 
 		protected EffectModuleInstanceBase()
 		{
@@ -133,7 +134,7 @@ namespace Vixen.Module.Effect
 		/// <summary>
 		/// This contains the target node filter chain
 		/// </summary>
-		public List<IElementNodeFilter> ElementNodeFilters {
+		public List<IChainableElementNodeFilter> ElementNodeFilters {
 			get => _elementNodeFilters;
 			set
 			{
@@ -223,9 +224,9 @@ namespace Vixen.Module.Effect
 
 			if (ElementNodeFilters != null)
 			{
-				foreach (var elementNodeFilter in ElementNodeFilters)
+				foreach (var filter in ElementNodeFilters)
 				{
-					filteredNodes = elementNodeFilter.Filter(filteredNodes);
+					filteredNodes = filter.ElementNodeFilter.Filter(filteredNodes);
 				}
 			}
 

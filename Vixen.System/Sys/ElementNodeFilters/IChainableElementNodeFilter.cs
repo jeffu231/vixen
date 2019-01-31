@@ -4,7 +4,7 @@ using Vixen.Module.ElementNodeFilter;
 
 namespace Vixen.Sys.ElementNodeFilters
 {
-	public class IChainableElementNodeFilter
+	public interface IChainableElementNodeFilter
 	{
 		Guid Id { get; set; }
 		ElementNodeFilterType Type { get; }

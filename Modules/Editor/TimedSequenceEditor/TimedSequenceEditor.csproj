@@ -220,6 +220,7 @@
       <DependentUpon>ElementNodeFiltersEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\WPF\ElementFilterDocker\ViewModels\ElementNodeFilterDockerViewModel.cs" />
+    <Compile Include="Forms\WPF\ElementFilterDocker\ViewModels\ElementNodeFilterViewModel.cs" />
     <Compile Include="Forms\WPF\ElementFilterDocker\Views\ElementNodeFilterDockerView.xaml.cs">
       <DependentUpon>ElementNodeFilterDockerView.xaml</DependentUpon>
     </Compile>

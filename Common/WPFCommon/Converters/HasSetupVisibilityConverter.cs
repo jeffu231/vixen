@@ -3,19 +3,17 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Markup;
-using Vixen.Module.MixingFilter;
-using Vixen.Sys.LayerMixing;
+using Vixen.Sys;
 
-namespace VixenModules.Editor.LayerEditor.Converters
+namespace Common.WPFCommon.Converters
 {
 	public class HasSetupVisibilityConverter:MarkupExtension, IValueConverter
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			ILayerMixingFilterInstance layerMixingFilterInstance = value as ILayerMixingFilterInstance;
-			if (layerMixingFilterInstance !=null)
+			if (value is IHasSetup instance)
 			{
-				return layerMixingFilterInstance.HasSetup ? Visibility.Visible : Visibility.Collapsed;
+				return instance.HasSetup ? Visibility.Visible : Visibility.Collapsed;
 			}
 
 			return Visibility.Collapsed;

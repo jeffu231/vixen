@@ -5,24 +5,19 @@
                    xmlns:commonConverters="clr-namespace:Common.WPFCommon.Converters;assembly=WPFCommon"
                    xmlns:commonUtils="clr-namespace:Common.WPFCommon.Utils;assembly=WPFCommon"
                    xmlns:viewModels="clr-namespace:VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.ViewModels"
-                   xmlns:views="clr-namespace:VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.Views"
-                   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-                   xmlns:converters="clr-namespace:VixenModules.Editor.LayerEditor.Converters;assembly=LayerEditor"
-                   xmlns:commands="clr-namespace:VixenModules.Editor.LayerEditor.Input;assembly=LayerEditor">
+                   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
 
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="pack://application:,,,/WPFCommon;component/Theme/Theme.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
-			<commonConverters:ColorToSolidBrushConverter x:Key="ColorToSolidBrushConverter"/>
-			<commonConverters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
 		</ResourceDictionary>
 
 	</UserControl.Resources>
 
 	<DockPanel Background="{StaticResource BackColorBrush}">
-		<Grid HorizontalAlignment="Stretch" Background="#444444">
+		<Grid HorizontalAlignment="Stretch" Background="{StaticResource BackColorBrush}">
 
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="1*"></ColumnDefinition>
@@ -35,17 +30,17 @@
 
 			<Button Grid.Column="0" Grid.Row="0" Content="Add Filter" Margin="5" Command="{Binding AddFilterCommand}"></Button>
 			<Button Grid.Column="1" Grid.Row="0" Content="Remove Filter" Margin="5" Command="{Binding RemoveFilterCommand}"
-                                CommandParameter="{Binding ElementName=_lbLayers, Path=SelectedItem}"></Button>
-			<ListBox Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Name="_lbLayers" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" 
-                                 ItemsSource="{Binding Layers}" 
-                                Style="{StaticResource ListBoxStyle}">
+                                CommandParameter="{Binding ElementName=LblFilters, Path=SelectedItem}"></Button>
+			<ListBox Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Name="LblFilters" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" 
+                                 ItemsSource="{Binding Filters}" 
+                                Style="{StaticResource SimpleListBoxStyle}">
 				<ListBox.ItemTemplate>
-					<DataTemplate>
+					<DataTemplate DataType="{x:Type viewModels:ElementNodeFilterViewModel}">
 						<StackPanel Margin="5">
 							<Expander>
 								<Expander.Header>
 									<Grid HorizontalAlignment="Stretch" >
-										<Label Content="{Binding LayerName}" Padding="3">
+										<Label Content="{Binding Name}" Padding="3">
 
 										</Label>
 									</Grid>
@@ -64,19 +59,18 @@
 										</Grid.RowDefinitions>
 
 										<Label Grid.Column="0" Grid.Row="0" Margin="3">Name</Label>
-										<TextBox Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" DockPanel.Dock="Top" Margin="3" Text="{Binding LayerName}"
+										<TextBox Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" DockPanel.Dock="Top" Margin="3" Text="{Binding Name}"
                                                                  commonUtils:TextBoxExtender.CommitOnEnter="true"
 								                                 commonUtils:TextBoxExtender.CommitOnFocusLost="true"
 								                                 commonUtils:TextBoxExtender.RollbackOnEscape="true"
 			                                                     commonUtils:TextBoxExtender.CommitOnTyping="false" />
-										<Label Grid.Column="0" Grid.Row="1" Margin="3" Visibility="{Binding Converter={converters:DefaultLayerVisibilityConverter}}">Type</Label>
-										<ComboBox Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Margin="3" ItemsSource="{Binding ElementName=_lbLayers, Path=DataContext.FilterTypes, Mode=OneWay}" 
-                                                        DisplayMemberPath="Descriptor.TypeName" SelectedValuePath="Descriptor.TypeId" SelectedValue="{Binding FilterTypeId}"
-                                                        Visibility="{Binding Converter={converters:DefaultLayerVisibilityConverter}}">
+										<Label Grid.Column="0" Grid.Row="1" Margin="3">Type</Label>
+										<ComboBox Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Margin="3" ItemsSource="{Binding StandardFilters, Mode=OneWay}" 
+                                                        DisplayMemberPath="Descriptor.TypeName" SelectedValuePath="Descriptor.TypeId" SelectedValue="{Binding FilterTypeId}">
 										</ComboBox>
-										<Label Grid.Column="0" Grid.Row="2" Margin="3" Visibility="{Binding LayerMixingFilter, Converter={converters:HasSetupVisibilityConverter}}">Configuration</Label>
-										<Button Grid.Column="1" Grid.Row="2" Margin="3" Content="Configuration" Visibility="{Binding LayerMixingFilter, Converter={converters:HasSetupVisibilityConverter}}"
-															Command="{x:Static commands:LayerEditorCommands.ConfigureLayer}" CommandParameter="{Binding LayerMixingFilter}">
+										<Label Grid.Column="0" Grid.Row="2" Margin="3" Visibility="{Binding Filter, Converter={commonConverters:HasSetupVisibilityConverter}}">Configuration</Label>
+										<Button Grid.Column="1" Grid.Row="2" Margin="3" Content="Configuration" Visibility="{Binding Filter, Converter={commonConverters:HasSetupVisibilityConverter}}"
+															Command="{Binding ConfigureFilterCommand}">
 										</Button>
 									</Grid>
 								</DockPanel>
