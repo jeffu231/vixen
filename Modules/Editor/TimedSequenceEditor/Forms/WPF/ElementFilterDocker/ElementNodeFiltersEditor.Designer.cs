@@ -1,6 +1,6 @@
 ﻿namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker
 {
-	partial class ElementNodeFilterEditor
+	partial class ElementNodeFiltersEditor
 	{
 		/// <summary>
 		/// Required designer variable.

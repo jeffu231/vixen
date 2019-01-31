@@ -9,15 +9,14 @@ using Vixen.Services;
 
 namespace Vixen.Sys.ElementNodeFilters
 {
-	public abstract class ChainableElementNodeFilter: IChainableElementNodeFilter, IEquatable<ChainableElementNodeFilter>, IEqualityComparer<ChainableElementNodeFilter>, INotifyPropertyChanged
+	public abstract class ChainableElementNodeFilterBase: IChainableElementNodeFilter, IEquatable<ChainableElementNodeFilterBase>, IEqualityComparer<ChainableElementNodeFilterBase>, INotifyPropertyChanged
 	{
-
 		private IElementNodeFilterInstance _elementNodeFilter;
 		private string __name;
 		private ElementNodeFilterType _type;
 		private int _chainLevel;
 
-		public ChainableElementNodeFilter()
+		protected ChainableElementNodeFilterBase()
 		{
 			Id = Guid.NewGuid();
 		}
@@ -28,7 +27,7 @@ namespace Vixen.Sys.ElementNodeFilters
 		[DataMember]
 		public ElementNodeFilterType Type
 		{
-			get { return _type; }
+			get => _type;
 			protected set
 			{
 				if (value == _type) return;
@@ -61,10 +60,7 @@ namespace Vixen.Sys.ElementNodeFilters
 			}
 		}
 
-		public string FilterName
-		{
-			get { return ElementNodeFilter != null ? ElementNodeFilter.Descriptor.TypeName : "None"; }
-		}
+		public string FilterName => ElementNodeFilter != null ? ElementNodeFilter.Descriptor.TypeName : "None";
 
 		public Guid FilterTypeId
 		{
@@ -88,9 +84,9 @@ namespace Vixen.Sys.ElementNodeFilters
 		#region Implementation of IEquatable<ChainableElementNodeFilter>
 
 		/// <inheritdoc />
-		public bool Equals(ChainableElementNodeFilter other)
+		public bool Equals(ChainableElementNodeFilterBase other)
 		{
-			throw new NotImplementedException();
+			return Id == other?.Id;
 		}
 
 		#endregion
@@ -98,13 +94,14 @@ namespace Vixen.Sys.ElementNodeFilters
 		#region Implementation of IEqualityComparer<in ChainableElementNodeFilter>
 
 		/// <inheritdoc />
-		public bool Equals(ChainableElementNodeFilter x, ChainableElementNodeFilter y)
+		public bool Equals(ChainableElementNodeFilterBase x, ChainableElementNodeFilterBase y)
 		{
-			throw new NotImplementedException();
+			if (x == null || y == null) return false;
+			return x.Id == y.Id;
 		}
 
 		/// <inheritdoc />
-		public int GetHashCode(ChainableElementNodeFilter obj)
+		public int GetHashCode(ChainableElementNodeFilterBase obj)
 		{
 			return obj.Id.GetHashCode();
 		}
@@ -119,7 +116,7 @@ namespace Vixen.Sys.ElementNodeFilters
 		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{
 			var handler = PropertyChanged;
-			if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+			handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
 		#endregion

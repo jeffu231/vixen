@@ -213,11 +213,11 @@
     <Compile Include="AutomaticMusicDetection.Designer.cs">
       <DependentUpon>AutomaticMusicDetection.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\WPF\ElementFilterDocker\ElementNodeFilterEditor.cs">
+    <Compile Include="Forms\WPF\ElementFilterDocker\ElementNodeFiltersEditor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\WPF\ElementFilterDocker\ElementNodeFilterEditor.Designer.cs">
-      <DependentUpon>ElementNodeFilterEditor.cs</DependentUpon>
+    <Compile Include="Forms\WPF\ElementFilterDocker\ElementNodeFiltersEditor.Designer.cs">
+      <DependentUpon>ElementNodeFiltersEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\WPF\ElementFilterDocker\ViewModels\ElementNodeFilterDockerViewModel.cs" />
     <Compile Include="Forms\WPF\ElementFilterDocker\Views\ElementNodeFilterDockerView.xaml.cs">
@@ -481,8 +481,8 @@
     <EmbeddedResource Include="Forms\Form_CurveLibrary.resx">
       <DependentUpon>Form_CurveLibrary.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\WPF\ElementFilterDocker\ElementNodeFilterEditor.resx">
-      <DependentUpon>ElementNodeFilterEditor.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\WPF\ElementFilterDocker\ElementNodeFiltersEditor.resx">
+      <DependentUpon>ElementNodeFiltersEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="InvalidAudioPathDialog.resx">
       <DependentUpon>InvalidAudioPathDialog.cs</DependentUpon>
