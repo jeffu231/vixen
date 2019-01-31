@@ -24,7 +24,7 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker
 		{
 		
 			InitializeComponent();
-			
+			_sequenceEditorForm = sequenceEditorForm;
 			var host = new ElementHost { Dock = DockStyle.Fill };
 
 			Controls.Add(host);
@@ -35,7 +35,7 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker
 			host.Child = _ElementNodeFiltersEditorView;
 
 			sequenceEditorForm.TimelineControl.SelectionChanged += TimelineControl_SelectionChanged;
-
+			
 			//_layerEditorView.CollectionChanged += LayerEditorViewCollectionChanged;
 			//_layerEditorView.LayerChanged += LayerEditorViewOnLayerChanged;
 		}
@@ -47,7 +47,14 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker
 			{
 				_elements.Clear();
 				_elements.AddRange(value);
-				_vm.Filters = new ObservableCollection<IChainableElementNodeFilter>(_elements.First().EffectNode.Effect.ElementNodeFilters);
+				if (_elements.Any())
+				{
+					_vm.Filters = new ObservableCollection<IChainableElementNodeFilter>(_elements.First().EffectNode.Effect.ElementNodeFilters);
+				}
+				else
+				{
+					_vm.Filters = new ObservableCollection<IChainableElementNodeFilter>();
+				}
 				//_effectPropertyEditorGridEffectEffectPropertiesEditor.SelectedObjects = _elements.Select(x => x.EffectNode.Effect).ToArray();
 			}
 		}

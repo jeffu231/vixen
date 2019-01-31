@@ -74,22 +74,22 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 
 		#endregion
 
-		#region FilterTypeId model property
+		#region FilterTypeId property
 
 		/// <summary>
 		/// Gets or sets the FilterTypeId value.
 		/// </summary>
-		[Model]
+		[ViewModelToModel("Filter")]
 		public Guid FilterTypeId
 		{
 			get { return GetValue<Guid>(FilterTypeIdProperty); }
-			private set { SetValue(FilterTypeIdProperty, value); }
+			set { SetValue(FilterTypeIdProperty, value); }
 		}
 
 		/// <summary>
 		/// FilterTypeId property data.
 		/// </summary>
-		public static readonly PropertyData FilterTypeIdProperty = RegisterProperty("FilterTypeId", typeof(Guid));
+		public static readonly PropertyData FilterTypeIdProperty = RegisterProperty("FilterTypeId", typeof(Guid), null);
 
 		#endregion
 

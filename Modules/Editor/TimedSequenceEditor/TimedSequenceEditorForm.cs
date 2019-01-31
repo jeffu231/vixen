@@ -47,6 +47,7 @@ using Vixen.Sys.State;
 using VixenModules.App.ColorGradients;
 using VixenModules.App.Marks;
 using VixenModules.Editor.EffectEditor;
+using VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker;
 using VixenModules.Editor.TimedSequenceEditor.Undo;
 using VixenModules.Sequence.Timed;
 using WeifenLuo.WinFormsUI.Docking;
@@ -255,6 +256,8 @@ namespace VixenModules.Editor.TimedSequenceEditor
 				return LayerEditor;
 			if (persistString == "VixenModules.Editor.TimedSequenceEditor.Form_ToolPalette")
 				return null;
+			if (persistString == typeof(ElementNodeFiltersEditor).ToString())
+				return ElementNodeFiltersEditor;
 
 			//Else
 			throw new NotImplementedException("Unable to find docking window type: " + persistString);
@@ -310,6 +313,11 @@ namespace VixenModules.Editor.TimedSequenceEditor
 			if (LayerEditor.DockState == DockState.Unknown)
 			{
 				LayerEditor.Show(dockPanel, DockState.DockRight);
+			}
+
+			if (ElementNodeFiltersEditor.DockState == DockState.Unknown)
+			{
+				ElementNodeFiltersEditor.Show(dockPanel, DockState.DockRight);
 			}
 
 			XMLProfileSettings xml = new XMLProfileSettings();
@@ -614,6 +622,7 @@ namespace VixenModules.Editor.TimedSequenceEditor
 			LayerEditor.Show(dockPanel, DockState.DockRight);
 			FindEffects.Show(dockPanel, DockState.DockRight);
 			EffectsForm.Show(dockPanel, DockState.DockLeft);
+			ElementNodeFiltersEditor.Show(dockPanel, DockState.DockRight);
 		}
 
 
@@ -983,6 +992,25 @@ namespace VixenModules.Editor.TimedSequenceEditor
 				_layerEditor.Closing +=LayerEditorOnClosing;
 
 				return _layerEditor;
+			}
+		}
+
+		private ElementNodeFiltersEditor _elementNodeFiltersEditor;
+
+		private ElementNodeFiltersEditor ElementNodeFiltersEditor
+		{
+			get
+			{
+				if (_elementNodeFiltersEditor != null && !_elementNodeFiltersEditor.IsDisposed)
+				{
+					return _elementNodeFiltersEditor;
+				}
+
+				_elementNodeFiltersEditor = new ElementNodeFiltersEditor(this);
+				//_elementNodeFiltersEditor.LayersChanged += LayerEditorLayersChanged;
+				//_elementNodeFiltersEditor.Closing += LayerEditorOnClosing;
+
+				return _elementNodeFiltersEditor;
 			}
 		}
 
@@ -5227,6 +5255,7 @@ namespace VixenModules.Editor.TimedSequenceEditor
 			EffectsForm.Close();
 			LayerEditor.Close();
 			FindEffects.Close();
+			ElementNodeFiltersEditor.Close();
 
 			var xml = new XMLProfileSettings();
 			xml.PutSetting(XMLProfileSettings.SettingType.AppSettings, string.Format("{0}/DockLeftPortion", Name), (int)dockPanel.DockLeftPortion);
@@ -5502,7 +5531,11 @@ namespace VixenModules.Editor.TimedSequenceEditor
 			gridWindowToolStripMenuItem.Checked = !(GridForm.IsHidden || GridForm.DockState == DockState.Unknown);
 			effectEditorWindowToolStripMenuItem.Checked =
 				!(_effectEditorForm == null || EffectEditorForm.DockState == DockState.Unknown);
+			elementFilterWindowToolStripMenuItem.Checked =
+				!(_elementNodeFiltersEditor == null || _elementNodeFiltersEditor.DockState == DockState.Unknown);
 		}
+
+		
 
 		private void timerPostponePlay_Tick(object sender, EventArgs e)
 		{
@@ -5782,6 +5815,7 @@ namespace VixenModules.Editor.TimedSequenceEditor
 			}
 			return defaultEffectDuration;
 		}
+
 	}
 
 	[Serializable]

@@ -224,6 +224,9 @@
     <Compile Include="Forms\WPF\ElementFilterDocker\Views\ElementNodeFilterDockerView.xaml.cs">
       <DependentUpon>ElementNodeFilterDockerView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\WPF\ElementFilterDocker\Views\ElementNodeFilterView.xaml.cs">
+      <DependentUpon>ElementNodeFilterView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\WPF\MarksDocker\Services\MarkImportExportService.cs" />
     <Compile Include="Forms\WPF\MarksDocker\ViewModels\CheckBoxStateBase.cs" />
     <Compile Include="Forms\WPF\MarksDocker\ViewModels\CollectionTypeCheckBoxState.cs" />
@@ -611,6 +614,10 @@
     <Page Include="Forms\WPF\ElementFilterDocker\Views\ElementNodeFilterDockerView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Forms\WPF\ElementFilterDocker\Views\ElementNodeFilterView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Forms\WPF\MarksDocker\Views\MarkCollectionView.xaml">
       <SubType>Designer</SubType>

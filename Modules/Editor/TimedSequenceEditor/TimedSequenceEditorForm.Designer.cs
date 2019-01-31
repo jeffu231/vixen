@@ -97,6 +97,7 @@ namespace VixenModules.Editor.TimedSequenceEditor
 			this.toolStripMenuItemColorLibrary = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemGradientLibrary = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemCurveLibrary = new System.Windows.Forms.ToolStripMenuItem();
+			this.elementFilterWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.audioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_associateAudio = new System.Windows.Forms.ToolStripMenuItem();
@@ -792,7 +793,8 @@ namespace VixenModules.Editor.TimedSequenceEditor
             this.toolStripMenuItemFindEffects,
             this.toolStripMenuItemColorLibrary,
             this.toolStripMenuItemGradientLibrary,
-            this.toolStripMenuItemCurveLibrary});
+            this.toolStripMenuItemCurveLibrary,
+            this.elementFilterWindowToolStripMenuItem});
 			this.viewToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(221)))), ((int)(((byte)(221)))), ((int)(((byte)(221)))));
 			this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
 			this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
@@ -944,6 +946,13 @@ namespace VixenModules.Editor.TimedSequenceEditor
 			this.toolStripMenuItemCurveLibrary.Size = new System.Drawing.Size(234, 22);
 			this.toolStripMenuItemCurveLibrary.Text = "Curve Library Window";
 			this.toolStripMenuItemCurveLibrary.Click += new System.EventHandler(this.toolStripMenuItemCurveLibrary_Click);
+			// 
+			// elementFilterWindowToolStripMenuItem
+			// 
+			this.elementFilterWindowToolStripMenuItem.Name = "elementFilterWindowToolStripMenuItem";
+			this.elementFilterWindowToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+			this.elementFilterWindowToolStripMenuItem.Text = "Element Filter Window";
+			this.elementFilterWindowToolStripMenuItem.Click += new System.EventHandler(this.elementFilterWindowToolStripMenuItem_Click);
 			// 
 			// toolsToolStripMenuItem
 			// 
@@ -2522,6 +2531,7 @@ namespace VixenModules.Editor.TimedSequenceEditor
 		private System.Windows.Forms.ToolStripMenuItem alignmentToolStripMenuItemCloseGap400;
 		private System.Windows.Forms.ToolStripButton viewToolStripButton_ZoomRowIn;
 		private System.Windows.Forms.ToolStripButton viewToolStripButton_ZoomRowOut;
+		private System.Windows.Forms.ToolStripMenuItem elementFilterWindowToolStripMenuItem;
 		private System.Windows.Forms.ToolStrip toolStripColorLibrary;
 		private System.Windows.Forms.ContextMenuStrip contextMenuStripLibraries;
 		private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItemLibraries;
