@@ -79,7 +79,9 @@
   <ItemGroup>
     <Compile Include="SkipFilterModuleDescriptor.cs" />
     <Compile Include="SkipFilterModule.cs" />
-    <Compile Include="SkipFilterSetup.cs" />
+    <Compile Include="SkipFilterSetup.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="SkipFilterSetup.Designer.cs">
       <DependentUpon>SkipFilterSetup.cs</DependentUpon>
     </Compile>

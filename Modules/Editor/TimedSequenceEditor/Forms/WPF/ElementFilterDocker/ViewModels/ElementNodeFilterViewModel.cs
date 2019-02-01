@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using Catel.Data;
 using Catel.MVVM;
 using Vixen.Module.ElementNodeFilter;
-using Vixen.Services;
 using Vixen.Sys.ElementNodeFilters;
 
 namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.ViewModels
@@ -15,7 +13,6 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 		public ElementNodeFilterViewModel(IChainableElementNodeFilter filter)
 		{
 			Filter = filter;
-			PropertyChanged += ElementNodeFilterViewModel_PropertyChanged;
 		}
 
 		#region Filter model property
@@ -138,14 +135,6 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 			if (ParentViewModel is ElementNodeFilterDockerViewModel pm)
 			{
 				pm.OnFiltersChanged(new EventArgs());
-			}
-		}
-
-		private void ElementNodeFilterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-		{
-			if (e.PropertyName.Equals(nameof(FilterTypeId)))
-			{
-				Filter.ElementNodeFilter = ApplicationServices.Get<IElementNodeFilterInstance>(FilterTypeId);
 			}
 		}
 	}

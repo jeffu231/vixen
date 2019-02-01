@@ -85,7 +85,7 @@
     <Compile Include="DepthFilterSetup.Designer.cs">
       <DependentUpon>DepthFilterSetup.cs</DependentUpon>
     </Compile>
-    <Compile Include="MaskAndFillData.cs" />
+    <Compile Include="DepthFilterData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

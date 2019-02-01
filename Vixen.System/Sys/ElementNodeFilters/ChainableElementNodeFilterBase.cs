@@ -65,7 +65,13 @@ namespace Vixen.Sys.ElementNodeFilters
 		public Guid FilterTypeId
 		{
 			get => ElementNodeFilter?.Descriptor.TypeId ?? Guid.Empty;
-			set => ElementNodeFilter = ElementNodeFilterService.Instance.GetInstance(value);
+			set
+			{
+				if (ElementNodeFilter != null && ElementNodeFilter.Descriptor.TypeId != value)
+				{
+					ElementNodeFilter = ElementNodeFilterService.Instance.GetInstance(value);
+				} 
+			}
 		}
 
 		public IElementNodeFilterInstance ElementNodeFilter

@@ -1,8 +1,7 @@
 ﻿using System;
 using Vixen.Module.ElementNodeFilter;
-using VixenModules.ElementNodeFilter.DepthFilter;
 
-namespace VixenModules.LayerMixingFilter.HighestValueWins
+namespace VixenModules.ElementNodeFilter.DepthFilter
 {
 	public class DepthFilterModuleDescriptor : ElementNodeFilterModuleDescriptorBase
 	{

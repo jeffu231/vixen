@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("Depth Filter")]
+[assembly: AssemblyTitle("Skip filter")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Vixen")]
-[assembly: AssemblyProduct("Depth Filter")]
+[assembly: AssemblyProduct("Skip filter")]
 [assembly: AssemblyCopyright("Copyright 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -23,7 +23,7 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 
-[assembly: Guid("C6D2ADFC-2C29-4C25-B1E1-5FA9BF0863C1")]
+[assembly: Guid("99316C12-5992-4029-9D6C-24AA15FDF39E")]
 
 // Version information for an assembly consists of the following four values:
 //

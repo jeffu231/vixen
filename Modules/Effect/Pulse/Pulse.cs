@@ -35,7 +35,7 @@ namespace VixenModules.Effect.Pulse
 
 				if (node != null)
 				{
-					_elementData = RenderNode(node);
+					_elementData.Add(RenderNode(node));
 					//_elementData = IntentBuilder.ConvertToStaticArrayIntents(_elementData, TimeSpan, IsDiscrete());
 				}
 			}
