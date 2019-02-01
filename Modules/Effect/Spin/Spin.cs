@@ -51,8 +51,12 @@ namespace VixenModules.Effect.Spin
 		{
 			_elementData = new EffectIntents();
 
-			DoRendering(tokenSource);
-
+			foreach (var elementNode in TargetNodes)
+			{
+				var renderNodes = GetNodesToRenderOn(elementNode);
+				DoRendering(renderNodes, tokenSource);
+			}
+			
 			//_elementData = IntentBuilder.ConvertToStaticArrayIntents(_elementData, TimeSpan, IsDiscrete());
 		}
 
@@ -447,9 +451,8 @@ namespace VixenModules.Effect.Spin
 
 		#endregion
 
-		private void DoRendering(CancellationTokenSource tokenSource = null)
+		private void DoRendering(List<ElementNode> renderNodes, CancellationTokenSource tokenSource = null)
 		{
-			List<ElementNode> renderNodes = GetNodesToRenderOn();
 			int targetNodeCount = renderNodes.Count;
 			
 			//If there are no nodes to render on Exit!
@@ -689,16 +692,19 @@ namespace VixenModules.Effect.Spin
 			_elementData = EffectIntents.Restrict(_elementData, TimeSpan.Zero, TimeSpan);
 		}
 
-		private List<ElementNode> GetNodesToRenderOn()
+		private List<ElementNode> GetNodesToRenderOn(ElementNode node)
 		{
 			IEnumerable<ElementNode> renderNodes = null;
 
-			if (DepthOfEffect == 0) {
-				renderNodes = TargetNodes.SelectMany(x => x.GetLeafEnumerator()).ToList();
+			if (DepthOfEffect == 0)
+			{
+				renderNodes = node.GetLeafEnumerator().ToList();
 			}
-			else {
-				renderNodes = TargetNodes;
-				for (int i = 0; i < DepthOfEffect; i++) {
+			else
+			{
+				renderNodes = new[] { node };
+				for (int i = 0; i < DepthOfEffect; i++)
+				{
 					renderNodes = renderNodes.SelectMany(x => x.Children);
 				}
 			}
@@ -706,7 +712,7 @@ namespace VixenModules.Effect.Spin
 			// If the given DepthOfEffect results in no nodes (because it goes "too deep" and misses all nodes), 
 			// then we'll default to the LeafElements, which will at least return 1 element (the TargetNode)
 			if (!renderNodes.Any())
-				renderNodes = TargetNodes.SelectMany(x => x.GetLeafEnumerator());
+				renderNodes = node.GetLeafEnumerator();
 
 			return renderNodes.ToList();
 		}
