@@ -90,9 +90,11 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 			Filters.Add(new StandardElementNodeFilter
 			{
 				Name = $"Filter {index + 1}",
-				ElementNodeFilter = filter,
+				ElementNodeFilter = ElementNodeFilterService.Instance.GetInstance(filter.TypeId),
 				ChainLevel = index
 			});
+
+			OnFiltersChanged(new EventArgs());
 		}
 
 		/// <summary>
@@ -108,29 +110,30 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 
 		#region RemoveFilter command
 
-		private Command _removeFilterCommand;
+		private Command<IChainableElementNodeFilter> _removeFilterCommand;
 
 		/// <summary>
 		/// Gets the RemoveFilter command.
 		/// </summary>
-		public Command RemoveFilterCommand
+		public Command<IChainableElementNodeFilter> RemoveFilterCommand
 		{
-			get { return _removeFilterCommand ?? (_removeFilterCommand = new Command(RemoveFilter, CanRemoveFilter)); }
+			get { return _removeFilterCommand ?? (_removeFilterCommand = new Command<IChainableElementNodeFilter>(RemoveFilter, CanRemoveFilter)); }
 		}
 
 		/// <summary>
 		/// Method to invoke when the RemoveFilter command is executed.
 		/// </summary>
-		private void RemoveFilter()
+		private void RemoveFilter(IChainableElementNodeFilter filter)
 		{
-			// TODO: Handle command logic here
+			Filters.Remove(filter);
+			OnFiltersChanged(new EventArgs());
 		}
 
 		/// <summary>
 		/// Method to check whether the RemoveFilter command can be executed.
 		/// </summary>
 		/// <returns><c>true</c> if the command can be executed; otherwise <c>false</c></returns>
-		private bool CanRemoveFilter()
+		private bool CanRemoveFilter(IChainableElementNodeFilter filter)
 		{
 			return true;
 		}

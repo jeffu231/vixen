@@ -71,7 +71,7 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker
 			{
 				element.EffectNode.Effect.ElementNodeFilters = _vm.Filters.ToList();
 				element.EffectNode.Effect.FilterNodes();
-				element.RenderElement();
+				element.UpdateNotifyContentChanged();
 			}
 		}
 
