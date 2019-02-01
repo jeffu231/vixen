@@ -218,7 +218,7 @@ namespace Vixen.Module.Effect
 			return effectIntents;
 		}
 
-		private void FilterNodes()
+		public void FilterNodes()
 		{
 			var filteredNodes = _unFilteredTargetNodes.ToArray();
 

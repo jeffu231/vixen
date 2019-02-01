@@ -11,7 +11,11 @@ namespace VixenModules.ElementNodeFilter.DepthFilter
 	{
 		private DepthFilterData _data;
 
-		public int Depth { get; set; }
+		public int Depth
+		{
+			get { return _data.Depth; }
+			set { _data.Depth = value; }
+		}
 
 		#region Overrides of ElementNodeFilterModuleInstanceBase
 

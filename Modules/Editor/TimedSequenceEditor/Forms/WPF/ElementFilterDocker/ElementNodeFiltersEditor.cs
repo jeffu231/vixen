@@ -30,6 +30,7 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker
 			Controls.Add(host);
 
 			_vm = new ElementNodeFilterDockerViewModel();
+			_vm.FiltersChanged += _vm_FiltersChanged;
 			_ElementNodeFiltersEditorView = new ElementNodeFilterDockerView(_vm);
 
 			host.Child = _ElementNodeFiltersEditorView;
@@ -64,7 +65,16 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker
 			Elements = _sequenceEditorForm.TimelineControl.SelectedElements.ToArray();
 		}
 
-		
+		private void _vm_FiltersChanged(object sender, EventArgs e)
+		{
+			foreach (var element in Elements)
+			{
+				element.EffectNode.Effect.ElementNodeFilters = _vm.Filters.ToList();
+				element.EffectNode.Effect.FilterNodes();
+				element.RenderElement();
+			}
+		}
+
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>

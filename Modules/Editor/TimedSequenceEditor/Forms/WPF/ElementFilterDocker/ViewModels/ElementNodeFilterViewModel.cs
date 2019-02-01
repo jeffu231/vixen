@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Catel.Data;
 using Catel.MVVM;
 using Vixen.Module.ElementNodeFilter;
+using Vixen.Services;
 using Vixen.Sys.ElementNodeFilters;
 
 namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.ViewModels
@@ -13,6 +15,7 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 		public ElementNodeFilterViewModel(IChainableElementNodeFilter filter)
 		{
 			Filter = filter;
+			PropertyChanged += ElementNodeFilterViewModel_PropertyChanged;
 		}
 
 		#region Filter model property
@@ -92,39 +95,7 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 		public static readonly PropertyData FilterTypeIdProperty = RegisterProperty("FilterTypeId", typeof(Guid), null);
 
 		#endregion
-
-
-		#region Setup command
-
-		private Command _setupCommand;
-
-		/// <summary>
-		/// Gets the Setup command.
-		/// </summary>
-		public Command SetupCommand
-		{
-			get { return _setupCommand ?? (_setupCommand = new Command(Setup, CanSetup)); }
-		}
-
-		/// <summary>
-		/// Method to invoke when the Setup command is executed.
-		/// </summary>
-		private void Setup()
-		{
-			// TODO: Handle command logic here
-		}
-
-		/// <summary>
-		/// Method to check whether the Setup command can be executed.
-		/// </summary>
-		/// <returns><c>true</c> if the command can be executed; otherwise <c>false</c></returns>
-		private bool CanSetup()
-		{
-			return true;
-		}
-
-		#endregion
-
+		
 		#region ConfigureFilter command
 
 		private Command _configureFilterCommand;
@@ -142,7 +113,13 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 		/// </summary>
 		private void ConfigureFilter()
 		{
-			// TODO: Handle command logic here
+			if (Filter.ElementNodeFilter.HasSetup)
+			{
+				if (Filter.ElementNodeFilter.Setup())
+				{
+					OnFilterUpdated();
+				}
+			}
 		}
 
 		/// <summary>
@@ -156,6 +133,20 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 
 		#endregion
 
-		
+		private void OnFilterUpdated()
+		{
+			if (ParentViewModel is ElementNodeFilterDockerViewModel pm)
+			{
+				pm.OnFiltersChanged(new EventArgs());
+			}
+		}
+
+		private void ElementNodeFilterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName.Equals(nameof(FilterTypeId)))
+			{
+				Filter.ElementNodeFilter = ApplicationServices.Get<IElementNodeFilterInstance>(FilterTypeId);
+			}
+		}
 	}
 }

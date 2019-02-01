@@ -60,5 +60,7 @@ namespace Vixen.Module.Effect
 		ObservableCollection<IMarkCollection> MarkCollections { get; set; }
 
 		List<IChainableElementNodeFilter> ElementNodeFilters { get; set; }
+
+		void FilterNodes();
 	}
 }

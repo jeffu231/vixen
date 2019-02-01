@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Catel.Data;
@@ -11,9 +12,13 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 {
 	public class ElementNodeFilterDockerViewModel : ViewModelBase
 	{
+
+		public event EventHandler<EventArgs> FiltersChanged;
+
 		public ElementNodeFilterDockerViewModel()
 		{
 			Filters = new ObservableCollection<IChainableElementNodeFilter>();
+			Filters.CollectionChanged += Filters_CollectionChanged;
 			InitializeStandardFilters();
 		}
 
@@ -131,9 +136,24 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 		}
 
 		#endregion
-		
-		
+
+
 		#endregion
+
+		#region Events
+
+		internal void OnFiltersChanged(EventArgs args)
+		{
+			FiltersChanged?.Invoke(this, args);
+		}
+
+		private void Filters_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+		{
+			OnFiltersChanged(new EventArgs());
+		}
+
+		#endregion
+
 
 	}
 }

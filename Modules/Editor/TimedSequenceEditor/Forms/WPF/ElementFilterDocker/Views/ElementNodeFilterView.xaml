@@ -4,7 +4,8 @@
                    xmlns:catel="http://schemas.catelproject.com"
                    xmlns:viewModels="clr-namespace:VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.ViewModels"
                    xmlns:utils="clr-namespace:Common.WPFCommon.Utils;assembly=WPFCommon"
-                   xmlns:converters="clr-namespace:Common.WPFCommon.Converters;assembly=WPFCommon">
+                   xmlns:converters="clr-namespace:Common.WPFCommon.Converters;assembly=WPFCommon"
+                   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
 
 	<UserControl.Resources>
 		<ResourceDictionary>
