@@ -4,44 +4,74 @@
                    xmlns:catel="http://schemas.catelproject.com"
                    xmlns:commonConverters="clr-namespace:Common.WPFCommon.Converters;assembly=WPFCommon"
                    xmlns:commonUtils="clr-namespace:Common.WPFCommon.Utils;assembly=WPFCommon"
+                   xmlns:commonBehaviors="clr-namespace:Common.WPFCommon.Behaviors;assembly=WPFCommon"
                    xmlns:viewModels="clr-namespace:VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.ViewModels"
                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-                   xmlns:views="clr-namespace:VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.Views">
+                   xmlns:views="clr-namespace:VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.Views"
+                   xmlns:commonControls="clr-namespace:Common.WPFCommon.Controls;assembly=WPFCommon">
 
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="pack://application:,,,/WPFCommon;component/Theme/Theme.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
+			<commonConverters:BooleanToVisibilityConverter 
+				x:Key="InvertedBooleanToVisibilityConverter" 
+				True="Collapsed" 
+				False="Visible" />
+			<commonConverters:BooleanToVisibilityConverter 
+				x:Key="BooleanToVisibilityConverter" 
+				True="Visible" 
+				False="Collapsed" />
 		</ResourceDictionary>
-
+		
 	</UserControl.Resources>
 
 	<DockPanel Background="{StaticResource BackColorBrush}">
-		<Grid HorizontalAlignment="Stretch" Background="{StaticResource BackColorBrush}">
-
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="1*"></ColumnDefinition>
-				<ColumnDefinition Width="1*"></ColumnDefinition>
-			</Grid.ColumnDefinitions>
-			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto"></RowDefinition>
-				<RowDefinition Height="*"></RowDefinition>
-			</Grid.RowDefinitions>
-			<Grid.Resources>
-				<DataTemplate x:Key="ElementNodeFilterRow" DataType="{x:Type viewModels:ElementNodeFilterViewModel}">
-					<views:ElementNodeFilterView/>
-				</DataTemplate>
-			</Grid.Resources>
-			<Button Grid.Column="0" Grid.Row="0" Content="Add Transform" Margin="5" Command="{Binding AddFilterCommand}"></Button>
-			<Button Grid.Column="1" Grid.Row="0" Content="Remove Transform" Margin="5" Command="{Binding RemoveFilterCommand}"
-                                CommandParameter="{Binding ElementName=LblFilters, Path=SelectedItem}"></Button>
-			<ListBox Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Name="LblFilters" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" 
-                                 ItemsSource="{Binding Filters}" 
-                                Style="{StaticResource SimpleListBoxStyle}"
-                                 ItemTemplate="{StaticResource ElementNodeFilterRow}">
-				
-			</ListBox>
-		</Grid>
+		<StackPanel>
+			<Border Visibility="{Binding IsActive, Converter={StaticResource InvertedBooleanToVisibilityConverter}}" BorderThickness="0.5,1,0.5,1" BorderBrush="#6000" Background="#10FFFFFF" CornerRadius="2,3,2,2" SnapsToDevicePixels="True"  >
+				<Border BorderThickness=".5,1,0.5,1" BorderBrush="#20FFFFFF" CornerRadius="2,3,2,2" Margin="2">
+					<StackPanel>
+						<TextBlock TextWrapping="Wrap" Text="{Binding Information, Mode=OneWay}" TextAlignment="Left" Foreground="#DDD" Padding="5,5,5,5"
+						           Visibility="{Binding Information, Converter={commonConverters:StringNullOrEmptyToVisibilityConverter}}">
+							<TextBlock.Background>
+								<SolidColorBrush Color="Transparent" Opacity="0"></SolidColorBrush>
+							</TextBlock.Background>
+						</TextBlock>
+						<TextBlock TextAlignment="Left" Foreground="#DDD" Padding="5,5,5,5">
+							<TextBlock.Background>
+								<SolidColorBrush Color="Transparent" Opacity="0"></SolidColorBrush>
+							</TextBlock.Background>
+							<commonControls:NavigatableHyperLink NavigateUri="{Binding InformationLink, Mode=OneWay}">More Info</commonControls:NavigatableHyperLink>
+						</TextBlock>
+					</StackPanel>
+				</Border>
+			</Border>
+			<Grid HorizontalAlignment="Stretch" Background="{StaticResource BackColorBrush}" Visibility="{Binding IsActive, Converter={StaticResource BooleanToVisibilityConverter}}">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="1*"></ColumnDefinition>
+					<ColumnDefinition Width="1*"></ColumnDefinition>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"></RowDefinition>
+					<RowDefinition Height="*"></RowDefinition>
+				</Grid.RowDefinitions>
+				<Grid.Resources>
+					<DataTemplate x:Key="ElementNodeFilterRow" DataType="{x:Type viewModels:ElementNodeFilterViewModel}">
+						<views:ElementNodeFilterView/>
+					</DataTemplate>
+				</Grid.Resources>
+				<Button Grid.Column="0" Grid.Row="0" Content="Add Transform" Margin="5" Command="{Binding AddFilterCommand}"></Button>
+				<Button Grid.Column="1" Grid.Row="0" Content="Remove Transform" Margin="5" Command="{Binding RemoveFilterCommand}"
+	                                CommandParameter="{Binding ElementName=LblFilters, Path=SelectedItem}"></Button>
+				<ListBox Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Name="LblFilters" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" 
+	                                 ItemsSource="{Binding Filters}" 
+	                                Style="{StaticResource SimpleListBoxStyle}"
+	                                 ItemTemplate="{StaticResource ElementNodeFilterRow}" 
+	                                 commonBehaviors:MultiSelectorBehaviour.SynchronizedSelectedItems="{Binding SelectedItems}" >
+					
+				</ListBox>
+			</Grid>
+		</StackPanel>
 	</DockPanel>
 </catel:UserControl>

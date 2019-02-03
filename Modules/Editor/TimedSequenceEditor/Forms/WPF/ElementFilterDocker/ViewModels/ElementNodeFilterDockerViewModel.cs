@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Catel.Data;
@@ -13,14 +12,26 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 {
 	public class ElementNodeFilterDockerViewModel : ViewModelBase
 	{
-
 		public event EventHandler<EventArgs> FiltersChanged;
+		private const string InfoLink = @"http://www.vixenlights.com";
+		private const string DefaultMessage = @"Select an Effect to edit";
 
 		public ElementNodeFilterDockerViewModel()
 		{
 			Filters = new ObservableCollection<IChainableElementNodeFilter>();
+			SelectedItems = new ObservableCollection<IChainableElementNodeFilter>();
+			SelectedItems.CollectionChanged += SelectedItems_CollectionChanged;
 			Filters.CollectionChanged += Filters_CollectionChanged;
+			InformationLink = InfoLink;
+			Information = DefaultMessage;
 			InitializeStandardFilters();
+		}
+
+		private void SelectedItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+		{
+			var viewModelBase = this as ViewModelBase;
+			var commandManager = viewModelBase.GetViewModelCommandManager();
+			commandManager.InvalidateCommands();
 		}
 
 		#region Filters model property
@@ -57,6 +68,78 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 		/// StandardFilters property data.
 		/// </summary>
 		public static readonly PropertyData StandardFiltersProperty = RegisterProperty("StandardFilters", typeof(ObservableCollection<IModuleDescriptor>));
+
+		#endregion
+
+		#region SelectedItems property
+
+		/// <summary>
+		/// Gets or sets the SelectedItems value.
+		/// </summary>
+		public ObservableCollection<IChainableElementNodeFilter> SelectedItems
+		{
+			get { return GetValue<ObservableCollection<IChainableElementNodeFilter>>(SelectedItemsProperty); }
+			set { SetValue(SelectedItemsProperty, value); }
+		}
+
+		/// <summary>
+		/// SelectedItems property data.
+		/// </summary>
+		public static readonly PropertyData SelectedItemsProperty = RegisterProperty("SelectedItems", typeof(ObservableCollection<IChainableElementNodeFilter>));
+
+		#endregion
+
+		#region IsActive property
+
+		/// <summary>
+		/// Gets or sets the IsActive value.
+		/// </summary>
+		public bool IsActive
+		{
+			get { return GetValue<bool>(IsActiveProperty); }
+			set { SetValue(IsActiveProperty, value); }
+		}
+
+		/// <summary>
+		/// IsActive property data.
+		/// </summary>
+		public static readonly PropertyData IsActiveProperty = RegisterProperty("IsActive", typeof(bool));
+
+		#endregion
+
+		#region Information property
+
+		/// <summary>
+		/// Gets or sets the Information value.
+		/// </summary>
+		public string Information
+		{
+			get { return GetValue<string>(InformationProperty); }
+			set { SetValue(InformationProperty, value); }
+		}
+
+		/// <summary>
+		/// Information property data.
+		/// </summary>
+		public static readonly PropertyData InformationProperty = RegisterProperty("Information", typeof(string));
+
+		#endregion
+
+		#region InformationLink property
+
+		/// <summary>
+		/// Gets or sets the InformationLink value.
+		/// </summary>
+		public string InformationLink
+		{
+			get { return GetValue<string>(InformationLinkProperty); }
+			set { SetValue(InformationLinkProperty, value); }
+		}
+
+		/// <summary>
+		/// InformationLink property data.
+		/// </summary>
+		public static readonly PropertyData InformationLinkProperty = RegisterProperty("InformationLink", typeof(string));
 
 		#endregion
 
@@ -140,7 +223,7 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 		/// <returns><c>true</c> if the command can be executed; otherwise <c>false</c></returns>
 		private bool CanRemoveFilter(IChainableElementNodeFilter filter)
 		{
-			return true;
+			return SelectedItems.Any();
 		}
 
 		#endregion

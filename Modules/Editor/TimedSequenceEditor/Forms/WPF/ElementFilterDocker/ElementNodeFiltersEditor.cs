@@ -51,9 +51,11 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker
 				if (_elements.Any())
 				{
 					_vm.Filters = new ObservableCollection<IChainableElementNodeFilter>(_elements.First().EffectNode.Effect.ElementNodeFilters);
+					_vm.IsActive = true;
 				}
 				else
 				{
+					_vm.IsActive = false;
 					_vm.Filters = new ObservableCollection<IChainableElementNodeFilter>();
 				}
 				//_effectPropertyEditorGridEffectEffectPropertiesEditor.SelectedObjects = _elements.Select(x => x.EffectNode.Effect).ToArray();
