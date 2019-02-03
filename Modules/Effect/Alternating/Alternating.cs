@@ -47,19 +47,21 @@ namespace VixenModules.Effect.Alternating
 		{
 			_elementData = new EffectIntents();
 
-			var renderNodes = GetNodesToRenderOn();
-			
-			_elementData.Add(RenderNode(renderNodes));
+			foreach (var elementNode in TargetNodes)
+			{
+				var renderNodes = GetNodesToRenderOn(elementNode);
 
+				_elementData.Add(RenderNode(renderNodes));
+			}
 		}
 
-		private IEnumerable<ElementNode> GetNodesToRenderOn()
+		private IEnumerable<ElementNode> GetNodesToRenderOn(ElementNode node)
 		{
-			IEnumerable<ElementNode> renderNodes = TargetNodes;
+			IEnumerable<ElementNode> renderNodes = new[] { node }; 
 
 			if (!EnableDepth)
 			{
-				renderNodes = TargetNodes.SelectMany(x => x.GetLeafEnumerator());
+				renderNodes = node.GetLeafEnumerator().ToList();
 			}
 			else
 			{
@@ -68,11 +70,13 @@ namespace VixenModules.Effect.Alternating
 					renderNodes = renderNodes.SelectMany(x => x.Children);
 				}
 			}
-			
+
 			// If the given DepthOfEffect results in no nodes (because it goes "too deep" and misses all nodes), 
 			// then we'll default to the LeafElements, which will at least return 1 element (the TargetNode)
 			if (!renderNodes.Any())
-				renderNodes = TargetNodes.SelectMany(x => x.GetLeafEnumerator());
+			{
+				renderNodes = node.GetLeafEnumerator();
+			}
 
 			return renderNodes;
 		}
