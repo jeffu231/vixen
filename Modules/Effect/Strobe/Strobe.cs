@@ -42,19 +42,14 @@ namespace VixenModules.Effect.Strobe
 		{
 			_elementData = new EffectIntents();
 
-			var renderNodes = GetNodesToRenderOn().ToList();
+			foreach (var elementNode in TargetNodes)
+			{
+				var renderNodes = elementNode.GetLeafEnumerator().ToList();
 
-			_elementData.Add(RenderNode(renderNodes));
-
-		}
-
-		private IEnumerable<ElementNode> GetNodesToRenderOn()
-		{
-			IEnumerable<ElementNode> renderNodes = TargetNodes;
+				_elementData.Add(RenderNode(renderNodes));
+			}
 			
-			renderNodes = TargetNodes.SelectMany(x => x.GetLeafEnumerator());
 
-			return renderNodes;
 		}
 
 		//Validate that the we are using valid colors and set appropriate defaults if not.
