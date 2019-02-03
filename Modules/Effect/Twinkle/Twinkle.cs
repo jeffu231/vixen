@@ -51,26 +51,31 @@ namespace VixenModules.Effect.Twinkle
 		{
 			_elementData = new EffectIntents();
 
-			IEnumerable<ElementNode> targetNodes = GetNodesToRenderOn();
+			foreach (var elementNode in TargetNodes)
+			{
+				IEnumerable<ElementNode> targetNodes = GetNodesToRenderOn(elementNode);
 
-			List<IndividualTwinkleDetails> twinkles = null;
-			if (!IndividualElements)
-				twinkles = GenerateTwinkleData();
+				List<IndividualTwinkleDetails> twinkles = null;
+				if (!IndividualElements)
+					twinkles = GenerateTwinkleData();
 
-			int totalNodes = targetNodes.Count();
-			double i = 0;
+				int totalNodes = targetNodes.Count();
+				double i = 0;
 
-			foreach (ElementNode node in targetNodes) {
-				if (tokenSource != null && tokenSource.IsCancellationRequested)
-					return;
-
-				if (node != null)
+				foreach (ElementNode node in targetNodes)
 				{
-					bool discreteColors = HasDiscreteColors && ColorModule.isElementNodeDiscreteColored(node);
-					var intents = RenderElement(node, i++/totalNodes, discreteColors, twinkles);
-					_elementData.Add(IntentBuilder.ConvertToStaticArrayIntents(intents, TimeSpan, discreteColors));
+					if (tokenSource != null && tokenSource.IsCancellationRequested)
+						return;
+
+					if (node != null)
+					{
+						bool discreteColors = HasDiscreteColors && ColorModule.isElementNodeDiscreteColored(node);
+						var intents = RenderElement(node, i++ / totalNodes, discreteColors, twinkles);
+						_elementData.Add(IntentBuilder.ConvertToStaticArrayIntents(intents, TimeSpan, discreteColors));
+					}
 				}
 			}
+			
 		}
 
 		//Validate that the we are using valid colors and set appropriate defaults if not.
@@ -595,15 +600,16 @@ namespace VixenModules.Effect.Twinkle
 			return result;
 		}
 
-		private List<ElementNode> GetNodesToRenderOn()
+		private IEnumerable<ElementNode> GetNodesToRenderOn(ElementNode node)
 		{
 			IEnumerable<ElementNode> renderNodes = null;
 
-			if (DepthOfEffect == 0 || !IndividualElements) {
-				renderNodes = TargetNodes.SelectMany(x => x.GetLeafEnumerator()).Distinct();
+			if (DepthOfEffect == 0 || !IndividualElements)
+			{
+				renderNodes = node.GetLeafEnumerator().Distinct();
 			}
 			else {
-				renderNodes = TargetNodes;
+				renderNodes = new []{node};
 				for (int i = 0; i < DepthOfEffect; i++) {
 					renderNodes = renderNodes.SelectMany(x => x.Children).Distinct();
 				}
@@ -612,9 +618,9 @@ namespace VixenModules.Effect.Twinkle
 			// If the given DepthOfEffect results in no nodes (because it goes "too deep" and misses all nodes), 
 			// then we'll default to the LeafElements, which will at least return 1 element (the TargetNode)
 			if (!renderNodes.Any())
-				renderNodes = TargetNodes.SelectMany(x => x.GetLeafEnumerator()).Distinct();
+				renderNodes = node.GetLeafEnumerator().Distinct();
 
-			return renderNodes.ToList();
+			return renderNodes;
 		}
 
 		private class IndividualTwinkleDetails
