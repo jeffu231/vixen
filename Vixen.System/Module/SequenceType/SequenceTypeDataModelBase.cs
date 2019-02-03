@@ -33,6 +33,9 @@ namespace Vixen.Module.SequenceType
 		[DataMember]
 		private IModuleDataModel[] _layerMixingFilterDataModels;
 
+		[DataMember(EmitDefaultValue = false)]
+		private IModuleDataModel[] _elementNodeTransformsDataModels;
+
 		[DataMember] private IModuleDataModel[] _dataModels;
 		public ModuleLocalDataSet LocalDataSet { get; set; }
 
@@ -77,12 +80,16 @@ namespace Vixen.Module.SequenceType
 				_mediaSurrogates = Media.Select(x => new MediaSurrogate(x)).ToArray();
 				Media.ForEach(x => activeInstances.Add(x.InstanceId));
 			}
+
+			ModuleLocalDataSet transformDataSet = new ModuleLocalDataSet();
 			if (EffectData != null) {
-				_effectNodeSurrogates = EffectData.Select(x => new EffectNodeSurrogate((IEffectNode) x)).ToArray();
+				_effectNodeSurrogates = EffectData.Select(x => new EffectNodeSurrogate((IEffectNode) x, transformDataSet)).ToArray();
 				foreach (IDataNode dataNode in EffectData) {
 					activeInstances.Add(((IEffectNode) dataNode).Effect.InstanceId);
 				}
 			}
+
+			_elementNodeTransformsDataModels = transformDataSet.DataModels.ToArray();
 
 			if (SequenceLayers != null)
 			{
@@ -122,7 +129,10 @@ namespace Vixen.Module.SequenceType
 
 			// Rehydrate the modules.
 			var elementNodes = VixenSystem.Nodes.Distinct().ToDictionary(x => x.Id);
-			IEffectNode[] effectNodes = _effectNodeSurrogates.Select(x => x.CreateEffectNode(elementNodes)).ToArray();
+
+			var transformDataSet = new ModuleLocalDataSet { DataModels = _elementNodeTransformsDataModels ?? new IModuleDataModel[]{} };
+
+			IEffectNode[] effectNodes = _effectNodeSurrogates.Select(x => x.CreateEffectNode(elementNodes, transformDataSet)).ToArray();
 			// weed out effects without nodes..
 			effectNodes = effectNodes.Where(x => x.Effect.UnFilteredTargetNodes.Count() != 0).ToArray();
 
@@ -130,9 +140,6 @@ namespace Vixen.Module.SequenceType
 
 			// Connect them to their respective data from the data store.
 			// This was previously being done by adding the data to the sequence after loading the data.
-			foreach (var effectNode in effectNodes) {
-				LocalDataSet.AssignModuleInstanceData(effectNode.Effect);
-			}
 			foreach (var sequenceFilterNode in sequenceFilterNodes) {
 				LocalDataSet.AssignModuleInstanceData(sequenceFilterNode.Filter);
 			}

@@ -354,6 +354,7 @@
     <Compile Include="Module\ModuleConsumer.cs" />
     <Compile Include="Module\ModuleTypeDataRetriever.cs" />
     <Compile Include="Module\Preview\PreviewElementIntentStates.cs" />
+    <Compile Include="Module\SequenceType\Surrogate\ElementNodeTransformSurrogate.cs" />
     <Compile Include="Module\SequenceType\Surrogate\LayerMixingFilterSurrogate.cs" />
     <Compile Include="Module\Service\IService.cs" />
     <Compile Include="Module\Service\IServiceModuleDescriptor.cs" />

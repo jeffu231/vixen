@@ -20,5 +20,26 @@ namespace Vixen.Module.SequenceType.Surrogate
 
 		[DataMember]
 		public ChannelNodeReferenceSurrogate[] TargetNodes { get; protected set; }
+
+		[DataMember(EmitDefaultValue = false)]
+		public ElementNodeTransformSurrogate[] ElementTransforms { get; protected set; }
+
+		[OnDeserialized]
+		private void OnDeserialized(StreamingContext c)
+		{
+			if (ElementTransforms == null)
+			{
+				ElementTransforms = new ElementNodeTransformSurrogate[]{};
+			}
+		}
+
+		[OnSerializing]
+		private void OnSerializing(StreamingContext c)
+		{
+			if (ElementTransforms.Length == 0)
+			{
+				ElementTransforms = null;
+			}
+		}
 	}
 }
