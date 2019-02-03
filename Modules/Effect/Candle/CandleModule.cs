@@ -202,19 +202,20 @@ namespace VixenModules.Effect.Candle
 		{
 			_effectIntents = new EffectIntents();
 			_r = new Random();
-		
-			var nodes = TargetNodes.SelectMany(x => x.GetLeafEnumerator());
 
-			var elementGroup = nodes.Select((x, index) => new { x, index })
+			foreach (var elementNode in TargetNodes)
+			{
+				var nodes = elementNode.GetLeafEnumerator();
+
+				var elementGroup = nodes.Select((x, index) => new { x, index })
 					.GroupBy(x => x.index / GroupLevel, y => y.x);
 
-			foreach (IGrouping<int, ElementNode> block in elementGroup)
-			{
-				_RenderCandleOnElements(block.ToList());
+				foreach (IGrouping<int, ElementNode> block in elementGroup)
+				{
+					_RenderCandleOnElements(block.ToList());
+				}
 			}
-
 			//_effectIntents = IntentBuilder.ConvertToStaticArrayIntents(_effectIntents, TimeSpan, IsDiscrete());
-
 		}
 
 		protected override EffectIntents _Render()
