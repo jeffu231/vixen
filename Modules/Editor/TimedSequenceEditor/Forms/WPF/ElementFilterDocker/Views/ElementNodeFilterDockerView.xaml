@@ -33,8 +33,8 @@
 					<views:ElementNodeFilterView/>
 				</DataTemplate>
 			</Grid.Resources>
-			<Button Grid.Column="0" Grid.Row="0" Content="Add Filter" Margin="5" Command="{Binding AddFilterCommand}"></Button>
-			<Button Grid.Column="1" Grid.Row="0" Content="Remove Filter" Margin="5" Command="{Binding RemoveFilterCommand}"
+			<Button Grid.Column="0" Grid.Row="0" Content="Add Transform" Margin="5" Command="{Binding AddFilterCommand}"></Button>
+			<Button Grid.Column="1" Grid.Row="0" Content="Remove Transform" Margin="5" Command="{Binding RemoveFilterCommand}"
                                 CommandParameter="{Binding ElementName=LblFilters, Path=SelectedItem}"></Button>
 			<ListBox Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Name="LblFilters" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" 
                                  ItemsSource="{Binding Filters}" 

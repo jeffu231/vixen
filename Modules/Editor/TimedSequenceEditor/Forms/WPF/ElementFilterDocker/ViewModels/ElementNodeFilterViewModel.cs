@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Catel.Data;
 using Catel.MVVM;
+using Vixen.Module;
 using Vixen.Module.ElementNodeFilter;
 using Vixen.Sys.ElementNodeFilters;
 
@@ -39,7 +41,7 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 		/// <summary>
 		/// Gets or sets the StandardFilters value.
 		/// </summary>
-		public ObservableCollection<IElementNodeFilterInstance> StandardFilters
+		public ObservableCollection<IModuleDescriptor> StandardFilters
 		{
 			get
 			{
@@ -48,7 +50,7 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 					return pm.StandardFilters;
 				}
 
-				return new ObservableCollection<IElementNodeFilterInstance>();
+				return new ObservableCollection<IModuleDescriptor>();
 			}
 		
 		}
@@ -83,7 +85,11 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 		public Guid FilterTypeId
 		{
 			get { return GetValue<Guid>(FilterTypeIdProperty); }
-			set { SetValue(FilterTypeIdProperty, value); }
+			set
+			{
+				SetValue(FilterTypeIdProperty, value);
+				FilterChanged();
+			}
 		}
 
 		/// <summary>
@@ -129,6 +135,21 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 		}
 
 		#endregion
+
+		private bool IsStandardName()
+		{
+			return StandardFilters.Any(x => x.TypeName.Equals(Name));
+		}
+
+		private void FilterChanged()
+		{
+			if (IsStandardName())
+			{
+				Name = Filter.ElementNodeFilter.Descriptor.TypeName;
+			}
+			OnFilterUpdated();
+		}
+
 
 		private void OnFilterUpdated()
 		{

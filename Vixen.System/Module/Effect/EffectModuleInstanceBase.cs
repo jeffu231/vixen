@@ -218,6 +218,7 @@ namespace Vixen.Module.Effect
 			return effectIntents;
 		}
 
+		[Browsable(false)]
 		public void FilterNodes()
 		{
 			var filteredNodes = _unFilteredTargetNodes.ToArray();

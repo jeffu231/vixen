@@ -44,7 +44,7 @@
 			                                                     utils:TextBoxExtender.CommitOnTyping="false" />
 								<Label Grid.Column="0" Grid.Row="1" Margin="3">Type</Label>
 								<ComboBox Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Margin="3" ItemsSource="{Binding StandardFilters, Mode=OneWay}" 
-                                                        DisplayMemberPath="Descriptor.TypeName" SelectedValuePath="Descriptor.TypeId" SelectedValue="{Binding FilterTypeId}">
+                                                        DisplayMemberPath="TypeName" SelectedValuePath="TypeId" SelectedValue="{Binding FilterTypeId}">
 								</ComboBox>
 								<Label Grid.Column="0" Grid.Row="2" Margin="3" Visibility="{Binding Filter.ElementNodeFilter, Converter={converters:HasSetupVisibilityConverter}}">Configuration</Label>
 								<Button Grid.Column="1" Grid.Row="2" Margin="3" Content="Configuration" Visibility="{Binding Filter.ElementNodeFilter, Converter={converters:HasSetupVisibilityConverter}}"
