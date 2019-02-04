@@ -44,7 +44,8 @@ namespace VixenModules.Effect.Chase
 					DepthOfEffect = 0;
 				}
 
-				UpdateTargetNodeHandlingAttributes();
+				UpdateDepthAttributes();
+				TypeDescriptor.Refresh(this);
 			}
 		}
 
@@ -340,14 +341,15 @@ namespace VixenModules.Effect.Chase
 		{
 			UpdateColorHandlingAttributes();
 			UpdateDefaultLevelAttributes();
-			UpdateTargetNodeHandlingAttributes();
+			UpdateDepthAttributes();
 			TypeDescriptor.Refresh(this);
 		}
 
-		private void UpdateTargetNodeHandlingAttributes()
+		private void UpdateDepthAttributes()
 		{
 			Dictionary<string, bool> propertyStates = new Dictionary<string, bool>(2);
-			propertyStates.Add(nameof(TargetNodeHandling), TargetNodes.Length > 0);
+			propertyStates.Add(nameof(TargetNodeHandling), TargetNodes.Length > 1);
+			propertyStates.Add(nameof(DepthOfEffect), DetermineDepth() > 2);
 			SetBrowsable(propertyStates);
 		}
 
