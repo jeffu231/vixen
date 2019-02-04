@@ -132,14 +132,19 @@ namespace Vixen.Module.SequenceType
 
 			var transformDataSet = new ModuleLocalDataSet { DataModels = _elementNodeTransformsDataModels ?? new IModuleDataModel[]{} };
 
-			IEffectNode[] effectNodes = _effectNodeSurrogates.Select(x => x.CreateEffectNode(elementNodes, transformDataSet)).ToArray();
+			IEffectNode[] effectNodes = _effectNodeSurrogates.Select(x => x.CreateEffectNode(elementNodes, LocalDataSet, transformDataSet)).ToArray();
 			// weed out effects without nodes..
 			effectNodes = effectNodes.Where(x => x.Effect.UnFilteredTargetNodes.Count() != 0).ToArray();
 
 			ISequenceFilterNode[] sequenceFilterNodes = _filterNodeSurrogates.Select(x => x.CreateFilterNode()).ToArray();
 
-			// Connect them to their respective data from the data store.
-			// This was previously being done by adding the data to the sequence after loading the data.
+			//// Connect them to their respective data from the data store.
+			//// This was previously being done by adding the data to the sequence after loading the data.
+			//foreach (var effectNode in effectNodes)
+			//{
+			//	LocalDataSet.AssignModuleInstanceData(effectNode.Effect);
+			//}
+
 			foreach (var sequenceFilterNode in sequenceFilterNodes) {
 				LocalDataSet.AssignModuleInstanceData(sequenceFilterNode.Filter);
 			}

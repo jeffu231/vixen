@@ -21,7 +21,7 @@ namespace Vixen.Module.SequenceType.Surrogate
 			ElementTransforms = effectNode.Effect.ElementNodeFilters.Select(x => new ElementNodeTransformSurrogate(x, transformsDataSet)).ToArray();
 		}
 
-		public IEffectNode CreateEffectNode(Dictionary<Guid,ElementNode> elementNodes, ModuleLocalDataSet transformDataSet)
+		public IEffectNode CreateEffectNode(Dictionary<Guid,ElementNode> elementNodes, ModuleLocalDataSet effectDataSet, ModuleLocalDataSet transformDataSet)
 		{
 			// Create a element node lookup of elements that are currently valid.
 			
@@ -35,6 +35,8 @@ namespace Vixen.Module.SequenceType.Surrogate
 			effect.InstanceId = InstanceId;
 			effect.TimeSpan = TimeSpan;
 			effect.StartTime = StartTime;
+			//Hydrate the data model
+			effectDataSet.AssignModuleInstanceData(effect);
 			//effect.TargetNodes = validElementIds.Select(x => elementNodes[x]).ToArray();
 			ElementNode node;
 			if (elementNodes.TryGetValue(TargetNodes.First().NodeId, out node))
@@ -47,7 +49,7 @@ namespace Vixen.Module.SequenceType.Surrogate
 			}
 
 			effect.ElementNodeFilters = ElementTransforms==null?new List<IChainableElementNodeFilter>() : ElementTransforms.Select(x => x.CreateTransform(transformDataSet)).ToList();
-
+			effect.FilterNodes();
 			return new EffectNode(effect, StartTime);
 		}
 	}
