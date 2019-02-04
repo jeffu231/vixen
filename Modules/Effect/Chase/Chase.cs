@@ -43,6 +43,8 @@ namespace VixenModules.Effect.Chase
 				{
 					DepthOfEffect = 0;
 				}
+
+				UpdateTargetNodeHandlingAttributes();
 			}
 		}
 
@@ -50,11 +52,19 @@ namespace VixenModules.Effect.Chase
 		{
 			_elementData = new EffectIntents();
 
-			foreach (var elementNode in TargetNodes)
+			if (TargetNodes.Length == 1 || TargetNodeHandling == TargetNodeSelection.Individual)
 			{
-				var renderNodes = GetNodesToRenderOn(elementNode);
-				DoRendering(renderNodes, tokenSource);
+				foreach (var elementNode in TargetNodes)
+				{
+					var renderNodes = GetNodesToRenderOn(elementNode);
+					DoRendering(renderNodes, tokenSource);
+				}
 			}
+			else
+			{
+				DoRendering(TargetNodes.ToList(), tokenSource);
+			}
+			
 			
 
 			//_elementData = IntentBuilder.ConvertToStaticArrayIntents(_elementData, TimeSpan, IsDiscrete());
@@ -270,6 +280,21 @@ namespace VixenModules.Effect.Chase
 		}
 
 		[Value]
+		[ProviderCategory(@"Depth", 4)]
+		[ProviderDisplayName(@"TargetNodeSelection")]
+		[ProviderDescription(@"TargetNodeSelection")]
+		public TargetNodeSelection TargetNodeHandling
+		{
+			get => _data.TargetNodeSelection;
+			set
+			{
+				_data.TargetNodeSelection = value;
+				IsDirty = true;
+				OnPropertyChanged();
+			}
+		}
+
+		[Value]
 		[ProviderCategory(@"Pulse",3)]
 		[ProviderDisplayName(@"ExtendPulseStart")]
 		[ProviderDescription(@"ExtendPulseStart")]
@@ -315,9 +340,16 @@ namespace VixenModules.Effect.Chase
 		{
 			UpdateColorHandlingAttributes();
 			UpdateDefaultLevelAttributes();
+			UpdateTargetNodeHandlingAttributes();
 			TypeDescriptor.Refresh(this);
 		}
 
+		private void UpdateTargetNodeHandlingAttributes()
+		{
+			Dictionary<string, bool> propertyStates = new Dictionary<string, bool>(2);
+			propertyStates.Add(nameof(TargetNodeHandling), TargetNodes.Length > 0);
+			SetBrowsable(propertyStates);
+		}
 
 		private void UpdateColorHandlingAttributes()
 		{

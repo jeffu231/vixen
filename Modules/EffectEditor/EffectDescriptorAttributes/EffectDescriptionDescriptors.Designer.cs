@@ -1997,6 +1997,15 @@ namespace VixenModules.EffectEditor.EffectDescriptorAttributes {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Determines how the elements that the effect is targeting after transforms are evaluated. Individually or as a group..
+        /// </summary>
+        internal static string TargetNodeSelection {
+            get {
+                return ResourceManager.GetString("TargetNodeSelection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Determines how the target elements are treated. Either as individual strings or by their actual location..
         /// </summary>
         internal static string TargetPositioning {

@@ -858,4 +858,7 @@
   <data name="ReverseColorCurve" xml:space="preserve">
     <value>Reverse</value>
   </data>
+  <data name="TargetNodeSelection" xml:space="preserve">
+    <value>Element Handling</value>
+  </data>
 </root>

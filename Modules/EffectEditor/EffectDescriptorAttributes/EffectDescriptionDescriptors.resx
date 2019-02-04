@@ -867,4 +867,7 @@
   <data name="ReverseColorCurve" xml:space="preserve">
     <value>Reverses the Color and Curve depending on direction of Movement curve.</value>
   </data>
+  <data name="TargetNodeSelection" xml:space="preserve">
+    <value>Determines how the elements that the effect is targeting after transforms are evaluated. Individually or as a group.</value>
+  </data>
 </root>

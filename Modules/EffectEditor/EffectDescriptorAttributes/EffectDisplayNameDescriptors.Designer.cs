@@ -2015,6 +2015,15 @@ namespace VixenModules.EffectEditor.EffectDescriptorAttributes {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Element Handling.
+        /// </summary>
+        internal static string TargetNodeSelection {
+            get {
+                return ResourceManager.GetString("TargetNodeSelection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Positioning.
         /// </summary>
         internal static string TargetPositioning {
