@@ -540,7 +540,7 @@
         <Setter Property="Foreground" Value="{StaticResource ForeColorBrush}"/>
         <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
 		<Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-        <Setter Property="MinWidth" Value="200"/>
+        <Setter Property="MinWidth" Value="150"/>
         <Setter Property="MinHeight" Value="18"/>
         <Setter Property="AllowDrop" Value="true"/>
 	    <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
