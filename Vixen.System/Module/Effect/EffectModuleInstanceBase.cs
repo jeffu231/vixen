@@ -134,6 +134,7 @@ namespace Vixen.Module.Effect
 		/// <summary>
 		/// This contains the target node filter chain
 		/// </summary>
+		[Browsable(false)]
 		public List<IChainableElementNodeFilter> ElementNodeFilters {
 			get => _elementNodeFilters;
 			set
