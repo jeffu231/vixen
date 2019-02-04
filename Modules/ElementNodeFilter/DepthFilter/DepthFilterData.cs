@@ -12,7 +12,6 @@ namespace VixenModules.ElementNodeFilter.DepthFilter
 			return newInstance;
 		}
 
-		[DataMember]
-		public int Depth { get; set; }
+		[DataMember] public int Depth { get; set; } = 1;
 	}
 }

@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Linq;
 using System.Windows.Forms;
 using Common.Controls;
 using Common.Controls.Theme;
 using Common.Resources.Properties;
-using Vixen.Sys;
 
 namespace VixenModules.ElementNodeFilter.DepthFilter
 {
@@ -14,24 +12,10 @@ namespace VixenModules.ElementNodeFilter.DepthFilter
 		{
 			InitializeComponent();
 			ThemeUpdateControls.UpdateControls(this);
-			trkDepth.Minimum = 0;
-			trkDepth.Maximum = 10;
-			trkDepth.Value = depth;
+			numericUpDownDepth.Value = depth;
 		}
 
-		public int Depth => trkDepth.Value;
-
-		//private int DetermineDepth()
-		//{
-		//	var depth = 0;
-		//	var node = _nodes.FirstOrDefault();
-		//	if (node != null)
-		//	{
-		//		depth = node.GetMaxChildDepth();
-		//	}
-
-		//	return depth;
-		//}
+		public int Depth => (int)numericUpDownDepth.Value;
 
 		#region Theme Events
 
