@@ -52,12 +52,12 @@ namespace VixenModules.ElementNodeFilter.SkipFilter
 
 			if (Skip > 0)
 			{
-				for (int i = First; i < nodes.Length; i += 1 + Skip)
+				for (int i = First+Skip; i < nodes.Length; i += 1 + Skip)
 				{
 					int x = 0;
 					for (; x < Take; x++)
 					{
-						renderNodes.Add(nodes[i]);
+						renderNodes.Add(nodes[i+x]);
 					}
 
 					i += x - 1;
