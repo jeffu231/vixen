@@ -8,19 +8,21 @@ namespace VixenModules.ElementNodeFilter.SkipFilter
 {
 	public partial class SkipFilterSetup : BaseForm
 	{
-		public SkipFilterSetup(int skip)
+		public SkipFilterSetup(int first, int skip, int take)
 		{
 			InitializeComponent();
 			ThemeUpdateControls.UpdateControls(this);
-			numericUpDownSkip.Minimum = 1;
-			numericUpDownSkip.Maximum = 100;
-			numericUpDownSkip.Increment = 1;
-			numericUpDownSkip.DecimalPlaces = 0;
-			numericUpDownSkip.Value = skip;
+			numericUpDownFirstN.Value = first;
+			numericUpDownSkipN.Value = skip;
+			numericUpDownTakeN.Value = take;
 		}
 
-		public int Skip => (int)numericUpDownSkip.Value;
+		public int First => (int)numericUpDownFirstN.Value;
 
+		public int Skip => (int)numericUpDownSkipN.Value;
+
+		public int Take => (int) numericUpDownTakeN.Value;
+		
 		#region Theme Events
 
 		private void buttonBackground_MouseHover(object sender, EventArgs e)

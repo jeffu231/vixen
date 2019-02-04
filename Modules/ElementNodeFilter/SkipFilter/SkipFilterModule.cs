@@ -11,10 +11,22 @@ namespace VixenModules.ElementNodeFilter.SkipFilter
 	{
 		private SkipFilterData _data;
 
+		public int First
+		{
+			get => _data.First;
+			set => _data.First = value;
+		}
+
 		public int Skip
 		{
-			get { return _data.Skip; }
-			set { _data.Skip = value; }
+			get => _data.Skip;
+			set => _data.Skip = value;
+		}
+
+		public int Take
+		{
+			get => _data.Take;
+			set => _data.Take = value;
 		}
 
 		#region Overrides of ElementNodeFilterModuleInstanceBase
@@ -27,16 +39,35 @@ namespace VixenModules.ElementNodeFilter.SkipFilter
 
 		private ElementNode[] GetNodesToRenderOn(ElementNode[] nodes)
 		{
-			if (Skip == 0)
+			List<ElementNode> renderNodes = new List<ElementNode>();
+
+			if (First > 0)
 			{
-				return nodes;
+				if (First > nodes.Length)
+				{
+					First = nodes.Length;
+				}
+				renderNodes.AddRange(nodes.Take(First));
+			}
+
+			if (Skip > 0)
+			{
+				for (int i = First; i < nodes.Length; i += 1 + Skip)
+				{
+					int x = 0;
+					for (; x < Take; x++)
+					{
+						renderNodes.Add(nodes[i]);
+					}
+
+					i += x - 1;
+				}
+			}
+			else if(Take > 0)
+			{
+				renderNodes.AddRange(nodes.Skip(First).Take(Take));
 			}
 			
-			List<ElementNode> renderNodes = new List<ElementNode>();
-			for (int i = 0; i < nodes.Length; i+=1+Skip)
-			{
-				renderNodes.Add(nodes[i]);
-			}
 			
 			return renderNodes.ToArray();
 		}
@@ -53,11 +84,13 @@ namespace VixenModules.ElementNodeFilter.SkipFilter
 		/// <inheritdoc />
 		public override bool Setup()
 		{
-			using (SkipFilterSetup setup = new SkipFilterSetup(_data.Skip))
+			using (SkipFilterSetup setup = new SkipFilterSetup(_data.First, _data.Skip, _data.Take))
 			{
 				if (setup.ShowDialog() == DialogResult.OK)
 				{
+					_data.First = setup.First;
 					_data.Skip = setup.Skip;
+					_data.Take = setup.Take;
 					return true;
 				}
 			}
