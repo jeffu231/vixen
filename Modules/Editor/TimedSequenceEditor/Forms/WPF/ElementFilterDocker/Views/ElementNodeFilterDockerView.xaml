@@ -8,7 +8,8 @@
                    xmlns:viewModels="clr-namespace:VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.ViewModels"
                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                    xmlns:views="clr-namespace:VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.Views"
-                   xmlns:commonControls="clr-namespace:Common.WPFCommon.Controls;assembly=WPFCommon">
+                   xmlns:commonControls="clr-namespace:Common.WPFCommon.Controls;assembly=WPFCommon"
+                   xmlns:dd="urn:gong-wpf-dragdrop">
 
 	<UserControl.Resources>
 		<ResourceDictionary>
@@ -67,7 +68,11 @@
 	                                 ItemsSource="{Binding Filters}" 
 	                                Style="{StaticResource SimpleListBoxStyle}"
 	                                 ItemTemplate="{StaticResource ElementNodeFilterRow}" 
-	                                 commonBehaviors:MultiSelectorBehaviour.SynchronizedSelectedItems="{Binding SelectedItems}" >
+	                                 commonBehaviors:MultiSelectorBehaviour.SynchronizedSelectedItems="{Binding SelectedItems}" 
+	                                 dd:DragDrop.IsDragSource="True"
+	                                 dd:DragDrop.IsDropTarget="True"
+	                                 dd:DragDrop.DropHandler="{Binding}"
+	                                 dd:DragDrop.DragHandler="{Binding}">
 
 			</ListBox>
 		</Grid>

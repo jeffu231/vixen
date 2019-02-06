@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 
@@ -110,5 +111,22 @@ namespace Common.WPFCommon.Utils
 
             return result;
         }
-    }
+
+        public static bool IsChildOf(this UIElement targetItem, UIElement sourceItem)
+        {
+	        var parent = ItemsControl.ItemsControlFromItemContainer(targetItem);
+
+	        while (parent != null)
+	        {
+		        if (parent == sourceItem)
+		        {
+			        return true;
+		        }
+
+		        parent = ItemsControl.ItemsControlFromItemContainer(parent);
+	        }
+
+	        return false;
+        }
+	}
 }

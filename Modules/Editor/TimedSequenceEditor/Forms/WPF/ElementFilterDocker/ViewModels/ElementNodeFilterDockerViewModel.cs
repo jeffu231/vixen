@@ -1,16 +1,24 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
+using System.Windows;
+using System.Windows.Controls;
 using Catel.Data;
 using Catel.MVVM;
+using GongSolutions.Wpf.DragDrop;
+using GongSolutions.Wpf.DragDrop.Utilities;
 using Vixen.Module;
 using Vixen.Module.ElementNodeFilter;
 using Vixen.Services;
 using Vixen.Sys.ElementNodeFilters;
+using Common.WPFCommon.Utils;
 
 namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.ViewModels
 {
-	public class ElementNodeFilterDockerViewModel : ViewModelBase
+	public class ElementNodeFilterDockerViewModel : ViewModelBase, IDropTarget, IDragSource
 	{
 		public event EventHandler<EventArgs> FiltersChanged;
 		private const string InfoLink = @"http://www.vixenlights.com";
@@ -246,5 +254,201 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 		#endregion
 
 
+		#region Implementation of IDropTarget
+
+		/// <summary>
+		/// Determines whether the data of the drag drop action should be copied otherwise moved.
+		/// </summary>
+		/// <param name="dropInfo">The DropInfo with a valid DragInfo.</param>
+		public static bool ShouldCopyData(IDropInfo dropInfo)
+		{
+			// default should always the move action/effect
+			if (dropInfo?.DragInfo == null)
+			{
+				return false;
+			}
+
+			return true;
+		}
+		public static bool CanAcceptData(IDropInfo dropInfo)
+		{
+			if (dropInfo?.DragInfo == null)
+			{
+				return false;
+			}
+
+			if (!dropInfo.IsSameDragDropContextAsSource)
+			{
+				return false;
+			}
+
+			var isListBoxItem = dropInfo.InsertPosition.HasFlag(RelativeInsertPosition.TargetItemCenter)
+								 && dropInfo.VisualTargetItem is ListBoxItem;
+			if (isListBoxItem && dropInfo.VisualTargetItem == dropInfo.DragInfo.VisualSourceItem)
+			{
+				return false;
+			}
+
+			IList<IChainableElementNodeFilter> chainableElementNodeFilters = dropInfo.Data as IList<IChainableElementNodeFilter>;
+			var evmTarget = dropInfo.TargetItem as IChainableElementNodeFilter;
+			if (evmTarget == null)
+			{
+				return false;
+			}
+
+			if (chainableElementNodeFilters != null)
+			{
+				if (isListBoxItem && dropInfo.InsertPosition.HasFlag(RelativeInsertPosition.TargetItemCenter))
+				{
+
+					return false;
+				}
+			}
+
+			if (dropInfo.DragInfo.SourceCollection == dropInfo.TargetCollection)
+			{
+				var targetList = dropInfo.TargetCollection.TryGetList();
+				return targetList != null;
+			}
+
+			if (dropInfo.TargetCollection == null)
+			{
+				return false;
+			}
+
+			if (TestCompatibleTypes(dropInfo.TargetCollection, dropInfo.Data))
+			{
+				var isChildOf = dropInfo.VisualTargetItem.IsChildOf(dropInfo.DragInfo.VisualSourceItem);
+				return !isChildOf;
+			}
+
+			return false;
+		}
+
+		/// <inheritdoc />
+		public void DragOver(IDropInfo dropInfo)
+		{
+			if (CanAcceptData(dropInfo))
+			{
+				dropInfo.Effects = DragDropEffects.Move;
+
+				if (dropInfo.InsertPosition == RelativeInsertPosition.None || dropInfo.InsertPosition == RelativeInsertPosition.TargetItemCenter)
+				{
+					dropInfo.DropTargetAdorner = null;
+					return;
+				}
+
+				dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
+			}
+			else
+			{
+				dropInfo.DropTargetAdorner = null;
+			}
+		}
+
+		/// <inheritdoc />
+		public void Drop(IDropInfo dropInfo)
+		{
+			if (dropInfo.Data is IChainableElementNodeFilter model)
+			{
+				var insertIndex = dropInfo.InsertPosition==RelativeInsertPosition.BeforeTargetItem?dropInfo.InsertIndex:dropInfo.InsertIndex+1;
+				var removeIndex = Filters.IndexOf(model);
+
+				if (removeIndex < insertIndex)
+				{
+					Filters.Insert(insertIndex, model);
+					Filters.RemoveAt(removeIndex);
+				}
+				else
+				{
+					removeIndex++;
+					if (Filters.Count + 1 > removeIndex)
+					{
+						Filters.Insert(insertIndex, model);
+						Filters.RemoveAt(removeIndex);
+					}
+				}
+
+				OnFiltersChanged(new EventArgs());
+			}
+		}
+
+		private static bool TestCompatibleTypes(IEnumerable target, object data)
+		{
+			TypeFilter filter = (t, o) => { return (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(IEnumerable<>)); };
+
+			var enumerableInterfaces = target.GetType().FindInterfaces(filter, null);
+			var enumerableTypes = from i in enumerableInterfaces
+				select i.GetGenericArguments().Single();
+
+			if (enumerableTypes.Any())
+			{
+				var dataType = TypeUtilities.GetCommonBaseClass(ExtractData(data));
+				return enumerableTypes.Any(t => t.IsAssignableFrom(dataType));
+			}
+			else
+			{
+				return target is IList;
+			}
+		}
+
+		public static IEnumerable ExtractData(object data)
+		{
+			if (data is IEnumerable && !(data is string))
+			{
+				return (IEnumerable)data;
+			}
+			else
+			{
+				return Enumerable.Repeat(data, 1);
+			}
+		}
+
+		#endregion
+
+		#region Implementation of IDragSource
+
+		/// <inheritdoc />
+		public void StartDrag(IDragInfo dragInfo)
+		{
+			var itemCount = dragInfo.SourceItems.Cast<object>().Count();
+			dragInfo.Data = null;
+
+			if (itemCount > 0)
+			{
+				if (dragInfo.SourceItems.Cast<object>().First() is IChainableElementNodeFilter dragItem)
+				{
+					dragInfo.Data = dragItem;
+				}
+			}
+			
+			dragInfo.Effects = (dragInfo.Data != null) ? DragDropEffects.Move : DragDropEffects.None;
+		}
+
+		/// <inheritdoc />
+		public bool CanStartDrag(IDragInfo dragInfo)
+		{
+			return Filters.Count > 0;
+		}
+
+		/// <inheritdoc />
+		public void Dropped(IDropInfo dropInfo)
+		{
+			
+		}
+
+		/// <inheritdoc />
+		public void DragCancelled()
+		{
+			
+		}
+
+		/// <inheritdoc />
+		public bool TryCatchOccurredException(Exception exception)
+		{
+			return false;
+		}
+
+		#endregion
 	}
 }
