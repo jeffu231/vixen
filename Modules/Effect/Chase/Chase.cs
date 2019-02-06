@@ -38,13 +38,21 @@ namespace VixenModules.Effect.Chase
 			if (TargetNodes.Any())
 			{
 				CheckForInvalidColorData();
-				var firstNode = TargetNodes.FirstOrDefault();
-				if (firstNode != null && DepthOfEffect > firstNode.GetMaxChildDepth() - 1)
+
+				if (TargetNodes.Length > 1)
 				{
 					DepthOfEffect = 0;
 				}
-
-				UpdateDepthAttributes();
+				else
+				{
+					var firstNode = TargetNodes.FirstOrDefault();
+					if (firstNode != null && DepthOfEffect > firstNode.GetMaxChildDepth() - 1)
+					{
+						DepthOfEffect = 0;
+					}
+				}
+				
+				UpdateTargetingAttributes();
 				TypeDescriptor.Refresh(this);
 			}
 		}
@@ -53,21 +61,41 @@ namespace VixenModules.Effect.Chase
 		{
 			_elementData = new EffectIntents();
 
-			if (TargetNodes.Length == 1 || TargetNodeHandling == TargetNodeSelection.Individual)
+			if (TargetNodeHandling == TargetNodeSelection.Group)
 			{
-				foreach (var elementNode in TargetNodes)
+				if (TargetNodes.Length == 1)
 				{
-					var renderNodes = GetNodesToRenderOn(elementNode);
+					var renderNodes = GetNodesToRenderOn(TargetNodes.First());
 					DoRendering(renderNodes, tokenSource);
 				}
+				else
+				{
+					DoRendering(TargetNodes.ToList(), tokenSource);
+				}
+				
 			}
-			else
+			else 
 			{
-				DoRendering(TargetNodes.ToList(), tokenSource);
+				if (TargetNodes.Length == 1)
+				{
+					var targetNodes = GetNodesToRenderOn(TargetNodes.First());
+					foreach (var elementNode in targetNodes)
+					{
+						var renderNodes = GetNodesToRenderOn(elementNode);
+						DoRendering(renderNodes, tokenSource);
+					}
+				}
+				else
+				{
+					foreach (var elementNode in TargetNodes)
+					{
+						var renderNodes = GetNodesToRenderOn(elementNode);
+						DoRendering(renderNodes, tokenSource);
+					}
+				}
+				
+				
 			}
-			
-			
-
 			//_elementData = IntentBuilder.ConvertToStaticArrayIntents(_elementData, TimeSpan, IsDiscrete());
 		}
 
@@ -118,7 +146,23 @@ namespace VixenModules.Effect.Chase
 		}
 
 		[Value]
-		[ProviderCategory(@"Color",0)]
+		[ProviderCategory(@"Setup", 0)]
+		[ProviderDisplayName(@"TargetNodeSelection")]
+		[ProviderDescription(@"TargetNodeSelection")]
+		public TargetNodeSelection TargetNodeHandling
+		{
+			get => _data.TargetNodeSelection;
+			set
+			{
+				_data.TargetNodeSelection = value;
+				IsDirty = true;
+				OnPropertyChanged();
+			}
+		}
+
+
+		[Value]
+		[ProviderCategory(@"Color",1)]
 		[ProviderDisplayName(@"ColorHandling")]
 		[ProviderDescription(@"ColorHandling")]
 		[PropertyOrder(1)]
@@ -136,7 +180,7 @@ namespace VixenModules.Effect.Chase
 		}
 
 		[Value]
-		[ProviderCategory(@"Color", 0)]
+		[ProviderCategory(@"Color", 1)]
 		[ProviderDisplayName(@"Color")]
 		[ProviderDescription(@"Color")]
 		[PropertyOrder(2)]
@@ -156,7 +200,7 @@ namespace VixenModules.Effect.Chase
 		}
 
 		[Value]
-		[ProviderCategory(@"Brightness", 1)]
+		[ProviderCategory(@"Brightness", 2)]
 		[ProviderDisplayName(@"EnableMinimumBrightness")]
 		[ProviderDescription(@"EnableMinimumBrightness")]
 		[PropertyOrder(2)]
@@ -174,7 +218,7 @@ namespace VixenModules.Effect.Chase
 		}
 
 		[Value]
-		[ProviderCategory(@"Brightness",1)]
+		[ProviderCategory(@"Brightness",2)]
 		[ProviderDisplayName(@"MinimumBrightness")]
 		[ProviderDescription(@"MinimumBrightness")]
 		[PropertyOrder(3)]
@@ -191,7 +235,7 @@ namespace VixenModules.Effect.Chase
 		}
 
 		[Value]
-		[ProviderCategory(@"Pulse", 3)]
+		[ProviderCategory(@"Pulse", 4)]
 		[ProviderDisplayName(@"PulseOverlap")]
 		[ProviderDescription(@"PulseOverlap")]
 		public int PulseOverlap
@@ -214,7 +258,7 @@ namespace VixenModules.Effect.Chase
 		}
 
 		[Value]
-		[ProviderCategory(@"Color",0)]
+		[ProviderCategory(@"Color",1)]
 		[ProviderDisplayName(@"ColorGradient")]
 		[ProviderDescription(@"Color")]
 		[PropertyOrder(3)]
@@ -233,7 +277,7 @@ namespace VixenModules.Effect.Chase
 		}
 
 		[Value]
-		[ProviderCategory(@"Brightness",1)]
+		[ProviderCategory(@"Brightness",2)]
 		[ProviderDisplayName(@"PulseShape")]
 		[ProviderDescription(@"PulseShape")]
 		[PropertyOrder(1)]
@@ -249,7 +293,7 @@ namespace VixenModules.Effect.Chase
 		}
 
 		[Value]
-		[ProviderCategory(@"Direction",2)]
+		[ProviderCategory(@"Direction",3)]
 		[ProviderDisplayName(@"Direction")]
 		[ProviderDescription(@"Direction")]
 		public Curve ChaseMovement
@@ -264,7 +308,7 @@ namespace VixenModules.Effect.Chase
 		}
 
 		[Value]
-		[ProviderCategory(@"Depth",4)]
+		[ProviderCategory(@"Depth",5)]
 		[ProviderDisplayName(@"Depth")]
 		[ProviderDescription(@"Depth")]
 		[TypeConverter(typeof(TargetElementDepthConverter))]
@@ -281,22 +325,7 @@ namespace VixenModules.Effect.Chase
 		}
 
 		[Value]
-		[ProviderCategory(@"Depth", 4)]
-		[ProviderDisplayName(@"TargetNodeSelection")]
-		[ProviderDescription(@"TargetNodeSelection")]
-		public TargetNodeSelection TargetNodeHandling
-		{
-			get => _data.TargetNodeSelection;
-			set
-			{
-				_data.TargetNodeSelection = value;
-				IsDirty = true;
-				OnPropertyChanged();
-			}
-		}
-
-		[Value]
-		[ProviderCategory(@"Pulse",3)]
+		[ProviderCategory(@"Pulse",4)]
 		[ProviderDisplayName(@"ExtendPulseStart")]
 		[ProviderDescription(@"ExtendPulseStart")]
 		public bool ExtendPulseToStart
@@ -311,7 +340,7 @@ namespace VixenModules.Effect.Chase
 		}
 
 		[Value]
-		[ProviderCategory(@"Pulse",3)]
+		[ProviderCategory(@"Pulse",4)]
 		[ProviderDisplayName(@"ExtendPulseEnd")]
 		[ProviderDescription(@"ExtendPulseEnd")]
 		public bool ExtendPulseToEnd
@@ -341,15 +370,16 @@ namespace VixenModules.Effect.Chase
 		{
 			UpdateColorHandlingAttributes();
 			UpdateDefaultLevelAttributes();
-			UpdateDepthAttributes();
+			UpdateTargetingAttributes();
 			TypeDescriptor.Refresh(this);
 		}
 
-		private void UpdateDepthAttributes()
+		private void UpdateTargetingAttributes()
 		{
+			var depth = DetermineDepth();
 			Dictionary<string, bool> propertyStates = new Dictionary<string, bool>(2);
-			propertyStates.Add(nameof(TargetNodeHandling), TargetNodes.Length > 1);
-			propertyStates.Add(nameof(DepthOfEffect), DetermineDepth() > 2);
+			propertyStates.Add(nameof(TargetNodeHandling), TargetNodes.Length > 1 || depth > 2);
+			propertyStates.Add(nameof(DepthOfEffect), depth > 2);
 			SetBrowsable(propertyStates);
 		}
 

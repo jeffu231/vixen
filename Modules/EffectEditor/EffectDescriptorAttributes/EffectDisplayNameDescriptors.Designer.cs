@@ -2015,7 +2015,7 @@ namespace VixenModules.EffectEditor.EffectDescriptorAttributes {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Element Handling.
+        ///   Looks up a localized string similar to Behavior.
         /// </summary>
         internal static string TargetNodeSelection {
             get {

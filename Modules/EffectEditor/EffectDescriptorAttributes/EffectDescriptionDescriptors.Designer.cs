@@ -1997,7 +1997,7 @@ namespace VixenModules.EffectEditor.EffectDescriptorAttributes {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Determines how the elements that the effect is targeting after transforms are evaluated. Individually or as a group..
+        ///   Looks up a localized string similar to Determines how the elements that the effect is targeting are evaluated after any depth is applied. Individual elements or across the elements / group..
         /// </summary>
         internal static string TargetNodeSelection {
             get {

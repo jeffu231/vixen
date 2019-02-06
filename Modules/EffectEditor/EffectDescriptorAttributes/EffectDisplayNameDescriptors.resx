@@ -859,6 +859,6 @@
     <value>Reverse</value>
   </data>
   <data name="TargetNodeSelection" xml:space="preserve">
-    <value>Element Handling</value>
+    <value>Behavior</value>
   </data>
 </root>
