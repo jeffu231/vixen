@@ -404,6 +404,15 @@ namespace VixenModules.EffectEditor.EffectDescriptorAttributes {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Determines how the Chase is applied across the target elements that are presented to the effect..
+        /// </summary>
+        internal static string ChaseTargetNodeSelection {
+            get {
+                return ResourceManager.GetString("ChaseTargetNodeSelection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select from a list of Christmas shapes..
         /// </summary>
         internal static string ChristmasShapes {

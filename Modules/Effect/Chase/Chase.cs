@@ -146,9 +146,9 @@ namespace VixenModules.Effect.Chase
 		}
 
 		[Value]
-		[ProviderCategory(@"Setup", 0)]
-		[ProviderDisplayName(@"TargetNodeSelection")]
-		[ProviderDescription(@"TargetNodeSelection")]
+		[ProviderCategory(@"Behavior", 0)]
+		[ProviderDisplayName(@"ChaseTargetNodeSelection")]
+		[ProviderDescription(@"ChaseTargetNodeSelection")]
 		public TargetNodeSelection TargetNodeHandling
 		{
 			get => _data.TargetNodeSelection;

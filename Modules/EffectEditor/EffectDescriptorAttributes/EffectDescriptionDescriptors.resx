@@ -870,4 +870,7 @@
   <data name="TargetNodeSelection" xml:space="preserve">
     <value>Determines how the elements that the effect is targeting are evaluated after any depth is applied. Individual elements or across the elements / group.</value>
   </data>
+  <data name="ChaseTargetNodeSelection" xml:space="preserve">
+    <value>Determines how the Chase is applied across the target elements that are presented to the effect.</value>
+  </data>
 </root>
