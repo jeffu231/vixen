@@ -57,7 +57,14 @@ namespace VixenModules.ElementNodeFilter.SkipFilter
 					int x = 0;
 					for (; x < Take; x++)
 					{
-						renderNodes.Add(nodes[i+x]);
+						if (i + x < nodes.Length)
+						{
+							renderNodes.Add(nodes[i+x]);
+						}
+						else
+						{
+							break;
+						}
 					}
 
 					i += x - 1;
