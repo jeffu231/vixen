@@ -138,7 +138,7 @@
     <None Include="bullet_yellow.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="cog.png" />
+    <Resource Include="cog.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cog_add.png" />

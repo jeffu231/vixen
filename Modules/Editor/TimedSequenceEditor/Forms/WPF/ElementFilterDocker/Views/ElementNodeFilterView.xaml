@@ -27,7 +27,7 @@
 							<Grid>
 								<Grid.ColumnDefinitions>
 									<ColumnDefinition Width="Auto" />
-									<ColumnDefinition Width="Auto" />
+									<ColumnDefinition Width="1*" />
 									<ColumnDefinition Width="Auto" />
 								</Grid.ColumnDefinitions>
 								<Grid.RowDefinitions>
@@ -43,12 +43,12 @@
 								                                 utils:TextBoxExtender.RollbackOnEscape="true"
 			                                                     utils:TextBoxExtender.CommitOnTyping="false" />
 								<Label Grid.Column="0" Grid.Row="1" Margin="3">Type</Label>
-								<ComboBox Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Margin="3" ItemsSource="{Binding StandardFilters, Mode=OneWay}" 
+								<ComboBox Grid.Column="1" Grid.Row="1" Margin="3" ItemsSource="{Binding StandardFilters, Mode=OneWay}" 
                                                         DisplayMemberPath="TypeName" SelectedValuePath="TypeId" SelectedValue="{Binding FilterTypeId}">
 								</ComboBox>
-								<Label Grid.Column="0" Grid.Row="2" Margin="3" Visibility="{Binding Filter.ElementNodeFilter, Converter={converters:HasSetupVisibilityConverter}}">Configuration</Label>
-								<Button Grid.Column="1" Grid.Row="2" Margin="3" Content="Configuration" Visibility="{Binding Filter.ElementNodeFilter, Converter={converters:HasSetupVisibilityConverter}}"
+								<Button Grid.Column="2" Grid.Row="1" Margin="3" Width="{Binding Path=ActualHeight, RelativeSource={RelativeSource Self}}" Visibility="{Binding Filter.ElementNodeFilter, Converter={converters:HasSetupVisibilityConverter}}"
 															Command="{Binding ConfigureFilterCommand}">
+									<Image Source="/Resources;component/cog.png" Width="16" Height="16"></Image>
 								</Button>
 							</Grid>
 						</DockPanel>
