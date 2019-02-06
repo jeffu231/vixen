@@ -7,7 +7,7 @@ namespace VixenModules.ElementNodeFilter.SkipFilter
 	{
 		private static readonly Guid _typeId = new Guid("{99316C12-5992-4029-9D6C-24AA15FDF39E}");
 
-		public override string TypeName => "Skip N";
+		public override string TypeName => "Skip";
 
 		public override Guid TypeId => _typeId;
 
@@ -17,7 +17,7 @@ namespace VixenModules.ElementNodeFilter.SkipFilter
 
 		public override string Author => "Jeff Uchitjil";
 
-		public override string Description => "Filters target nodes to skip n elements";
+		public override string Description => "Transforms target nodes to by skipping and taking elements";
 
 		public override string Version => "1.0";
 	}
