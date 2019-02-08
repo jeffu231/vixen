@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
-using Common.Controls.Timeline;
+using Catel.IoC;
+using Vixen.Sys;
 using Vixen.Sys.ElementNodeFilters;
+using VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.Services;
 using VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.ViewModels;
 using VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.Views;
 using WeifenLuo.WinFormsUI.Docking;
+using Element = Common.Controls.Timeline.Element;
 
 namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker
 {
@@ -17,23 +21,28 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker
 		private static readonly NLog.Logger Logging = NLog.LogManager.GetCurrentClassLogger();
 		private readonly List<Element> _elements = new List<Element>();
 		private readonly TimedSequenceEditorForm _sequenceEditorForm;
-		private readonly ElementNodeFilterDockerView _ElementNodeFiltersEditorView;
-		private ElementNodeFilterDockerViewModel _vm;
+		private readonly ElementNodeTransformEditorView _elementNodeFiltersEditorView;
+		private ElementNodeTransformEditorViewModel _vm;
 		
 		public ElementNodeFiltersEditor(TimedSequenceEditorForm sequenceEditorForm)
 		{
 		
 			InitializeComponent();
+			var serviceLocator = ServiceLocator.Default;
+			serviceLocator.RegisterType<IStandardTransformService, StandardTransformService>();
 			_sequenceEditorForm = sequenceEditorForm;
 			var host = new ElementHost { Dock = DockStyle.Fill };
 
 			Controls.Add(host);
 
-			_vm = new ElementNodeFilterDockerViewModel();
-			_vm.FiltersChanged += _vm_FiltersChanged;
-			_ElementNodeFiltersEditorView = new ElementNodeFilterDockerView(_vm);
+			_elementNodeFiltersEditorView = new ElementNodeTransformEditorView();
+					
+			host.Child = _elementNodeFiltersEditorView;
 
-			host.Child = _ElementNodeFiltersEditorView;
+			_vm = _elementNodeFiltersEditorView.ViewModel as ElementNodeTransformEditorViewModel;
+			_vm.FiltersChanged += _vm_FiltersChanged;
+			_vm.IsActive = false;
+
 
 			sequenceEditorForm.TimelineControl.SelectionChanged += TimelineControl_SelectionChanged;
 			
@@ -50,13 +59,13 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker
 				_elements.AddRange(value);
 				if (_elements.Any())
 				{
-					_vm.Filters = new ObservableCollection<IChainableElementNodeFilter>(_elements.First().EffectNode.Effect.ElementNodeFilters);
+					_vm.EffectNode = _elements.First().EffectNode;
 					_vm.IsActive = true;
 				}
 				else
 				{
 					_vm.IsActive = false;
-					_vm.Filters = new ObservableCollection<IChainableElementNodeFilter>();
+					_vm.EffectNode = null;
 				}
 				//_effectPropertyEditorGridEffectEffectPropertiesEditor.SelectedObjects = _elements.Select(x => x.EffectNode.Effect).ToArray();
 			}
@@ -67,14 +76,17 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker
 			Elements = _sequenceEditorForm.TimelineControl.SelectedElements.ToArray();
 		}
 
-		private void _vm_FiltersChanged(object sender, EventArgs e)
+		private async void _vm_FiltersChanged(object sender, EventArgs e)
 		{
-			foreach (var element in Elements)
+			await Task.Factory.StartNew(() =>
 			{
-				element.EffectNode.Effect.ElementNodeFilters = _vm.Filters.ToList();
-				element.EffectNode.Effect.FilterNodes();
-				element.UpdateNotifyContentChanged();
-			}
+				foreach (var element in Elements)
+				{
+					element.EffectNode.Effect.ElementNodeFilters = _vm.Filters.ToList();
+					element.EffectNode.Effect.FilterNodes();
+					element.UpdateNotifyContentChanged();
+				}
+			});
 		}
 
 		/// <summary>
@@ -87,7 +99,7 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker
 			{
 				components.Dispose();
 			}
-			if (_ElementNodeFiltersEditorView != null)
+			if (_elementNodeFiltersEditorView != null)
 			{
 				//_ElementNodeFiltersEditorView.CollectionChanged -= LayerEditorViewCollectionChanged;
 				//_ElementNodeFiltersEditorView.LayerChanged -= LayerEditorViewOnLayerChanged;

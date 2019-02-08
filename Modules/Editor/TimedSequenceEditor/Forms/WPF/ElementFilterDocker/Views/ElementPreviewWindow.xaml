@@ -1,0 +1,98 @@
+﻿<catel:Window x:Class="VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.Views.ElementPreviewWindow"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:catel="http://schemas.catelproject.com"
+                  xmlns:views="clr-namespace:VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.Views"
+                  xmlns:viewModels="clr-namespace:VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.ViewModels"
+                  xmlns:sys="clr-namespace:Vixen.Sys;assembly=Vixen"
+                  xmlns:dd="urn:gong-wpf-dragdrop"
+                  xmlns:behaviors="clr-namespace:Common.WPFCommon.Behaviors;assembly=WPFCommon"
+                  Width="600" Height="400">
+
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="pack://application:,,,/WPFCommon;component/Theme/Theme.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+
+	</Window.Resources>
+
+	<Grid Background="{StaticResource BackColorBrush}">
+       <Grid.ColumnDefinitions>
+		   <ColumnDefinition Width="2*"></ColumnDefinition>
+		   <ColumnDefinition Width="3*"></ColumnDefinition>
+		   <ColumnDefinition Width="2*"></ColumnDefinition>
+       </Grid.ColumnDefinitions>
+
+		<TreeView x:Name="ElementOriginalTree" 
+				  Grid.Column="0"
+				  ItemsSource="{Binding TargetNodes}" 
+				  BorderThickness="2"
+                  VerticalAlignment="Stretch"
+                  HorizontalAlignment="Stretch"
+                  ScrollViewer.CanContentScroll="True"
+                  FocusManager.IsFocusScope="True">
+			<TreeView.ItemTemplate>
+				<HierarchicalDataTemplate DataType="{x:Type sys:ElementNode}"  ItemsSource="{Binding Children}">
+					<TextBlock Text="{Binding Name}" />
+				</HierarchicalDataTemplate>
+			</TreeView.ItemTemplate>
+		</TreeView>
+		<!--<views:ElementNodeTransformEditorView 
+			Grid.Column="1" 
+			DataContext="{Binding Transformers}" 
+			VerticalAlignment="Stretch" 
+			HorizontalAlignment="Stretch">
+
+		</views:ElementNodeTransformEditorView>-->
+		<Grid Grid.Column="1" HorizontalAlignment="Stretch" 
+		      Background="{StaticResource BackColorBrush}" 
+		      >
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="1*"></ColumnDefinition>
+				<ColumnDefinition Width="1*"></ColumnDefinition>
+				<ColumnDefinition Width="1*"></ColumnDefinition>
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"></RowDefinition>
+				<RowDefinition Height="*"></RowDefinition>
+			</Grid.RowDefinitions>
+			<Grid.Resources>
+				<DataTemplate x:Key="ElementNodeFilterRow" DataType="{x:Type viewModels:ElementNodeFilterViewModel}">
+					<views:ElementNodeFilterView/>
+				</DataTemplate>
+			</Grid.Resources>
+			<Button Grid.Column="0" Grid.Row="0" Content="Add" Margin="5" Command="{Binding AddFilterCommand}"></Button>
+			<Button Grid.Column="1" Grid.Row="0" Content="Remove" Margin="5" Command="{Binding RemoveFilterCommand}"
+	                                CommandParameter="{Binding ElementName=LbFilters, Path=SelectedItem}"></Button>
+			<ListBox Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" Name="LbFilters" 
+					HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" 
+					ItemsSource="{Binding Filters}"  
+					Style="{StaticResource SimpleListBoxStyle}"
+					ItemTemplate="{StaticResource ElementNodeFilterRow}" 
+					behaviors:MultiSelectorBehaviour.SynchronizedSelectedItems="{Binding SelectedItems}"
+					dd:DragDrop.IsDragSource="True"
+					dd:DragDrop.IsDropTarget="True"
+					dd:DragDrop.DropHandler="{Binding}"
+					dd:DragDrop.DragHandler="{Binding}">
+
+			</ListBox>
+		</Grid>
+		<TreeView x:Name="ElementPreviewTreeView" 
+	              Grid.Column="2"
+	              ItemsSource="{Binding TransformedNodes}" 
+	              BorderThickness="2"
+	              VerticalAlignment="Stretch"
+	              HorizontalAlignment="Stretch"
+	              ScrollViewer.CanContentScroll="True"
+	              FocusManager.IsFocusScope="True">
+		    <TreeView.ItemTemplate>
+			    <HierarchicalDataTemplate DataType="{x:Type sys:ElementNode}"  ItemsSource="{Binding Children}">
+				    <TextBlock Text="{Binding Name}" />
+			    </HierarchicalDataTemplate>
+		    </TreeView.ItemTemplate>
+	    </TreeView>
+	</Grid>
+    
+</catel:Window>

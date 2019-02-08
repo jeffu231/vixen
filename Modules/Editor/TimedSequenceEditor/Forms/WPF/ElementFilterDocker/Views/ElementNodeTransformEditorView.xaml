@@ -1,4 +1,4 @@
-﻿<catel:UserControl x:Class="VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.Views.ElementNodeFilterDockerView"
+﻿<catel:UserControl x:Class="VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.Views.ElementNodeTransformEditorView"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                    xmlns:catel="http://schemas.catelproject.com"
@@ -51,6 +51,7 @@
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="1*"></ColumnDefinition>
 				<ColumnDefinition Width="1*"></ColumnDefinition>
+				<ColumnDefinition Width="1*"></ColumnDefinition>
 			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto"></RowDefinition>
@@ -61,14 +62,16 @@
 					<views:ElementNodeFilterView/>
 				</DataTemplate>
 			</Grid.Resources>
-			<Button Grid.Column="0" Grid.Row="0" Content="Add Transform" Margin="5" Command="{Binding AddFilterCommand}"></Button>
-			<Button Grid.Column="1" Grid.Row="0" Content="Remove Transform" Margin="5" Command="{Binding RemoveFilterCommand}"
+			<Button Grid.Column="0" Grid.Row="0" Content="Add" Margin="5" Command="{Binding AddFilterCommand}"></Button>
+			<Button Grid.Column="1" Grid.Row="0" Content="Remove" Margin="5" Command="{Binding RemoveFilterCommand}"
 	                                CommandParameter="{Binding ElementName=LblFilters, Path=SelectedItem}"></Button>
-			<ListBox Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Name="LblFilters" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" 
-	                                 ItemsSource="{Binding Filters}" 
-	                                Style="{StaticResource SimpleListBoxStyle}"
+			<Button Grid.Column="2" Grid.Row="0" Content="Preview" Margin="5" Command="{Binding PreviewCommand}"
+			        CommandParameter="{Binding ElementName=LblFilters, Path=SelectedItem}"></Button>
+			<ListBox Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" Name="LblFilters" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" 
+	                                 ItemsSource="{Binding Filters}"  
+	                                 Style="{StaticResource SimpleListBoxStyle}"
 	                                 ItemTemplate="{StaticResource ElementNodeFilterRow}" 
-	                                 commonBehaviors:MultiSelectorBehaviour.SynchronizedSelectedItems="{Binding SelectedItems}" 
+	                                 commonBehaviors:MultiSelectorBehaviour.SynchronizedSelectedItems="{Binding SelectedItems}"
 	                                 dd:DragDrop.IsDragSource="True"
 	                                 dd:DragDrop.IsDropTarget="True"
 	                                 dd:DragDrop.DropHandler="{Binding}"
@@ -77,4 +80,5 @@
 			</ListBox>
 		</Grid>
 	</DockPanel>
+	<!--commonBehaviors:MultiSelectorBehaviour.SynchronizedSelectedItems="{Binding SelectedItems}"-->
 </catel:UserControl>

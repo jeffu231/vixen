@@ -6,7 +6,9 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using Catel.Collections;
 using Catel.Data;
+using Catel.IoC;
 using Catel.MVVM;
 using GongSolutions.Wpf.DragDrop;
 using GongSolutions.Wpf.DragDrop.Utilities;
@@ -15,24 +17,30 @@ using Vixen.Module.ElementNodeFilter;
 using Vixen.Services;
 using Vixen.Sys.ElementNodeFilters;
 using Common.WPFCommon.Utils;
+using Vixen.Sys;
+using VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.Services;
+using VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.Views;
 
 namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.ViewModels
 {
-	public class ElementNodeFilterDockerViewModel : ViewModelBase, IDropTarget, IDragSource
+	public class ElementNodeTransformEditorViewModel : BaseTransformEditorViewModel, IDropTarget, IDragSource
 	{
 		public event EventHandler<EventArgs> FiltersChanged;
 		private const string InfoLink = @"http://www.vixenlights.com";
 		private const string DefaultMessage = @"Select an Effect to edit";
+		private ElementPreviewWindow _previewWindow;
+		private EffectNode _effectNode;
+		private readonly IStandardTransformService _transformService;
 
-		public ElementNodeFilterDockerViewModel()
+		public ElementNodeTransformEditorViewModel()
 		{
-			Filters = new ObservableCollection<IChainableElementNodeFilter>();
+			_transformService = this.GetServiceLocator().TryResolveType<IStandardTransformService>();
+			Filters = new FastObservableCollection<IChainableElementNodeFilter>();
 			SelectedItems = new ObservableCollection<IChainableElementNodeFilter>();
 			SelectedItems.CollectionChanged += SelectedItems_CollectionChanged;
-			Filters.CollectionChanged += Filters_CollectionChanged;
 			InformationLink = InfoLink;
 			Information = DefaultMessage;
-			InitializeStandardFilters();
+			IsActive = true;
 		}
 
 		private void SelectedItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -42,40 +50,76 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 			commandManager.InvalidateCommands();
 		}
 
+		#region EffectNode property
+
+		/// <summary>
+		/// Gets or sets the TargetNodes value.
+		/// </summary>
+		public EffectNode EffectNode
+		{
+			get => _effectNode;
+			set
+			{
+				if (_effectNode != value)
+				{
+					_effectNode = value;
+					if (_previewWindow !=null && _previewWindow.IsVisible)
+					{
+						_previewWindow.Close();
+					}
+					
+					Filters = _effectNode != null ? new FastObservableCollection<IChainableElementNodeFilter>(_effectNode.Effect.ElementNodeFilters) 
+						: new FastObservableCollection<IChainableElementNodeFilter>();
+					
+				}
+				
+			}
+		}
+
+
+		#endregion
+		
 		#region Filters model property
 
 		/// <summary>
 		/// Gets or sets the Filters value.
 		/// </summary>
-		[Model]
-		public ObservableCollection<IChainableElementNodeFilter> Filters
+		public FastObservableCollection<IChainableElementNodeFilter> Filters
 		{
-			get { return GetValue<ObservableCollection<IChainableElementNodeFilter>>(FiltersProperty); }
-			set { SetValue(FiltersProperty, value); }
+			get { return GetValue<FastObservableCollection<IChainableElementNodeFilter>>(FiltersProperty); }
+			set
+			{
+				var oldValue = GetValue<FastObservableCollection<IChainableElementNodeFilter>>(FiltersProperty);
+				if (oldValue != null)
+				{
+					oldValue.CollectionChanged -= Filters_CollectionChanged;
+				}
+				SetValue(FiltersProperty, value);
+				if (value != null)
+				{
+					value.CollectionChanged += Filters_CollectionChanged;
+				}
+				
+			}
 		}
 
 		/// <summary>
 		/// Filters property data.
 		/// </summary>
-		public static readonly PropertyData FiltersProperty = RegisterProperty("Filters", typeof(ObservableCollection<IChainableElementNodeFilter>));
+		public static readonly PropertyData FiltersProperty = RegisterProperty("Filters", typeof(FastObservableCollection<IChainableElementNodeFilter>));
 
 		#endregion
 
 		#region StandardFilters property
 
-		/// <summary>
-		/// Gets or sets the StandardFilters value.
-		/// </summary>
-		public ObservableCollection<IModuleDescriptor> StandardFilters
-		{
-			get { return GetValue<ObservableCollection<IModuleDescriptor>>(StandardFiltersProperty); }
-			set { SetValue(StandardFiltersProperty, value); }
-		}
+		#region StandardFilters property
 
 		/// <summary>
-		/// StandardFilters property data.
+		/// Gets the StandardFilters value.
 		/// </summary>
-		public static readonly PropertyData StandardFiltersProperty = RegisterProperty("StandardFilters", typeof(ObservableCollection<IModuleDescriptor>));
+		public List<IModuleDescriptor> StandardFilters => _transformService.StandardDescriptors;
+
+		#endregion
 
 		#endregion
 
@@ -151,13 +195,6 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 
 		#endregion
 
-		private void InitializeStandardFilters()
-		{
-			var descriptors = ApplicationServices.GetModuleDescriptors<IElementNodeFilterInstance>();
-			StandardFilters = new ObservableCollection<IModuleDescriptor>(descriptors);
-		}
-
-
 		#region Commands
 
 		#region AddFilter command
@@ -175,7 +212,7 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 		/// <summary>
 		/// Method to invoke when the AddFilter command is executed.
 		/// </summary>
-		private void AddFilter()
+		internal void AddFilter()
 		{
 			var filter = StandardFilters.FirstOrDefault();
 			if (filter != null)
@@ -188,7 +225,7 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 					ChainLevel = index
 				});
 
-				OnFiltersChanged(new EventArgs());
+				//OnFiltersChanged(new EventArgs());
 			}
 			
 		}
@@ -219,10 +256,10 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 		/// <summary>
 		/// Method to invoke when the RemoveFilter command is executed.
 		/// </summary>
-		private void RemoveFilter(IChainableElementNodeFilter filter)
+		internal void RemoveFilter(IChainableElementNodeFilter filter)
 		{
 			Filters.Remove(filter);
-			OnFiltersChanged(new EventArgs());
+			//OnFiltersChanged(new EventArgs());
 		}
 
 		/// <summary>
@@ -236,18 +273,50 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 
 		#endregion
 
+		#region Preview command
+
+		private Command _previewCommand;
+
+		/// <summary>
+		/// Gets the Preview command.
+		/// </summary>
+		public Command PreviewCommand
+		{
+			get { return _previewCommand ?? (_previewCommand = new Command(Preview, CanPreview)); }
+		}
+
+		/// <summary>
+		/// Method to invoke when the Preview command is executed.
+		/// </summary>
+		private void Preview()
+		{
+			_previewWindow = new ElementPreviewWindow(this);
+			_previewWindow.ShowDialog();
+		}
+
+		/// <summary>
+		/// Method to check whether the Preview command can be executed.
+		/// </summary>
+		/// <returns><c>true</c> if the command can be executed; otherwise <c>false</c></returns>
+		private bool CanPreview()
+		{
+			return EffectNode!=null;
+		}
+
+		#endregion
 
 		#endregion
 
 		#region Events
 
-		internal void OnFiltersChanged(EventArgs args)
+		internal override void OnFiltersChanged(EventArgs args)
 		{
 			FiltersChanged?.Invoke(this, args);
 		}
 
 		private void Filters_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
 		{
+			//ConfigureViewModels();
 			OnFiltersChanged(new EventArgs());
 		}
 
@@ -428,7 +497,7 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 		/// <inheritdoc />
 		public bool CanStartDrag(IDragInfo dragInfo)
 		{
-			return Filters.Count > 0;
+			return Filters?.Count > 0;
 		}
 
 		/// <inheritdoc />

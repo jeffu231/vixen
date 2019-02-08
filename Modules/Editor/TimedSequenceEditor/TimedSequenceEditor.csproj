@@ -223,13 +223,20 @@
     <Compile Include="Forms\WPF\ElementFilterDocker\ElementNodeFiltersEditor.Designer.cs">
       <DependentUpon>ElementNodeFiltersEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\WPF\ElementFilterDocker\ViewModels\ElementNodeFilterDockerViewModel.cs" />
+    <Compile Include="Forms\WPF\ElementFilterDocker\Services\IStandardTransformService.cs" />
+    <Compile Include="Forms\WPF\ElementFilterDocker\Services\StandardTransformService.cs" />
+    <Compile Include="Forms\WPF\ElementFilterDocker\ViewModels\ElementNodeTransformEditorViewModel.cs" />
     <Compile Include="Forms\WPF\ElementFilterDocker\ViewModels\ElementNodeFilterViewModel.cs" />
-    <Compile Include="Forms\WPF\ElementFilterDocker\Views\ElementNodeFilterDockerView.xaml.cs">
-      <DependentUpon>ElementNodeFilterDockerView.xaml</DependentUpon>
+    <Compile Include="Forms\WPF\ElementFilterDocker\ViewModels\ElementPreviewViewModel.cs" />
+    <Compile Include="Forms\WPF\ElementFilterDocker\ViewModels\BaseTransformEditorViewModel.cs" />
+    <Compile Include="Forms\WPF\ElementFilterDocker\Views\ElementNodeTransformEditorView.xaml.cs">
+      <DependentUpon>ElementNodeTransformEditorView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\WPF\ElementFilterDocker\Views\ElementNodeFilterView.xaml.cs">
       <DependentUpon>ElementNodeFilterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\WPF\ElementFilterDocker\Views\ElementPreviewWindow.xaml.cs">
+      <DependentUpon>ElementPreviewWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\WPF\MarksDocker\Services\MarkImportExportService.cs" />
     <Compile Include="Forms\WPF\MarksDocker\ViewModels\CheckBoxStateBase.cs" />
@@ -432,7 +439,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Forms\WPF\ElementFilterDocker\Models\" />
-    <Folder Include="Forms\WPF\ElementFilterDocker\Services\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\magnet.png" />
@@ -615,11 +621,15 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Forms\WPF\ElementFilterDocker\Views\ElementNodeFilterDockerView.xaml">
+    <Page Include="Forms\WPF\ElementFilterDocker\Views\ElementNodeTransformEditorView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Forms\WPF\ElementFilterDocker\Views\ElementNodeFilterView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\WPF\ElementFilterDocker\Views\ElementPreviewWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

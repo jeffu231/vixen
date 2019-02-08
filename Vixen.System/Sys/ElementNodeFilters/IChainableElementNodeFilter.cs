@@ -1,10 +1,11 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Runtime.Serialization;
 using Vixen.Module.ElementNodeFilter;
 
 namespace Vixen.Sys.ElementNodeFilters
 {
-	public interface IChainableElementNodeFilter
+	public interface IChainableElementNodeFilter: INotifyPropertyChanged
 	{
 		Guid Id { get; set; }
 		ElementNodeFilterType Type { get; }
