@@ -24,21 +24,28 @@
 		   <ColumnDefinition Width="3*"></ColumnDefinition>
 		   <ColumnDefinition Width="2*"></ColumnDefinition>
        </Grid.ColumnDefinitions>
-
-		<TreeView x:Name="ElementOriginalTree" 
-				  Grid.Column="0"
-				  ItemsSource="{Binding TargetNodes}" 
-				  BorderThickness="2"
-                  VerticalAlignment="Stretch"
-                  HorizontalAlignment="Stretch"
-                  ScrollViewer.CanContentScroll="True"
-                  FocusManager.IsFocusScope="True">
-			<TreeView.ItemTemplate>
-				<HierarchicalDataTemplate DataType="{x:Type sys:ElementNode}"  ItemsSource="{Binding Children}">
-					<TextBlock Text="{Binding Name}" />
-				</HierarchicalDataTemplate>
-			</TreeView.ItemTemplate>
-		</TreeView>
+		<DockPanel Grid.Column="0" >
+			<Border DockPanel.Dock="Top" BorderThickness="0.5,1,0.5,1" BorderBrush="#6000" Background="{StaticResource BackColorBrush}" CornerRadius="2,3,2,2" SnapsToDevicePixels="True"  >
+				<Border BorderThickness=".5,1,0.5,1" BorderBrush="#20FFFFFF" CornerRadius="2,3,2,2" Margin="2">
+					<Label x:Name="EffectName" Content="Input Elements" HorizontalAlignment="Center" FontWeight="Bold" FontSize="10pt" />
+				</Border>
+			</Border>
+			<TreeView x:Name="ElementOriginalTree" 
+			          DockPanel.Dock="Bottom"
+			          ItemsSource="{Binding TargetNodes}" 
+			          BorderThickness="2"
+			          VerticalAlignment="Stretch"
+			          HorizontalAlignment="Stretch"
+			          ScrollViewer.CanContentScroll="True"
+			          FocusManager.IsFocusScope="True">
+				<TreeView.ItemTemplate>
+					<HierarchicalDataTemplate DataType="{x:Type sys:ElementNode}"  ItemsSource="{Binding Children}">
+						<TextBlock Text="{Binding Name}" />
+					</HierarchicalDataTemplate>
+				</TreeView.ItemTemplate>
+			</TreeView>
+		</DockPanel>
+		
 		<!--<views:ElementNodeTransformEditorView 
 			Grid.Column="1" 
 			DataContext="{Binding Transformers}" 
@@ -47,11 +54,8 @@
 
 		</views:ElementNodeTransformEditorView>-->
 		<Grid Grid.Column="1" HorizontalAlignment="Stretch" 
-		      Background="{StaticResource BackColorBrush}" 
-		      >
+		      Background="{StaticResource BackColorBrush}" >
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="1*"></ColumnDefinition>
-				<ColumnDefinition Width="1*"></ColumnDefinition>
 				<ColumnDefinition Width="1*"></ColumnDefinition>
 			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions>
@@ -63,10 +67,21 @@
 					<views:ElementNodeFilterView/>
 				</DataTemplate>
 			</Grid.Resources>
-			<Button Grid.Column="0" Grid.Row="0" Content="Add" Margin="5" Command="{Binding AddFilterCommand}"></Button>
-			<Button Grid.Column="1" Grid.Row="0" Content="Remove" Margin="5" Command="{Binding RemoveFilterCommand}"
-	                                CommandParameter="{Binding ElementName=LbFilters, Path=SelectedItem}"></Button>
-			<ListBox Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" Name="LbFilters" 
+			<Border Grid.Column="0" DockPanel.Dock="Top" BorderThickness="0.5,1,0.5,1" BorderBrush="#6000" Background="{StaticResource BackColorBrush}" CornerRadius="2,3,2,2" SnapsToDevicePixels="True"  >
+				<Border BorderThickness=".5,1,0.5,1" BorderBrush="#20FFFFFF" CornerRadius="2,3,2,2" Margin="2">
+					<Grid >
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="1*"></ColumnDefinition>
+							<ColumnDefinition Width="1*"></ColumnDefinition>
+						</Grid.ColumnDefinitions>
+						<Button Grid.Column="0" Grid.Row="0" Content="Add" Margin="5" Command="{Binding AddFilterCommand}"></Button>
+						<Button Grid.Column="1" Grid.Row="0" Content="Remove" Margin="5" Command="{Binding RemoveFilterCommand}"
+						        CommandParameter="{Binding ElementName=LbFilters, Path=SelectedItem}"></Button>
+					</Grid>
+				</Border>
+			</Border>
+
+			<ListBox Grid.Column="0" Grid.Row="1" Name="LbFilters" 
 					HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" 
 					ItemsSource="{Binding Filters}"  
 					Style="{StaticResource SimpleListBoxStyle}"
@@ -76,23 +91,30 @@
 					dd:DragDrop.IsDropTarget="True"
 					dd:DragDrop.DropHandler="{Binding}"
 					dd:DragDrop.DragHandler="{Binding}">
-
 			</ListBox>
 		</Grid>
-		<TreeView x:Name="ElementPreviewTreeView" 
-	              Grid.Column="2"
-	              ItemsSource="{Binding TransformedNodes}" 
-	              BorderThickness="2"
-	              VerticalAlignment="Stretch"
-	              HorizontalAlignment="Stretch"
-	              ScrollViewer.CanContentScroll="True"
-	              FocusManager.IsFocusScope="True">
-		    <TreeView.ItemTemplate>
-			    <HierarchicalDataTemplate DataType="{x:Type sys:ElementNode}"  ItemsSource="{Binding Children}">
-				    <TextBlock Text="{Binding Name}" />
-			    </HierarchicalDataTemplate>
-		    </TreeView.ItemTemplate>
-	    </TreeView>
+		<DockPanel Grid.Column="2" >
+			<Border DockPanel.Dock="Top" BorderThickness="0.5,1,0.5,1" BorderBrush="#6000" Background="{StaticResource BackColorBrush}" CornerRadius="2,3,2,2" SnapsToDevicePixels="True"  >
+				<Border BorderThickness=".5,1,0.5,1" BorderBrush="#20FFFFFF" CornerRadius="2,3,2,2" Margin="2">
+					<Label Content="Transformed Elements" HorizontalAlignment="Center" FontWeight="Bold" FontSize="10pt" />
+				</Border>
+			</Border>
+			<TreeView x:Name="ElementPreviewTreeView" 
+			          DockPanel.Dock="Bottom"
+			          ItemsSource="{Binding TransformedNodes}" 
+			          BorderThickness="2"
+			          VerticalAlignment="Stretch"
+			          HorizontalAlignment="Stretch"
+			          ScrollViewer.CanContentScroll="True"
+			          FocusManager.IsFocusScope="True">
+				<TreeView.ItemTemplate>
+					<HierarchicalDataTemplate DataType="{x:Type sys:ElementNode}"  ItemsSource="{Binding Children}">
+						<TextBlock Text="{Binding Name}" />
+					</HierarchicalDataTemplate>
+				</TreeView.ItemTemplate>
+			</TreeView>
+		</DockPanel>
+		
 	</Grid>
     
 </catel:Window>
