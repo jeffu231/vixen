@@ -138,24 +138,6 @@
     <None Include="bullet_yellow.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="cog.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="cog_add.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="cog_delete.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="cog_edit.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="cog_error.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="cog_go.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="control_end.png" />
   </ItemGroup>
   <ItemGroup>
@@ -280,6 +262,12 @@
     <Content Include="buttonDistributeHorizontal.BackgroundImage.png" />
     <Content Include="buttonDistributeVertical.BackgroundImage.png" />
     <Content Include="buttonMatchProperties.BackgroundImage.png" />
+    <Resource Include="cog.png" />
+    <Resource Include="cog_add.png" />
+    <Resource Include="cog_delete.png" />
+    <Resource Include="cog_edit.png" />
+    <Resource Include="cog_error.png" />
+    <Resource Include="cog_go.png" />
     <Content Include="fill_gaps.png" />
     <None Include="Resources\HeadingBackgroundImage.jpg" />
     <None Include="Resources\HeadingBackgroundImageHover.jpg" />

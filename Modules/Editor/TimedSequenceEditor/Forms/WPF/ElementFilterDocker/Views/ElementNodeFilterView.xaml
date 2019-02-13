@@ -4,8 +4,7 @@
                    xmlns:catel="http://schemas.catelproject.com"
                    xmlns:viewModels="clr-namespace:VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.ViewModels"
                    xmlns:utils="clr-namespace:Common.WPFCommon.Utils;assembly=WPFCommon"
-                   xmlns:converters="clr-namespace:Common.WPFCommon.Converters;assembly=WPFCommon"
-                   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
+                   xmlns:converters="clr-namespace:Common.WPFCommon.Converters;assembly=WPFCommon">
 
 	<UserControl.Resources>
 		<ResourceDictionary>
@@ -48,7 +47,7 @@
 								</ComboBox>
 								<Button Grid.Column="2" Grid.Row="1" Margin="3" Width="{Binding Path=ActualHeight, RelativeSource={RelativeSource Self}}" Visibility="{Binding Filter.ElementNodeFilter, Converter={converters:HasSetupVisibilityConverter}}"
 															Command="{Binding ConfigureFilterCommand}">
-									<Image Source="/Resources;component/cog.png" Width="16" Height="16"></Image>
+									<Image Source="/Resources;component/cog_edit.png" Width="16" Height="16"></Image>
 								</Button>
 							</Grid>
 						</DockPanel>

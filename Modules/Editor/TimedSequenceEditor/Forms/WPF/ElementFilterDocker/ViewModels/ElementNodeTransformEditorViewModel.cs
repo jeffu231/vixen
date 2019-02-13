@@ -112,17 +112,13 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 
 		#region StandardFilters property
 
-		#region StandardFilters property
-
 		/// <summary>
 		/// Gets the StandardFilters value.
 		/// </summary>
 		public List<IModuleDescriptor> StandardFilters => _transformService.StandardDescriptors;
 
 		#endregion
-
-		#endregion
-
+		
 		#region SelectedItems property
 
 		/// <summary>
