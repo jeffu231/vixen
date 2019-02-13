@@ -19,7 +19,7 @@ namespace Vixen.Module.ElementNodeFilter
 			return false;
 		}
 
-		public virtual ElementNode[] Filter(ElementNode[] nodes)
+		public virtual IElementNode[] Filter(IElementNode[] nodes)
 		{
 			return nodes;
 		}

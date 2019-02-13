@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Common.Controls.ColorManagement.ColorModels;
 using Vixen.Module.Property;
 using Vixen.Rule;
@@ -111,10 +112,10 @@ namespace VixenModules.Property.Face {
 		public override bool HasElementSetupHelper => true;
 
 		/// <inheritdoc />
-		public override bool SetupElements(IEnumerable<ElementNode> nodes)
+		public override bool SetupElements(IEnumerable<IElementNode> nodes)
 		{
 			var helper = new FaceSetupHelper();
-			return helper.Perform(nodes);
+			return helper.Perform(nodes.Cast<ElementNode>()); 
 		}
 
 		#endregion

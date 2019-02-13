@@ -187,6 +187,11 @@ namespace Vixen.Sys
 			return nodes.SelectMany(x => x.GetElementEnumerator()).ToArray();
 		}
 
+		public static Element[] GetElements(this IEnumerable<IElementNode> nodes)
+		{
+			return nodes.SelectMany(x => x.GetElementEnumerator()).ToArray();
+		}
+
 		public static List<Element> GetElementList(this IEnumerable<ElementNode> nodes)
 		{
 			return nodes.SelectMany(x => x.GetElementEnumerator()).ToList();

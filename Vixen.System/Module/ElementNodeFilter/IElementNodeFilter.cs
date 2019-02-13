@@ -9,7 +9,7 @@ namespace Vixen.Module.ElementNodeFilter
 		/// </summary>
 		/// <param name="nodes"></param>
 		/// <returns></returns>
-		ElementNode[] Filter(ElementNode[] nodes);
+		IElementNode[] Filter(IElementNode[] nodes);
 
 	}
 }

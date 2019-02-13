@@ -138,7 +138,7 @@ namespace VixenModules.Property.Color
 
 		// static 'helper' methods in the color property
 		// gets the color type for a given element node. If no color properties are defined, it's assumed to be "full color".
-		public static ElementColorType getColorTypeForElementNode(ElementNode element)
+		public static ElementColorType getColorTypeForElementNode(IElementNode element)
 		{
 			ColorModule colorModule = element.Properties.Get(ColorDescriptor.ModuleId) as ColorModule;
 			if (colorModule != null) {
@@ -149,7 +149,7 @@ namespace VixenModules.Property.Color
 
 		// static 'helper' methods in the color property
 		// a simpler version of the getColorTypeForElementNode call -- often, we only care if an element should be discretely colored or not.
-		public static bool isElementNodeDiscreteColored(ElementNode element)
+		public static bool isElementNodeDiscreteColored(IElementNode element)
 		{
 			ElementColorType type = getColorTypeForElementNode(element);
 			if (type == ElementColorType.MultipleDiscreteColors || type == ElementColorType.SingleColor)
@@ -157,7 +157,7 @@ namespace VixenModules.Property.Color
 			return false;
 		}
 
-		public static bool isElementNodeTreeDiscreteColored(ElementNode element)
+		public static bool isElementNodeTreeDiscreteColored(IElementNode element)
 		{
 			return element.GetLeafEnumerator().Any(x => isElementNodeDiscreteColored(x));
 		}
@@ -165,7 +165,7 @@ namespace VixenModules.Property.Color
 		// gets a enumerable of valid colors for the given element node. If the element is full color, an empty enumeration
 		// will be returned; otherwise one of more colors will be returned (for single or multiple discrete colors).
 		// wIt will recurse the children to collect from all parts of the element
-		public static IEnumerable<System.Drawing.Color> getValidColorsForElementNode(ElementNode element, bool includeChildren)
+		public static IEnumerable<System.Drawing.Color> getValidColorsForElementNode(IElementNode element, bool includeChildren)
 		{
 			HashSet<System.Drawing.Color> result = new HashSet<System.Drawing.Color>();
 			ColorModule colorModule = element.Properties.Get(ColorDescriptor.ModuleId) as ColorModule;

@@ -385,6 +385,8 @@
     <Compile Include="Sys\ElementNodeFilters\IChainableElementNodeFilter.cs" />
     <Compile Include="Sys\ElementNodeFilters\StandardElementNodeFilter.cs" />
     <Compile Include="Sys\IDataPolicyFactory.cs" />
+    <Compile Include="Sys\IElementNode.cs" />
+    <Compile Include="Sys\IGroupNode.cs" />
     <Compile Include="Sys\IHasLayers.cs" />
     <Compile Include="Sys\IHasMarks.cs" />
     <Compile Include="Sys\IStateCombinator.cs" />
@@ -909,6 +911,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sys\TimeNode.cs" />
     <Compile Include="Sys\UIThread.cs" />
+    <Compile Include="Sys\VirtualElementNode.cs" />
     <Compile Include="Sys\VixenSystem.cs" />
     <Compile Include="Sys\WindowsMultimedia.cs" />
     <Compile Include="Sys\XmlHelper.cs" />

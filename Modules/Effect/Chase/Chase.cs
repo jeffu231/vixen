@@ -419,14 +419,14 @@ namespace VixenModules.Effect.Chase
 		}
 
 
-		private void DoRendering(List<ElementNode> renderNodes, CancellationTokenSource tokenSource = null)
+		private void DoRendering(List<IElementNode> renderNodes, CancellationTokenSource tokenSource = null)
 		{
 			int targetNodeCount = renderNodes.Count;
 
 			// apply the 'background' values to all targets if the level is supposed to be enabled
 			if (EnableDefaultLevel) {
 				int i = 0;
-				foreach (ElementNode target in renderNodes) {
+				foreach (IElementNode target in renderNodes) {
 					if (tokenSource != null && tokenSource.IsCancellationRequested) return;
 					
 					if (target != null)
@@ -503,11 +503,11 @@ namespace VixenModules.Effect.Chase
 				sampleMs = 2;
 			}
 			TimeSpan increment = TimeSpan.FromTicks((long)(sampleMs*TimeSpan.TicksPerMillisecond));
-			
+
 
 			// we need to keep track of the element that is 'under' the curve at a given time, to see if it changes,
 			// and when it does, we make the effect for it then (since it's a variable time pulse).
-			ElementNode lastTargetedNode = null;
+			IElementNode lastTargetedNode = null;
 			TimeSpan lastNodeStartTime = TimeSpan.Zero;
 
 			// iterate up to and including the last pulse generated
@@ -532,7 +532,7 @@ namespace VixenModules.Effect.Chase
 				if (currentNodeIndex < 0)
 					continue;
 
-				ElementNode currentNode = renderNodes[currentNodeIndex];
+				IElementNode currentNode = renderNodes[currentNodeIndex];
 				if (currentNode == lastTargetedNode)
 					continue;
 
@@ -560,9 +560,9 @@ namespace VixenModules.Effect.Chase
 			_elementData = EffectIntents.Restrict(_elementData, TimeSpan.Zero, TimeSpan);
 		}
 
-		private List<ElementNode> GetNodesToRenderOn(ElementNode node)
+		private List<IElementNode> GetNodesToRenderOn(IElementNode node)
 		{
-			IEnumerable<ElementNode> renderNodes = null;
+			IEnumerable<IElementNode> renderNodes = null;
 
 			if (DepthOfEffect == 0) {
 				renderNodes = node.GetLeafEnumerator().ToList();
@@ -639,7 +639,7 @@ namespace VixenModules.Effect.Chase
 		//	_elementData.Add(result);
 		//}
 
-		private void GeneratePulse(ElementNode target, TimeSpan startTime, TimeSpan duration, double currentMovementPosition)
+		private void GeneratePulse(IElementNode target, TimeSpan startTime, TimeSpan duration, double currentMovementPosition)
 		{
 			EffectIntents result = null;
 			

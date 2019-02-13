@@ -21,12 +21,12 @@ namespace Vixen.Module.Effect
 		/// <summary>
 		/// Filtered Nodes the effect is being applied to as a single collection.
 		/// </summary>
-		ElementNode[] TargetNodes { get; set; }
+		IElementNode[] TargetNodes { get; set; }
 
 		/// <summary>
 		/// Nodes the effect is being applied to as a single collection.
 		/// </summary>
-		ElementNode[] UnFilteredTargetNodes { get; set; }
+		IElementNode[] UnFilteredTargetNodes { get; set; }
 
 		/// <summary>
 		/// The length of the entire effect.

@@ -32,14 +32,14 @@ namespace VixenModules.ElementNodeFilter.SkipFilter
 		#region Overrides of ElementNodeFilterModuleInstanceBase
 
 		/// <inheritdoc />
-		public override ElementNode[] Filter(ElementNode[] nodes)
+		public override IElementNode[] Filter(IElementNode[] nodes)
 		{
 			return GetNodesToRenderOn(nodes);
 		}
 
-		private ElementNode[] GetNodesToRenderOn(ElementNode[] nodes)
+		private IElementNode[] GetNodesToRenderOn(IElementNode[] nodes)
 		{
-			List<ElementNode> renderNodes = new List<ElementNode>();
+			List<IElementNode> renderNodes = new List<IElementNode>();
 
 			if (First > 0)
 			{

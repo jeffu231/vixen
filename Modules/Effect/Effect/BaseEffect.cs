@@ -81,15 +81,15 @@ namespace VixenModules.Effect.Effect
 
 		}
 
-		protected bool IsElementDiscrete(ElementNode elementNode)
+		protected bool IsElementDiscrete(IElementNode elementNode)
 		{
 			return ColorModule.isElementNodeDiscreteColored(elementNode);
 		}
 
-		protected EffectIntents CreateIntentsForElement(ElementNode element, double intensity, Color color, TimeSpan duration)
+		protected EffectIntents CreateIntentsForElement(IElementNode element, double intensity, Color color, TimeSpan duration)
 		{
 			EffectIntents effectIntents = new EffectIntents();
-			foreach (ElementNode elementNode in element.GetLeafEnumerator())
+			foreach (IElementNode elementNode in element.GetLeafEnumerator())
 			{
 				if (HasDiscreteColors && IsElementDiscrete(elementNode))
 				{
@@ -107,7 +107,7 @@ namespace VixenModules.Effect.Effect
 			return effectIntents;
 		}
 
-		protected IIntent CreateIntent(ElementNode node, Color color, double intensity, TimeSpan duration)
+		protected IIntent CreateIntent(IElementNode node, Color color, double intensity, TimeSpan duration)
 		{
 			if (HasDiscreteColors && IsElementDiscrete(node))
 			{
@@ -117,7 +117,7 @@ namespace VixenModules.Effect.Effect
 			return CreateIntent(color, intensity, duration);
 		}
 
-		protected IIntent CreateIntent(ElementNode node, Color startColor, Color endColor, double startIntensity, double endIntensity, TimeSpan duration)
+		protected IIntent CreateIntent(IElementNode node, Color startColor, Color endColor, double startIntensity, double endIntensity, TimeSpan duration)
 		{
 			if (HasDiscreteColors && IsElementDiscrete(node))
 			{

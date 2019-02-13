@@ -15,7 +15,7 @@ namespace Vixen.Sys
 	/// A logical node that encapsulates a single Element or a branch/group of other ElementNodes.
 	/// </summary>
 	[Serializable]
-	public class ElementNode : GroupNode<Element>, IEqualityComparer<ElementNode>
+	public class ElementNode : GroupNode<Element>, IElementNode, IEqualityComparer<ElementNode>
 	{
 		// Making this static so there doesn't have to be potentially thousands of
 		// subscriptions from the node manager.
@@ -120,10 +120,14 @@ namespace Vixen.Sys
 			get { return base.Children.Cast<ElementNode>(); }
 		}
 
+		IEnumerable<IElementNode> IElementNode.Children => Children;
+
 		public new IEnumerable<ElementNode> Parents
 		{
 			get { return base.Parents.Cast<ElementNode>(); }
 		}
+
+		IEnumerable<IElementNode> IElementNode.Parents => Parents;
 
 		public bool Masked
 		{
@@ -234,10 +238,20 @@ namespace Vixen.Sys
 			}
 		}
 
+		IEnumerable<Element> IElementNode.GetElementEnumerator()
+		{
+			return GetElementEnumerator();
+		}
+
 		public IEnumerable<ElementNode> GetNodeEnumerator()
 		{
 			// "this" is already an enumerable, so AsEnumerable<> won't work.
 			return (new[] {this}).Concat(Children.SelectMany(x => x.GetNodeEnumerator()));
+		}
+
+		IEnumerable<IElementNode> IElementNode.GetNodeEnumerator()
+		{
+			return GetNodeEnumerator();
 		}
 
 		public IEnumerable<ElementNode> GetLeafEnumerator()
@@ -251,6 +265,11 @@ namespace Vixen.Sys
 			}
 		}
 
+		IEnumerable<IElementNode> IElementNode.GetLeafEnumerator()
+		{
+			return GetLeafEnumerator();
+		}
+
 		public IEnumerable<ElementNode> GetNonLeafEnumerator()
 		{
 			if (IsLeaf) {
@@ -260,6 +279,11 @@ namespace Vixen.Sys
 				// "this" is already an enumerable, so AsEnumerable<> won't work.
 				return (new[] {this}).Concat(Children.SelectMany(x => x.GetNonLeafEnumerator()));
 			}
+		}
+
+		IEnumerable<IElementNode> IElementNode.GetNonLeafEnumerator()
+		{
+			return GetNonLeafEnumerator();
 		}
 
 		public IEnumerable<ElementNode> GetAllParentNodes()

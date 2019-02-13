@@ -311,7 +311,7 @@ namespace VixenModules.Effect.Strobe
 
 		// renders the given node to the internal ElementData dictionary. If the given node is
 		// not a element, will recursively descend until we render its elements.
-		private EffectIntents RenderNode(List<ElementNode> elements)
+		private EffectIntents RenderNode(List<IElementNode> elements)
 		{
 			_strobeClass = new List<StrobeClass>();
 			EffectIntents effectIntents = new EffectIntents();
@@ -341,7 +341,7 @@ namespace VixenModules.Effect.Strobe
 				if (StrobeSource != StrobeSource.TimeInterval && (onDuration + startTime).TotalMilliseconds >
 				    _strobeClass[i + 1].StartTime.TotalMilliseconds) onDuration = TimeSpan.FromMilliseconds((_strobeClass[i + 1].StartTime.TotalMilliseconds - 1 - startTime.TotalMilliseconds)/2);
 
-				foreach (ElementNode element in elements)
+				foreach (IElementNode element in elements)
 				{
 					var glp = new GradientLevelPair(Colors, IntensityCurve);
 					RenderElement(glp, startTime, onDuration.Subtract(TimeSpan.FromMilliseconds(1)), element,
@@ -376,7 +376,7 @@ namespace VixenModules.Effect.Strobe
 		}
 
 		private void RenderElement(GradientLevelPair gradientLevelPair, TimeSpan startTime, TimeSpan interval,
-			ElementNode element, EffectIntents effectIntents)
+			IElementNode element, EffectIntents effectIntents)
 		{
 			if (interval <= TimeSpan.Zero) return;
 			var result = PulseRenderer.RenderNode(element, gradientLevelPair.Curve, gradientLevelPair.ColorGradient, interval, HasDiscreteColors);

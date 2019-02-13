@@ -17,10 +17,10 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 			Title = "Transform Preview";
 			SelectedItems = new ObservableCollection<IChainableElementNodeFilter>();
 			SelectedItems.CollectionChanged += SelectedItems_CollectionChanged;
-			TargetNodes = new FastObservableCollection<ElementNode>(editorViewModel.EffectNode.Effect.UnFilteredTargetNodes);
+			TargetNodes = new FastObservableCollection<IElementNode>(editorViewModel.EffectNode.Effect.UnFilteredTargetNodes);
 			EditorViewModel = editorViewModel;
 			Filters = editorViewModel.Filters;
-			TransformedNodes = new FastObservableCollection<ElementNode>();
+			TransformedNodes = new FastObservableCollection<IElementNode>();
 			editorViewModel.FiltersChanged += EditorViewModel_FiltersChanged;
 			UpdateTransformedNodesAsync();
 		}
@@ -38,16 +38,16 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 		/// Gets or sets the TargetNodes value.
 		/// </summary>
 		[Model]
-		public FastObservableCollection<ElementNode> TargetNodes
+		public FastObservableCollection<IElementNode> TargetNodes
 		{
-			get { return GetValue<FastObservableCollection<ElementNode>>(TargetNodesProperty); }
+			get { return GetValue<FastObservableCollection<IElementNode>>(TargetNodesProperty); }
 			private set { SetValue(TargetNodesProperty, value); }
 		}
 
 		/// <summary>
 		/// TargetNodes property data.
 		/// </summary>
-		public static readonly PropertyData TargetNodesProperty = RegisterProperty("TargetNodes", typeof(FastObservableCollection<ElementNode>));
+		public static readonly PropertyData TargetNodesProperty = RegisterProperty("TargetNodes", typeof(FastObservableCollection<IElementNode>));
 
 		#endregion
 
@@ -57,16 +57,16 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 		/// Gets or sets the TransformedNodes value.
 		/// </summary>
 		[Model]
-		public FastObservableCollection<ElementNode> TransformedNodes
+		public FastObservableCollection<IElementNode> TransformedNodes
 		{
-			get { return GetValue<FastObservableCollection<ElementNode>>(TransformedNodesProperty); }
+			get { return GetValue<FastObservableCollection<IElementNode>>(TransformedNodesProperty); }
 			private set { SetValue(TransformedNodesProperty, value); }
 		}
 
 		/// <summary>
 		/// TransformedNodes property data.
 		/// </summary>
-		public static readonly PropertyData TransformedNodesProperty = RegisterProperty("TransformedNodes", typeof(FastObservableCollection<ElementNode>));
+		public static readonly PropertyData TransformedNodesProperty = RegisterProperty("TransformedNodes", typeof(FastObservableCollection<IElementNode>));
 
 		#endregion
 

@@ -53,7 +53,7 @@ namespace VixenModules.Effect.Twinkle
 
 			foreach (var elementNode in TargetNodes)
 			{
-				IEnumerable<ElementNode> targetNodes = GetNodesToRenderOn(elementNode);
+				IEnumerable<IElementNode> targetNodes = GetNodesToRenderOn(elementNode);
 
 				List<IndividualTwinkleDetails> twinkles = null;
 				if (!IndividualElements)
@@ -62,7 +62,7 @@ namespace VixenModules.Effect.Twinkle
 				int totalNodes = targetNodes.Count();
 				double i = 0;
 
-				foreach (ElementNode node in targetNodes)
+				foreach (IElementNode node in targetNodes)
 				{
 					if (tokenSource != null && tokenSource.IsCancellationRequested)
 						return;
@@ -365,7 +365,7 @@ namespace VixenModules.Effect.Twinkle
 			}
 		}
 
-		private EffectIntents RenderElement(ElementNode node, double positionWithinGroup, bool discreteColors,
+		private EffectIntents RenderElement(IElementNode node, double positionWithinGroup, bool discreteColors,
 		                                    List<IndividualTwinkleDetails> twinkles = null)
 		{
 			if (twinkles == null)
@@ -600,9 +600,9 @@ namespace VixenModules.Effect.Twinkle
 			return result;
 		}
 
-		private IEnumerable<ElementNode> GetNodesToRenderOn(ElementNode node)
+		private IEnumerable<IElementNode> GetNodesToRenderOn(IElementNode node)
 		{
-			IEnumerable<ElementNode> renderNodes = null;
+			IEnumerable<IElementNode> renderNodes = null;
 
 			if (DepthOfEffect == 0 || !IndividualElements)
 			{

@@ -7,7 +7,7 @@ namespace Vixen.Module.SequenceType.Surrogate
 	[DataContract(Namespace = "")]
 	internal class ChannelNodeReferenceSurrogate
 	{
-		public ChannelNodeReferenceSurrogate(ElementNode elementNode)
+		public ChannelNodeReferenceSurrogate(IElementNode elementNode)
 		{
 			NodeId = elementNode.Id;
 		}

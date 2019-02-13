@@ -20,19 +20,19 @@ namespace VixenModules.ElementNodeFilter.DepthFilter
 		#region Overrides of ElementNodeFilterModuleInstanceBase
 
 		/// <inheritdoc />
-		public override ElementNode[] Filter(ElementNode[] nodes)
+		public override IElementNode[] Filter(IElementNode[] nodes)
 		{
 			return GetNodesToRenderOn(nodes);
 		}
 
-		private ElementNode[] GetNodesToRenderOn(ElementNode[] nodes)
+		private IElementNode[] GetNodesToRenderOn(IElementNode[] nodes)
 		{
 			if (Depth == 0)
 			{
 				return nodes;
 			}
 			
-			IEnumerable<ElementNode> renderNodes = nodes;
+			IEnumerable<IElementNode> renderNodes = nodes;
 			for (int i = 0; i < Depth; i++)
 			{
 				renderNodes = renderNodes.SelectMany(x => x.Children);

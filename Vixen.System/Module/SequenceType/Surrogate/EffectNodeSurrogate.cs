@@ -38,14 +38,13 @@ namespace Vixen.Module.SequenceType.Surrogate
 			//Hydrate the data model
 			effectDataSet.AssignModuleInstanceData(effect);
 			//effect.TargetNodes = validElementIds.Select(x => elementNodes[x]).ToArray();
-			ElementNode node;
-			if (elementNodes.TryGetValue(TargetNodes.First().NodeId, out node))
+			if (elementNodes.TryGetValue(TargetNodes.First().NodeId, out var node))
 			{
-				effect.UnFilteredTargetNodes = new[] {node};
+				effect.UnFilteredTargetNodes = new IElementNode[] {node};
 			}
 			else
 			{
-				effect.UnFilteredTargetNodes = new ElementNode[]{};
+				effect.UnFilteredTargetNodes = new IElementNode[]{};
 			}
 
 			effect.ElementNodeFilters = ElementTransforms==null?new List<IChainableElementNodeFilter>() : ElementTransforms.Select(x => x.CreateTransform(transformDataSet)).ToList();

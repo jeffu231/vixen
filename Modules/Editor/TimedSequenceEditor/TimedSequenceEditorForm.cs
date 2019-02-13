@@ -97,7 +97,7 @@ namespace VixenModules.Editor.TimedSequenceEditor
 		private Dictionary<EffectNode, Element> _effectNodeToElement;
 
 		// a mapping of system elements to the (possibly multiple) rows that represent them in the grid.
-		private Dictionary<ElementNode, List<Row>> _elementNodeToRows;
+		private Dictionary<IElementNode, List<Row>> _elementNodeToRows;
 
 		// the default time for a sequence if one is loaded with 0 time
 		private static readonly TimeSpan DefaultSequenceTime = TimeSpan.FromMinutes(1);
@@ -463,7 +463,7 @@ namespace VixenModules.Editor.TimedSequenceEditor
 			}
 
 			_effectNodeToElement = new Dictionary<EffectNode, Element>();
-			_elementNodeToRows = new Dictionary<ElementNode, List<Row>>();
+			_elementNodeToRows = new Dictionary<IElementNode, List<Row>>();
 
 			TimelineControl.grid.RenderProgressChanged += OnRenderProgressChanged;
 
@@ -1227,7 +1227,7 @@ namespace VixenModules.Editor.TimedSequenceEditor
 		private void LoadSystemNodesToRows(bool clearCurrentRows = true)
 		{
 			TimelineControl.AllowGridResize = false;
-			_elementNodeToRows = new Dictionary<ElementNode, List<Row>>();
+			_elementNodeToRows = new Dictionary<IElementNode, List<Row>>();
 
 			_suppressModifiedEvents = true;
 			//Scale our default pixel height for the rows
