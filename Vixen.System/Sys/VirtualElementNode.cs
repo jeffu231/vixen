@@ -6,7 +6,6 @@ namespace Vixen.Sys
 {
 	public class VirtualElementNode : GroupNode<Element>, IElementNode, IEqualityComparer<VirtualElementNode>
 	{
-
 		internal VirtualElementNode(Guid id, string name, Element element, IEnumerable<VirtualElementNode> content)
 			: base(name, content)
 		{
@@ -27,6 +26,11 @@ namespace Vixen.Sys
 		}
 
 		internal VirtualElementNode(string name, IEnumerable<VirtualElementNode> content)
+			: this(name, null, content)
+		{
+		}
+
+		internal VirtualElementNode(string name, params VirtualElementNode[] content)
 			: this(name, null, content)
 		{
 		}

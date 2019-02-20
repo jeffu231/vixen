@@ -381,6 +381,7 @@
     <Compile Include="Services\IFileService.cs" />
     <Compile Include="Services\LayerMixingFilterService.cs" />
     <Compile Include="Sys\ElementIntentStates.cs" />
+    <Compile Include="Sys\ElementNodeBase.cs" />
     <Compile Include="Sys\ElementNodeFilters\ChainableElementNodeFilterBase.cs" />
     <Compile Include="Sys\ElementNodeFilters\IChainableElementNodeFilter.cs" />
     <Compile Include="Sys\ElementNodeFilters\StandardElementNodeFilter.cs" />
@@ -404,12 +405,14 @@
     <Compile Include="Sys\Managers\IOutputDeviceCollection.cs" />
     <Compile Include="Sys\Managers\IOutputDeviceExecution.cs" />
     <Compile Include="Sys\Managers\IOutputDeviceFacadeParticipant.cs" />
+    <Compile Include="Sys\Managers\NodeManagerBase.cs" />
     <Compile Include="Sys\Managers\OrderedDeviceDictionary.cs" />
     <Compile Include="Sys\Managers\OutputDeviceCollection.cs" />
     <Compile Include="Sys\Managers\OutputDeviceCollectionExecutionMediator.cs" />
     <Compile Include="Sys\Managers\OutputDeviceExecution.cs" />
     <Compile Include="Sys\Managers\OutputDeviceFacade.cs" />
     <Compile Include="Sys\Managers\SmartOutputControllerManager.cs" />
+    <Compile Include="Sys\Managers\VirtualNodeManager.cs" />
     <Compile Include="Sys\OutputStateList.cs" />
     <Compile Include="Sys\OutputStateListAggregator.cs" />
     <Compile Include="Sys\Output\BasicOutputModuleExecutionControl.cs" />

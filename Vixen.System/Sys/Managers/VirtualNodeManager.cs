@@ -4,33 +4,22 @@ using System.Linq;
 
 namespace Vixen.Sys.Managers
 {
-	public class NodeManager : NodeManagerBase<ElementNode>, IEnumerable<ElementNode>
+	public class VirtualNodeManager : NodeManagerBase<VirtualElementNode>, IEnumerable<VirtualElementNode>
 	{
-		// a mapping of element node GUIDs to element node instances. Used for initial creation, to easily find nodes we have already created.
-		// once they've been created, they're in the dictionary. The only way to 'delete' elementNodes is to make a new NodeManager,
-		// which reinitializes this mapping and we can start fresh.
-		private Dictionary<Guid, ElementNode> _instances;
-
 		public static event EventHandler NodesChanged;
 
-		public NodeManager()
-		{
-			_instances = new Dictionary<Guid, ElementNode>();
-			ElementNode.Changed += ElementNode_Changed;
-		}
-
-		public NodeManager(IEnumerable<ElementNode> nodes)
-			: this()
+		public VirtualNodeManager(IEnumerable<VirtualElementNode> nodes)
 		{
 			AddNodes(nodes);
 		}
 
-		private void ElementNode_Changed(object sender, EventArgs e)
+		/// <inheritdoc />
+		protected override VirtualElementNode CreateNode(string name)
 		{
-			OnNodesChanged();
+			return new VirtualElementNode("Root");
 		}
 
-		public void MoveNode(ElementNode movingNode, ElementNode newParent, ElementNode oldParent, int index = -1)
+		public void MoveNode(VirtualElementNode movingNode, VirtualElementNode newParent, VirtualElementNode oldParent, int index = -1)
 		{
 			// if null nodes, default to the root node.
 			newParent = newParent ?? RootNode;
@@ -38,7 +27,8 @@ namespace Vixen.Sys.Managers
 
 			// if we are going to be moving a node within its same group, but to a later position, we need to offset
 			// the destination index by 1: once we remove a node, everything shuffles up one, and we need to account for it
-			if (oldParent == newParent && index >= 0 && index > newParent.IndexOfChild(movingNode)) {
+			if (oldParent == newParent && index >= 0 && index > newParent.IndexOfChild(movingNode))
+			{
 				index--;
 			}
 
@@ -48,33 +38,35 @@ namespace Vixen.Sys.Managers
 			AddChildToParent(movingNode, newParent, index);
 		}
 
-		public void RemoveNode(ElementNode node, ElementNode parent, bool cleanup)
+		public void RemoveNode(VirtualElementNode node, VirtualElementNode parent, bool cleanup)
 		{
 			// if the given parent is null, it's most likely a root node (ie. with
 			// a parent of our private RootNode). Try to remove it from that instead.
-			if (parent == null) {
+			if (parent == null)
+			{
 				node.RemoveFromParent(RootNode, cleanup);
 			}
-			else {
+			else
+			{
 				node.RemoveFromParent(parent, cleanup);
 				//If the parent no longer has children, add a element back to it.
 				if (parent.IsLeaf && parent.Element == null)
 				{
 					parent.Element = new Element(parent.Name);
-					VixenSystem.Elements.AddElement(parent.Element);
+					//VixenSystem.Elements.AddElement(parent.Element);
 				}
 			}
 
 		}
 
-		public void RenameNode(ElementNode node, string newName)
+		public void RenameNode(VirtualElementNode node, string newName)
 		{
 			node.Name = _Uniquify(newName);
 			if (node.Element != null)
 				node.Element.Name = node.Name;
 		}
 
-		public override void AddChildToParent(ElementNode child, ElementNode parent, int index = -1)
+		public override void AddChildToParent(VirtualElementNode child, VirtualElementNode parent, int index = -1)
 		{
 			// if no parent was specified, add to the root node.
 			if (parent == null)
@@ -82,8 +74,9 @@ namespace Vixen.Sys.Managers
 
 			// if an item is a group (or is becoming one), it can't have an output
 			// element anymore. Remove it.
-			if (parent.Element != null) {
-				VixenSystem.Elements.RemoveElement(parent.Element);
+			if (parent.Element != null)
+			{
+				//VixenSystem.Elements.RemoveElement(parent.Element);
 				parent.Element = null;
 			}
 
@@ -94,50 +87,45 @@ namespace Vixen.Sys.Managers
 				parent.InsertChild(index, child);
 		}
 
-		/// <inheritdoc />
-		protected override ElementNode CreateNode(string name)
-		{
-			return new ElementNode(name);
-		}
-
-		public IEnumerable<ElementNode> InvalidRootNodes
-		{
-			get { return RootNode.InvalidChildren(); }
-		}
+		//public IEnumerable<VirtualElementNode> InvalidRootNodes
+		//{
+		//	get { return RootNode.InvalidChildren(); }
+		//}
 
 		protected virtual void OnNodesChanged()
 		{
-			if (NodesChanged != null) {
+			if (NodesChanged != null)
+			{
 				NodesChanged(this, EventArgs.Empty);
 			}
 		}
 
-		public IEnumerable<ElementNode> GetLeafNodes()
+		public IEnumerable<IElementNode> GetLeafNodes()
 		{
 			// Don't want to return the root node.
 			// note: this may very well return duplicate nodes, if they are part of different groups.
 			return RootNode.Children.SelectMany(x => x.GetLeafEnumerator());
 		}
 
-		public IEnumerable<ElementNode> GetNonLeafNodes()
+		public IEnumerable<IElementNode> GetNonLeafNodes()
 		{
 			// Don't want to return the root node.
 			// note: this may very well return duplicate nodes, if they are part of different groups.
 			return RootNode.Children.SelectMany(x => x.GetNonLeafEnumerator());
 		}
 
-		public IEnumerable<ElementNode> GetRootNodes()
+		public IEnumerable<VirtualElementNode> GetRootNodes()
 		{
 			return RootNode.Children;
 		}
 
-		public IEnumerable<ElementNode> GetAllNodes()
+		public IEnumerable<VirtualElementNode> GetAllNodes()
 		{
 			//return RootNode.Children.SelectMany(x => x.GetNodeEnumerator());
 			return _instances.Values;
 		}
 
-		public IEnumerator<ElementNode> GetEnumerator()
+		public IEnumerator<VirtualElementNode> GetEnumerator()
 		{
 			// Don't want to return the root node.
 			return GetAllNodes().GetEnumerator();
