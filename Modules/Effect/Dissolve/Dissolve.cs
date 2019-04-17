@@ -47,8 +47,8 @@ namespace VixenModules.Effect.Dissolve
 		protected override void _PreRender(CancellationTokenSource cancellationToken = null)
 		{
 			_elementData = new EffectIntents();
-			IEnumerable<IGrouping<int, ElementNode>> elements;
-			IEnumerable<ElementNode> renderNodes = GetNodesToRenderOn();
+			IEnumerable<IGrouping<int, IElementNode>> elements;
+			IEnumerable<IElementNode> renderNodes = GetNodesToRenderOn();
 			switch (DissolveMode)
 			{
 				case DissolveMode.MarkCollection:
