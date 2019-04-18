@@ -120,14 +120,14 @@ namespace Vixen.Sys
 			get { return base.Children.Cast<ElementNode>(); }
 		}
 
-		IEnumerable<IElementNode> IElementNode.Children => Children;
+		IEnumerable<IElementNode> IElementNode.Children => base.Children.Cast<IElementNode>();
 
 		public new IEnumerable<ElementNode> Parents
 		{
 			get { return base.Parents.Cast<ElementNode>(); }
 		}
 
-		IEnumerable<IElementNode> IElementNode.Parents => Parents;
+		IEnumerable<IElementNode> IElementNode.Parents => base.Parents.Cast<IElementNode>(); 
 
 		public bool Masked
 		{
@@ -171,7 +171,7 @@ namespace Vixen.Sys
 
 		#region Overrides
 
-		public override void AddChild(GroupNode<Element> node)
+		public override void AddChild(IGroupNode<Element> node)
 		{
 			base.AddChild(node);
 			OnChanged(this);
@@ -183,7 +183,7 @@ namespace Vixen.Sys
 			OnChanged(this);
 		}
 
-		public override bool RemoveFromParent(GroupNode<Element> parent, bool cleanup)
+		public override bool RemoveFromParent(IGroupNode<Element> parent, bool cleanup)
 		{
 			bool result = base.RemoveFromParent(parent, cleanup);
 
@@ -205,14 +205,14 @@ namespace Vixen.Sys
 			return result;
 		}
 
-		public override bool RemoveChild(GroupNode<Element> node)
+		public override bool RemoveChild(IGroupNode<Element> node)
 		{
 			bool result = base.RemoveChild(node);
 			OnChanged(this);
 			return result;
 		}
 
-		public override GroupNode<Element> Get(int index)
+		public override IGroupNode<Element> Get(int index)
 		{
 			if (IsLeaf) throw new InvalidOperationException("Cannot get child nodes from a leaf.");
 			return base.Get(index);

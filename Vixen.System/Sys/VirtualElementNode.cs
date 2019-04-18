@@ -46,12 +46,12 @@ namespace Vixen.Sys
 		public new IEnumerable<VirtualElementNode> Children => base.Children.Cast<VirtualElementNode>();
 
 		/// <inheritdoc />
-		IEnumerable<IElementNode> IElementNode.Children => Children;
+		IEnumerable<IElementNode> IElementNode.Children => base.Children.Cast<IElementNode>();
 
 		public new IEnumerable<VirtualElementNode> Parents => base.Parents.Cast<VirtualElementNode>();
 
 		/// <inheritdoc />
-		IEnumerable<IElementNode> IElementNode.Parents => Parents;
+		IEnumerable<IElementNode> IElementNode.Parents => base.Parents.Cast<IElementNode>();
 
 		/// <inheritdoc />
 		public bool IsLeaf => !base.Children.Any();

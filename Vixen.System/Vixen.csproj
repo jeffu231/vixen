@@ -385,6 +385,7 @@
     <Compile Include="Sys\ElementNodeFilters\ChainableElementNodeFilterBase.cs" />
     <Compile Include="Sys\ElementNodeFilters\IChainableElementNodeFilter.cs" />
     <Compile Include="Sys\ElementNodeFilters\StandardElementNodeFilter.cs" />
+    <Compile Include="Sys\GroupingElementNode.cs" />
     <Compile Include="Sys\IDataPolicyFactory.cs" />
     <Compile Include="Sys\IElementNode.cs" />
     <Compile Include="Sys\IGroupNode.cs" />

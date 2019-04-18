@@ -13,6 +13,11 @@ namespace Vixen.Sys.Managers
 			AddNodes(nodes);
 		}
 
+		public VirtualNodeManager()
+		{
+			_instances = new Dictionary<Guid, VirtualElementNode>();
+		}
+
 		/// <inheritdoc />
 		protected override VirtualElementNode CreateNode(string name)
 		{

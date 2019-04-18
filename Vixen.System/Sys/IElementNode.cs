@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Vixen.Sys
 {
-	public interface IElementNode :IGroupNode
+	public interface IElementNode :IGroupNode<Element>
 	{
 		Element Element { get; set; }
 
