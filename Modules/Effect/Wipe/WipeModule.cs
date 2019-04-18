@@ -48,17 +48,17 @@ namespace VixenModules.Effect.Wipe
 		{
 			_elementData = new EffectIntents();
 
-			List<ElementNode[]> renderNodes = new List<ElementNode[]>();
-			List<Tuple<ElementNode, int, int, int>> renderedNodes = TargetNodes.SelectMany(x => x.GetLeafEnumerator())
+			List<IElementNode[]> renderNodes = new List<IElementNode[]>();
+			List<Tuple<IElementNode, int, int, int>> renderedNodes = TargetNodes.SelectMany(x => x.GetLeafEnumerator())
 				.Select(s =>
 				{
 					var prop = s.Properties.Get(LocationDescriptor._typeId);
 					if (prop != null)
 					{
-						return new Tuple<ElementNode, int, int, int>(s, ((LocationData)prop.ModuleData).X,
+						return new Tuple<IElementNode, int, int, int>(s, ((LocationData)prop.ModuleData).X,
 							((LocationData)prop.ModuleData).Y, ((LocationData)prop.ModuleData).Z);
 					}
-					return new Tuple<ElementNode, int, int, int>(null, -1, -1, -1);
+					return new Tuple<IElementNode, int, int, int>(null, -1, -1, -1);
 				})
 				.Where(s => s.Item2 > 0)
 				.ToList();
@@ -109,9 +109,9 @@ namespace VixenModules.Effect.Wipe
 			}
 		}
 
-		private List<ElementNode[]> GetRenderedCircle(List<Tuple<ElementNode, int, int, int>> renderedNodes)
+		private List<IElementNode[]> GetRenderedCircle(List<Tuple<IElementNode, int, int, int>> renderedNodes)
 		{
-			List<Tuple<int, ElementNode[]>> groups = new List<Tuple<int, ElementNode[]>>();
+			List<Tuple<int, IElementNode[]>> groups = new List<Tuple<int, IElementNode[]>>();
 			int steps = (int) (DistanceFromPoint(new Point(_maxX, _maxY), new Point(_minX, _minY)) / 2);
 			Point centerPoint = new Point((_bufferWidth) / 2 + _minX, _bufferHeight / 2 + _minY);
 
@@ -120,13 +120,13 @@ namespace VixenModules.Effect.Wipe
 
 			for (int i = 0; i < steps; i++)
 			{
-				List<ElementNode> elements = new List<ElementNode>();
-				foreach (Tuple<ElementNode, int, int, int> node in renderedNodes)
+				List<IElementNode> elements = new List<IElementNode>();
+				foreach (Tuple<IElementNode, int, int, int> node in renderedNodes)
 				{
 					int nodeLocation = (int)DistanceFromPoint(centerPoint, new Point(node.Item2, node.Item3));
 					if (nodeLocation == i) elements.Add(node.Item1);
 				}
-				groups.Add(new Tuple<int, ElementNode[]>(i, elements.ToArray()));
+				groups.Add(new Tuple<int, IElementNode[]>(i, elements.ToArray()));
 
 			}
 			return !ReverseDirection || WipeMovement == WipeMovement.Movement
@@ -134,17 +134,17 @@ namespace VixenModules.Effect.Wipe
 				: groups.OrderByDescending(o => o.Item1).Select(s => s.Item2).ToList();
 		}
 
-		private List<ElementNode[]> GetRenderedDiamond(List<Tuple<ElementNode, int, int, int>> renderedNodes)
+		private List<IElementNode[]> GetRenderedDiamond(List<Tuple<IElementNode, int, int, int>> renderedNodes)
 		{
-			List<Tuple<int, ElementNode[]>> groups = new List<Tuple<int, ElementNode[]>>();
+			List<Tuple<int, IElementNode[]>> groups = new List<Tuple<int, IElementNode[]>>();
 			int steps = (int)(Math.Sqrt(Math.Pow(_bufferWidth, 2) + Math.Pow(_bufferHeight, 2)) / 1.5);
 			_pulsePercent = (int)(_bufferWidth * (PulsePercent / 100));
 			if (WipeMovement == WipeMovement.Movement) steps += _pulsePercent;
 			
 			for (int i = 0; i < steps; i++)
 			{
-				List<ElementNode> elements = new List<ElementNode>();
-				foreach (Tuple<ElementNode, int, int, int> node in renderedNodes)
+				List<IElementNode> elements = new List<IElementNode>();
+				foreach (Tuple<IElementNode, int, int, int> node in renderedNodes)
 				{
 					// Do the Down/Left or Up/Right directions
 					int nodeLocation = (node.Item3 - _minY) - (node.Item2 - _minX) +
@@ -168,7 +168,7 @@ namespace VixenModules.Effect.Wipe
 						elements.Add(node.Item1);
 					}
 				}
-				groups.Add(new Tuple<int, ElementNode[]>(i, elements.ToArray()));
+				groups.Add(new Tuple<int, IElementNode[]>(i, elements.ToArray()));
 			}
 			return !ReverseDirection || WipeMovement == WipeMovement.Movement
 				? groups.OrderBy(o => o.Item1).Select(s => s.Item2).ToList()
@@ -176,18 +176,18 @@ namespace VixenModules.Effect.Wipe
 
 		}
 
-		private List<ElementNode[]> GetRenderedRectangle(List<Tuple<ElementNode, int, int, int>> renderedNodes)
+		private List<IElementNode[]> GetRenderedRectangle(List<Tuple<IElementNode, int, int, int>> renderedNodes)
 		{
-			List<Tuple<int, ElementNode[]>> groups = new List<Tuple<int, ElementNode[]>>();
+			List<Tuple<int, IElementNode[]>> groups = new List<Tuple<int, IElementNode[]>>();
 			int steps = (int)(Math.Max(_bufferWidth, _bufferHeight) / 2);
 			_pulsePercent = (int)(_bufferWidth * (PulsePercent / 100));
 			if (WipeMovement == WipeMovement.Movement) steps += _pulsePercent;
 
 			for (int i = 0; i < steps; i++)
 			{
-				List<ElementNode> elements = new List<ElementNode>();
+				List<IElementNode> elements = new List<IElementNode>();
 
-				foreach (Tuple<ElementNode, int, int, int> node in renderedNodes)
+				foreach (Tuple<IElementNode, int, int, int> node in renderedNodes)
 				{
 					// Sets Left and Right side of burst
 					if (_maxY - _midY - node.Item3 <= i && _maxY - _midY - node.Item3 >= -i &&
@@ -199,7 +199,7 @@ namespace VixenModules.Effect.Wipe
 					    (_maxY - _midY - node.Item3 == i || _maxY - _midY - node.Item3 == -i))
 						elements.Add(node.Item1);
 				}
-				groups.Add(new Tuple<int, ElementNode[]>(i, elements.ToArray()));
+				groups.Add(new Tuple<int, IElementNode[]>(i, elements.ToArray()));
 			}
 
 			return !ReverseDirection || WipeMovement == WipeMovement.Movement
@@ -207,17 +207,17 @@ namespace VixenModules.Effect.Wipe
 				: groups.OrderByDescending(o => o.Item1).Select(s => s.Item2).ToList();
 		}
 
-		private List<ElementNode[]> GetRenderedDiagonal(List<Tuple<ElementNode, int, int, int>> renderedNodes)
+		private List<IElementNode[]> GetRenderedDiagonal(List<Tuple<IElementNode, int, int, int>> renderedNodes)
 		{
-			List<Tuple<int, ElementNode[]>> groups = new List<Tuple<int, ElementNode[]>>();
+			List<Tuple<int, IElementNode[]>> groups = new List<Tuple<int, IElementNode[]>>();
 			int steps = (int)(Math.Sqrt(Math.Pow(_bufferWidth, 2) + Math.Pow(_bufferHeight, 2))*1.41);
 			_pulsePercent = (int)(_bufferWidth * (PulsePercent / 100));
 			if (WipeMovement == WipeMovement.Movement) steps += _pulsePercent;
 
 			for (int i = 0; i < steps; i++)
 			{
-				List<ElementNode> elements = new List<ElementNode>();
-				foreach (Tuple<ElementNode, int, int, int> node in renderedNodes)
+				List<IElementNode> elements = new List<IElementNode>();
+				foreach (Tuple<IElementNode, int, int, int> node in renderedNodes)
 				{
 					if (ReverseDirection || WipeMovement == WipeMovement.Movement)
 					{
@@ -245,14 +245,14 @@ namespace VixenModules.Effect.Wipe
 						}
 					}
 				}
-				groups.Add(new Tuple<int, ElementNode[]>(i, elements.ToArray()));
+				groups.Add(new Tuple<int, IElementNode[]>(i, elements.ToArray()));
 			}
 			return groups.OrderBy(o => o.Item1).Select(s => s.Item2).ToList();
 		}
 
-		private List<ElementNode[]> GetRenderedLRUD(List<Tuple<ElementNode, int, int, int>> renderedNodes)
+		private List<IElementNode[]> GetRenderedLRUD(List<Tuple<IElementNode, int, int, int>> renderedNodes)
 		{
-			List<Tuple<int, ElementNode[]>> groups = new List<Tuple<int, ElementNode[]>>();
+			List<Tuple<int, IElementNode[]>> groups = new List<Tuple<int, IElementNode[]>>();
 			int steps = 0;
 
 			_pulsePercent = Direction == WipeDirection.Vertical
@@ -273,11 +273,11 @@ namespace VixenModules.Effect.Wipe
 			
 			for (int i = 0; i < steps; i++)
 			{
-				List<ElementNode> elements = new List<ElementNode>();
+				List<IElementNode> elements = new List<IElementNode>();
 				switch (Direction)
 				{
 					case WipeDirection.Vertical:
-						foreach (Tuple<ElementNode, int, int, int> node in renderedNodes)
+						foreach (Tuple<IElementNode, int, int, int> node in renderedNodes)
 						{
 							if (_bufferHeight - (node.Item3 - _minY) == i) elements.Add(node.Item1);
 						}
@@ -285,14 +285,14 @@ namespace VixenModules.Effect.Wipe
 						break;
 
 					case WipeDirection.Horizontal:
-						foreach (Tuple<ElementNode, int, int, int> node in renderedNodes)
+						foreach (Tuple<IElementNode, int, int, int> node in renderedNodes)
 						{
 							if (_bufferWidth - (node.Item2 - _minX) == i) elements.Add(node.Item1);
 						}
 
 						break;
 				}
-				groups.Add(new Tuple<int, ElementNode[]>(i, elements.ToArray()));
+				groups.Add(new Tuple<int, IElementNode[]>(i, elements.ToArray()));
 			}
 
 			return ReverseDirection || WipeMovement == WipeMovement.Movement
@@ -300,7 +300,7 @@ namespace VixenModules.Effect.Wipe
 				: groups.OrderByDescending(o => o.Item1).Select(s => s.Item2).ToList();
 		}
 
-		private void RenderPulseLength(List<ElementNode[]> renderNodes, CancellationTokenSource tokenSource)
+		private void RenderPulseLength(List<IElementNode[]> renderNodes, CancellationTokenSource tokenSource)
 		{
 			TimeSpan effectTime = TimeSpan.Zero;
 			double intervals = (double)PulseTime / renderNodes.Count();
@@ -315,7 +315,7 @@ namespace VixenModules.Effect.Wipe
 				{
 					if (tokenSource != null && tokenSource.IsCancellationRequested)
 						return;
-					foreach (ElementNode element in item)
+					foreach (IElementNode element in item)
 					{
 						if (tokenSource != null && tokenSource.IsCancellationRequested)
 							return;
@@ -373,7 +373,7 @@ namespace VixenModules.Effect.Wipe
 
 		}
 
-		private void RenderCount(List<ElementNode[]> renderNodes, CancellationTokenSource tokenSource)
+		private void RenderCount(List<IElementNode[]> renderNodes, CancellationTokenSource tokenSource)
 		{
 			TimeSpan effectTime = TimeSpan.Zero;
 			int count = 0;
@@ -383,11 +383,11 @@ namespace VixenModules.Effect.Wipe
 
 			while (count < PassCount)
 			{
-				foreach (ElementNode[] item in renderNodes)
+				foreach (IElementNode[] item in renderNodes)
 				{
 					if (tokenSource != null && tokenSource.IsCancellationRequested) return;
 
-					foreach (ElementNode element in item)
+					foreach (IElementNode element in item)
 					{
 						if (tokenSource != null && tokenSource.IsCancellationRequested)
 							return;
@@ -498,7 +498,7 @@ namespace VixenModules.Effect.Wipe
 			}
 		}
 		
-		private void RenderMovement(List<ElementNode[]> renderNodes, CancellationTokenSource tokenSource)
+		private void RenderMovement(List<IElementNode[]> renderNodes, CancellationTokenSource tokenSource)
 		{
 			double previousMovement = 2.0;
 			TimeSpan startTime = TimeSpan.Zero;
@@ -546,7 +546,7 @@ namespace VixenModules.Effect.Wipe
 
 					if (wipeNode.ElementIndex - i > 0 && wipeNode.ElementIndex - i + burst < renderNodes.Count)
 					{
-						ElementNode[] elementGroup = renderNodes[wipeNode.ElementIndex - i + burst];
+						IElementNode[] elementGroup = renderNodes[wipeNode.ElementIndex - i + burst];
 						if (tokenSource != null && tokenSource.IsCancellationRequested) return;
 
 						foreach (var item in elementGroup)

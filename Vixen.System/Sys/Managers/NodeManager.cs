@@ -9,8 +9,7 @@ namespace Vixen.Sys.Managers
 		// a mapping of element node GUIDs to element node instances. Used for initial creation, to easily find nodes we have already created.
 		// once they've been created, they're in the dictionary. The only way to 'delete' elementNodes is to make a new NodeManager,
 		// which reinitializes this mapping and we can start fresh.
-		private Dictionary<Guid, ElementNode> _instances;
-
+		
 		public static event EventHandler NodesChanged;
 
 		public NodeManager()

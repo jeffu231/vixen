@@ -5,6 +5,7 @@ using Vixen.Module;
 namespace VixenModules.App.CustomPropEditor
 {
 	[DataContract]
+	[KnownType(typeof(SolidColorBrush))]
 	public class CustomPropEditorData : ModuleDataModelBase
 	{
 		private ModuleLocalDataSet _moduleData;

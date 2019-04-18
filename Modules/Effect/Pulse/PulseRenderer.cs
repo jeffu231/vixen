@@ -144,7 +144,7 @@ namespace VixenModules.Effect.Pulse
 
 			return points.OrderBy(x => x).ToArray();
 		}
-		public static EffectIntents RenderNode(ElementNode node, double level, Color color, TimeSpan duration)
+		public static EffectIntents RenderNode(IElementNode node, double level, Color color, TimeSpan duration)
 		{
 			var elementData = new EffectIntents();
 			if (node.Element != null && level > 0)
