@@ -12,7 +12,7 @@ namespace Vixen.Sys.ElementNodeFilters
 	public abstract class ChainableElementNodeFilterBase: IChainableElementNodeFilter, IEquatable<ChainableElementNodeFilterBase>, IEqualityComparer<ChainableElementNodeFilterBase>, INotifyPropertyChanged
 	{
 		private IElementNodeFilterInstance _elementNodeFilter;
-		private string __name;
+		private string _name;
 		private ElementNodeFilterType _type;
 		private int _chainLevel;
 
@@ -51,11 +51,11 @@ namespace Vixen.Sys.ElementNodeFilters
 		[DataMember]
 		public string Name
 		{
-			get => __name;
+			get => _name;
 			set
 			{
-				if (value == __name) return;
-				__name = value;
+				if (value == _name) return;
+				_name = value;
 				OnPropertyChanged();
 			}
 		}

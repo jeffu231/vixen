@@ -3387,9 +3387,10 @@ namespace VixenModules.Editor.TimedSequenceEditor
 
 		private void UpdatePasteMenuStates()
 		{
-			editToolStripButton_Paste.Enabled = toolStripMenuItem_Paste.Enabled = GetClipboardCount() > 0;
-			editToolStripButton_PasteVisibleMarks.Visible = toolStripMenuItem_PasteToMarks.Enabled = GetMarksPresent() && GetClipboardCount() > 0;
-			editToolStripButton_PasteInvert.Visible = toolStripMenuItem_PasteInvert.Enabled = GetClipboardCount() > 1;
+			int c = GetClipboardCount();
+			editToolStripButton_Paste.Enabled = toolStripMenuItem_Paste.Enabled = c > 0;
+			editToolStripButton_PasteVisibleMarks.Visible = toolStripMenuItem_PasteToMarks.Enabled = GetMarksPresent() && c > 0;
+			editToolStripButton_PasteInvert.Visible = toolStripMenuItem_PasteInvert.Enabled = c > 1;
 			editToolStripButton_PasteDropDown.Enabled = toolStripMenuItem_PasteSpecial.Enabled =
 			toolStripMenuItem_PasteToMarks.Enabled || toolStripMenuItem_PasteInvert.Enabled;
 		}
@@ -3404,10 +3405,12 @@ namespace VixenModules.Editor.TimedSequenceEditor
 		{
 			// Gets number of Effects on the clipboard, used to determine which paste options will be enabled.
 			IDataObject dataObject = Clipboard.GetDataObject();
-			if (dataObject.GetDataPresent(ClipboardFormatName.Name))
+			if (dataObject != null && dataObject.GetDataPresent(ClipboardFormatName.Name))
 			{
-				if (dataObject.GetData(ClipboardFormatName.Name) is TimelineElementsClipboardData data)
+				if(dataObject.GetData(ClipboardFormatName.Name) is TimelineElementsClipboardData data)
+				{
 					return data.EffectModelCandidates.Count;
+				}
 			}
 			return 0;
 		}
@@ -4936,6 +4939,7 @@ namespace VixenModules.Editor.TimedSequenceEditor
 				//Make a new effect and populate it with the detail data from the clipboard
 				var newEffect = ApplicationServices.Get<IEffectModuleInstance>(effectModelCandidate.TypeId);
 				newEffect.ModuleData = effectModelCandidate.GetEffectData();
+				newEffect.ElementNodeFilters = effectModelCandidate.GetElementNodeFilters();
 				var node = CreateEffectNode(newEffect, visibleRows[targetRowIndex], targetTime, effectModelCandidate.Duration);
 
 				if(LayerManager.ContainsLayer(effectModelCandidate.LayerId))

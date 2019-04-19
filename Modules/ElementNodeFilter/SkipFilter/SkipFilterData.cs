@@ -3,6 +3,7 @@ using Vixen.Module;
 
 namespace VixenModules.ElementNodeFilter.SkipFilter
 {
+	[DataContract]
 	public class SkipFilterData: ModuleDataModelBase
 	{
 		

@@ -204,6 +204,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ElementTransformModelCandidate.cs" />
     <Compile Include="PastingMode.cs" />
     <Compile Include="AudacityImportDialog.cs">
       <SubType>Form</SubType>

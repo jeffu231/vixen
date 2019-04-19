@@ -1,8 +1,10 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using Vixen.Module;
 
 namespace VixenModules.ElementNodeFilter.DepthFilter
 {
+	[DataContract]
 	public class DepthFilterData: ModuleDataModelBase
 	{
 		

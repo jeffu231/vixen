@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Xml;
 using Vixen.Module;
 using Vixen.Module.Effect;
+using Vixen.Services;
+using Vixen.Sys.ElementNodeFilters;
 
 namespace VixenModules.Editor.TimedSequenceEditor
 {
@@ -14,7 +17,9 @@ namespace VixenModules.Editor.TimedSequenceEditor
 	public class EffectModelCandidate
 	{
 		private readonly Type _moduleDataClass;
+		private readonly Type[] _filterTypes;
 		private readonly MemoryStream _effectData;
+		private readonly MemoryStream _effectNodeFilterData;
 
 		public EffectModelCandidate(IEffectModuleInstance effect)
 		{
@@ -26,6 +31,22 @@ namespace VixenModules.Editor.TimedSequenceEditor
 			_effectData = new MemoryStream();
 			using (XmlDictionaryWriter w = XmlDictionaryWriter.CreateBinaryWriter(_effectData))
 				ds.WriteObject(w, effect.ModuleData);
+
+			var elementTransforms = new List<ElementTransformModelCandidate>();
+			var t = new List<Type>();
+			foreach (var filter in effect.ElementNodeFilters)
+			{
+				elementTransforms.Add(new ElementTransformModelCandidate(filter.FilterTypeId, 
+					filter.Name, filter.ChainLevel, filter.ElementNodeFilter.ModuleData.Clone()));
+				var type = filter.ElementNodeFilter.Descriptor.ModuleDataClass;
+				t.Add(type);
+			}
+
+			_filterTypes = t.ToArray();
+			ds = new DataContractSerializer(typeof(List<ElementTransformModelCandidate>), t);
+			_effectNodeFilterData = new MemoryStream();
+			using (XmlDictionaryWriter w = XmlDictionaryWriter.CreateBinaryWriter(_effectNodeFilterData))
+				ds.WriteObject(w, elementTransforms);
 		}
 
 		public TimeSpan StartTime { get; set; }
@@ -37,10 +58,41 @@ namespace VixenModules.Editor.TimedSequenceEditor
 
 		public IModuleDataModel GetEffectData()
 		{
+			Console.Out.WriteLine(_filterTypes);
 			DataContractSerializer ds = new DataContractSerializer(_moduleDataClass);
 			MemoryStream effectDataIn = new MemoryStream(_effectData.ToArray());
 			using (XmlDictionaryReader r = XmlDictionaryReader.CreateBinaryReader(effectDataIn, XmlDictionaryReaderQuotas.Max))
 				return (IModuleDataModel)ds.ReadObject(r);
+			
+		}
+
+		public List<IChainableElementNodeFilter> GetElementNodeFilters()
+		{
+			DataContractSerializer ds = new DataContractSerializer(typeof(List<ElementTransformModelCandidate>), _filterTypes);
+			MemoryStream filterDataIn = new MemoryStream(_effectNodeFilterData.ToArray());
+			using (XmlDictionaryReader r =
+				XmlDictionaryReader.CreateBinaryReader(filterDataIn, XmlDictionaryReaderQuotas.Max))
+			{
+
+				var filters = (List<ElementTransformModelCandidate>)ds.ReadObject(r);
+				List<IChainableElementNodeFilter> nodeFilters = new List<IChainableElementNodeFilter>(filters.Count);
+				
+				foreach (ElementTransformModelCandidate emc in filters)
+				{
+					var filter = new StandardElementNodeFilter
+					{
+						Name = emc.Name,
+						ElementNodeFilter = ElementNodeFilterService.Instance.GetInstance(emc.TypeId),
+						ChainLevel = emc.ChainLevel
+					};
+
+					filter.ElementNodeFilter.ModuleData = emc.ModuleDataModel;
+					nodeFilters.Add(filter);
+
+				}
+
+				return nodeFilters;
+			}
 		}
 	}
 }

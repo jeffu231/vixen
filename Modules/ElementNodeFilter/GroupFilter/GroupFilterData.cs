@@ -3,6 +3,7 @@ using Vixen.Module;
 
 namespace VixenModules.ElementNodeFilter.GroupFilter
 {
+	[DataContract]
 	public class GroupFilterData: ModuleDataModelBase
 	{
 		
