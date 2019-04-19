@@ -175,6 +175,16 @@ namespace VixenModules.Editor.TimedSequenceEditor
 			ClipboardPaste(targetRow.Selected ? TimeSpan.Zero : _timeLineGlobalStateManager.CursorPosition);
 		}
 
+		private void toolStripMenuItem_CopyTransform_Click(object sender, EventArgs e)
+		{
+			ClipboardCopyTransform();
+		}
+
+		private void toolStripMenuItem_PasteTransform_Click(object sender, EventArgs e)
+		{
+			ClipboardPasteTransform();
+		}
+
 		private void undoToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			if (_undoMgr.NumUndoable > 0)

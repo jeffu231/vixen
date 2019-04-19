@@ -140,7 +140,9 @@ namespace Vixen.Module.Effect
 			set
 			{
 				_elementNodeFilters = value;
+				OnPropertyChanged();
 				IsDirty = true;
+				FilterNodes();
 			}
 		}
 

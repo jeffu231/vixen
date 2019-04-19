@@ -58,7 +58,6 @@ namespace VixenModules.Editor.TimedSequenceEditor
 
 		public IModuleDataModel GetEffectData()
 		{
-			Console.Out.WriteLine(_filterTypes);
 			DataContractSerializer ds = new DataContractSerializer(_moduleDataClass);
 			MemoryStream effectDataIn = new MemoryStream(_effectData.ToArray());
 			using (XmlDictionaryReader r = XmlDictionaryReader.CreateBinaryReader(effectDataIn, XmlDictionaryReaderQuotas.Max))

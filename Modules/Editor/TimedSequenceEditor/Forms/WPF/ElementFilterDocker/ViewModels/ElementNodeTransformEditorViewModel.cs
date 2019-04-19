@@ -62,23 +62,38 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 			{
 				if (_effectNode != value)
 				{
+					if (_effectNode != null)
+					{
+						_effectNode.Effect.PropertyChanged -= Effect_PropertyChanged;
+					}
 					_effectNode = value;
+
+					if (_effectNode != null)
+					{
+						_effectNode.Effect.PropertyChanged += Effect_PropertyChanged;
+					}
+
 					if (_previewWindow !=null && _previewWindow.IsVisible)
 					{
 						_previewWindow.Close();
 					}
-					
-					Filters = _effectNode != null ? new FastObservableCollection<IChainableElementNodeFilter>(_effectNode.Effect.ElementNodeFilters) 
-						: new FastObservableCollection<IChainableElementNodeFilter>();
-					
+
+					UpdateFilterProperty();
 				}
 				
 			}
 		}
 
+		private void Effect_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName.Equals(nameof(_effectNode.Effect.ElementNodeFilters)))
+			{
+				UpdateFilterProperty();	
+			}
+		}
 
 		#endregion
-		
+
 		#region Filters model property
 
 		/// <summary>
@@ -107,6 +122,12 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 		/// Filters property data.
 		/// </summary>
 		public static readonly PropertyData FiltersProperty = RegisterProperty("Filters", typeof(FastObservableCollection<IChainableElementNodeFilter>));
+
+		private void UpdateFilterProperty()
+		{
+			Filters = _effectNode != null ? new FastObservableCollection<IChainableElementNodeFilter>(_effectNode.Effect.ElementNodeFilters)
+				: new FastObservableCollection<IChainableElementNodeFilter>();
+		}
 
 		#endregion
 

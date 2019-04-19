@@ -416,6 +416,8 @@
     </Compile>
     <Compile Include="TimedSequenceElement.cs" />
     <Compile Include="TimedSequenceRowLabel.cs" />
+    <Compile Include="TimelineElementsClipboardData.cs" />
+    <Compile Include="TimelineElementTransformsClipboardData.cs" />
     <Compile Include="Undo\MarksRemovedUndoAction.cs" />
     <Compile Include="Undo\MarksAddedUndoAction .cs" />
     <Compile Include="Undo\MarksAddedRemovedUndoAction.cs" />

@@ -119,6 +119,8 @@ namespace VixenModules.Editor.TimedSequenceEditor
 		private static readonly DataFormats.Format ClipboardFormatName =
 			DataFormats.GetFormat(typeof (TimelineElementsClipboardData).FullName);
 
+		private static readonly DataFormats.Format ClipboardElementTransforms =
+			DataFormats.GetFormat(typeof(TimelineElementTransformsClipboardData).FullName);
 
 		private readonly ContextMenuStrip _contextMenuStrip = new ContextMenuStrip();
 
@@ -3402,6 +3404,12 @@ namespace VixenModules.Editor.TimedSequenceEditor
 			return dataObject != null && dataObject.GetDataPresent(ClipboardFormatName.Name);
 		}
 
+		private bool ClipboardHasTransformData()
+		{
+			IDataObject dataObject = Clipboard.GetDataObject();
+			return dataObject != null && dataObject.GetDataPresent(ClipboardElementTransforms.Name);
+		}
+
 		private int GetClipboardCount()
 		{
 			// Gets number of Effects on the clipboard, used to determine which paste options will be enabled.
@@ -4844,6 +4852,41 @@ namespace VixenModules.Editor.TimedSequenceEditor
 			ClipboardAddData(false);
 		}
 
+		private void ClipboardCopyTransform()
+		{
+			if (!TimelineControl.SelectedElements.Any())
+				return;
+
+			var element = TimelineControl.SelectedElements.First();
+
+			TimelineElementTransformsClipboardData data = new TimelineElementTransformsClipboardData(element.EffectNode.Effect.ElementNodeFilters);
+
+			IDataObject dataObject = new DataObject(ClipboardElementTransforms);
+			dataObject.SetData(data);
+			Clipboard.SetDataObject(dataObject, true);
+			_TimeLineSequenceClipboardContentsChanged(EventArgs.Empty);
+		}
+
+		private void ClipboardPasteTransform()
+		{
+			if (!TimelineControl.SelectedElements.Any())
+				return;
+
+			IDataObject dataObject = Clipboard.GetDataObject();
+
+			if (dataObject != null && dataObject.GetDataPresent(ClipboardElementTransforms.Name))
+			{
+				if (dataObject.GetData(ClipboardElementTransforms.Name) is TimelineElementTransformsClipboardData data)
+				{
+					foreach (var element in TimelineControl.SelectedElements)
+					{
+						element.EffectNode.Effect.ElementNodeFilters = data.CreateElementNodeFilters();
+						element.UpdateNotifyContentChanged();
+					}
+				}
+			}
+		}
+
 		/// <summary>
 		/// Pastes the clipboard data starting at the given time. If pasting to a SelectedRow, the time passed should be TimeSpan.Zero
 		/// </summary>
@@ -5837,22 +5880,5 @@ namespace VixenModules.Editor.TimedSequenceEditor
 			return defaultEffectDuration;
 		}
 
-	}
-
-	[Serializable]
-	internal class TimelineElementsClipboardData
-	{
-		public TimelineElementsClipboardData()
-		{
-			EffectModelCandidates = new Dictionary<EffectModelCandidate, int>();
-		}
-
-		// a collection of elements and the number of rows they were below the top visible element when
-		// this data was generated and placed on the clipboard.
-		public Dictionary<EffectModelCandidate, int> EffectModelCandidates { get; set; }
-
-		public int FirstVisibleRow { get; set; }
-
-		public TimeSpan EarliestStartTime { get; set; }
 	}
 }

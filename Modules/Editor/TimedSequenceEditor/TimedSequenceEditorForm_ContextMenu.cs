@@ -435,6 +435,33 @@ namespace VixenModules.Editor.TimedSequenceEditor
 
 			_contextMenuStrip.Items.AddRange(new ToolStripItem[] {contextMenuItemCut, contextMenuItemCopy, contextMenuItemPaste});
 
+			ToolStripMenuItem contextMenuItemCopyTransform = new ToolStripMenuItem("Copy Transform", null, toolStripMenuItem_CopyTransform_Click)
+			{
+				//ShortcutKeyDisplayString = @"Ctrl+C",
+				Image = Resources.page_copy,
+				Enabled = TimelineControl.SelectedElements.Count() == 1
+			};
+
+			// Gets Clipboard Count to be used with some of the Pasting options.
+			ToolStripMenuItem contextMenuItemPasteTransform = new ToolStripMenuItem("Paste Transform", null, toolStripMenuItem_PasteTransform_Click)
+			{
+				//ShortcutKeyDisplayString = @"Ctrl+V",
+				Image = Resources.page_white_paste,
+				Enabled = ClipboardHasTransformData()
+			};
+
+			if(TimelineControl.SelectedElements.Any()){
+				if (TimelineControl.SelectedElements.Any(x => x.EffectNode.Effect.ElementNodeFilters.Any()))
+				{
+					_contextMenuStrip.Items.Add(contextMenuItemCopyTransform);
+				}
+
+				if (contextMenuItemPasteTransform.Enabled)
+				{
+					_contextMenuStrip.Items.Add(contextMenuItemPasteTransform);
+				}
+			}
+
 			bool pasteSpecialSubMenu = clipboardCount > 1 && visibleMarks;
 
 			if (pasteSpecialSubMenu)
