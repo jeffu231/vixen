@@ -42,6 +42,7 @@ using Vixen.Module.Media;
 using Vixen.Module.Timing;
 using Vixen.Services;
 using Vixen.Sys;
+using Vixen.Sys.ElementNodeFilters;
 using Vixen.Sys.LayerMixing;
 using Vixen.Sys.State;
 using VixenModules.App.ColorGradients;
@@ -3482,7 +3483,7 @@ namespace VixenModules.Editor.TimedSequenceEditor
 			{
 				var newEffect = ApplicationServices.Get<IEffectModuleInstance>(element.EffectNode.Effect.TypeId);
 				newEffect.ModuleData = element.EffectNode.Effect.ModuleData.Clone();
-				
+				CloneEffectTransforms(element.EffectNode.Effect, newEffect);
 				try
 				{
 					// get the target element
@@ -3503,7 +3504,7 @@ namespace VixenModules.Editor.TimedSequenceEditor
 				{
 					string msg = "TimedSequenceEditor CloneElements: error adding effect of type " + newEffect.Descriptor.TypeId + " to row " +
 								 ((element.Row == null) ? "<null>" : element.Row.Name);
-					Logging.Error(msg, ex);
+					Logging.Error(ex, msg);
 				}
 			}
 
@@ -3860,6 +3861,22 @@ namespace VixenModules.Editor.TimedSequenceEditor
 			element.ContentChanged += ElementContentChangedHandler;
 			element.TimeChanged += ElementTimeChangedHandler;
 			return element;
+		}
+
+		private void CloneEffectTransforms(IEffect sourceEffect, IEffect targetEffect)
+		{
+			foreach (var nodeFilter in sourceEffect.ElementNodeFilters)
+			{
+				var filter = new StandardElementNodeFilter
+				{
+					Name = nodeFilter.Name,
+					ElementNodeFilter = ElementNodeFilterService.Instance.GetInstance(nodeFilter.ElementNodeFilter.TypeId),
+					ChainLevel = nodeFilter.ChainLevel
+				};
+
+				filter.ElementNodeFilter.ModuleData = nodeFilter.ElementNodeFilter.ModuleData.Clone();
+				targetEffect.ElementNodeFilters.Add(filter);
+			}
 		}
 
 		/// <summary>
