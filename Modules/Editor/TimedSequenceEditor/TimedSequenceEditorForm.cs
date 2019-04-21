@@ -4878,10 +4878,23 @@ namespace VixenModules.Editor.TimedSequenceEditor
 			{
 				if (dataObject.GetData(ClipboardElementTransforms.Name) is TimelineElementTransformsClipboardData data)
 				{
+					Dictionary<Element, Tuple<Object, PropertyDescriptor>> elementValues = new Dictionary<Element, Tuple<object, PropertyDescriptor>>();
 					foreach (var element in TimelineControl.SelectedElements)
 					{
+						var oldValue = element.EffectNode.Effect.ElementNodeFilters;
 						element.EffectNode.Effect.ElementNodeFilters = data.CreateElementNodeFilters();
 						element.UpdateNotifyContentChanged();
+						var propertyData = MetadataRepository.GetProperties(element.EffectNode.Effect).FirstOrDefault(x => x.PropertyType == typeof(List<IChainableElementNodeFilter>));
+						if (propertyData != null)
+						{
+							elementValues.Add(element, new Tuple<object, PropertyDescriptor>(oldValue, propertyData.Descriptor));
+						}	
+					}
+
+					if (elementValues.Any())
+					{
+						var undo = new EffectsPropertyModifiedUndoAction(elementValues);
+						AddEffectsModifiedToUndo(undo);
 					}
 				}
 			}
