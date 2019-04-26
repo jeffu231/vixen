@@ -8,13 +8,14 @@ namespace VixenModules.ElementNodeFilter.SkipFilter
 {
 	public partial class SkipFilterSetup : BaseForm
 	{
-		public SkipFilterSetup(int first, int skip, int take)
+		public SkipFilterSetup(int first, int skip, int take, bool takeBeforeSkip)
 		{
 			InitializeComponent();
 			ThemeUpdateControls.UpdateControls(this);
 			numericUpDownFirstN.Value = first;
 			numericUpDownSkipN.Value = skip;
 			numericUpDownTakeN.Value = take;
+			radioButtonUseFirst.Checked = takeBeforeSkip;
 		}
 
 		public int First => (int)numericUpDownFirstN.Value;
@@ -22,7 +23,9 @@ namespace VixenModules.ElementNodeFilter.SkipFilter
 		public int Skip => (int)numericUpDownSkipN.Value;
 
 		public int Take => (int) numericUpDownTakeN.Value;
-		
+
+		public bool TakeBeforeSkip => radioButtonUseFirst.Checked;
+
 		#region Theme Events
 
 		private void buttonBackground_MouseHover(object sender, EventArgs e)

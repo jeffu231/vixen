@@ -29,6 +29,12 @@ namespace VixenModules.ElementNodeFilter.SkipFilter
 			set => _data.Take = value;
 		}
 
+		public bool TakeBeforeSkip
+		{
+			get => _data.TakeBeforeSkip;
+			set => _data.TakeBeforeSkip = value;
+		}
+
 		#region Overrides of ElementNodeFilterModuleInstanceBase
 
 		/// <inheritdoc />
@@ -50,9 +56,21 @@ namespace VixenModules.ElementNodeFilter.SkipFilter
 				renderNodes.AddRange(nodes.Take(First));
 			}
 
+			if (TakeBeforeSkip && Take > 0)
+			{
+				for (int i = First; i < First+Take; i++)
+				{
+					if (i < nodes.Length)
+					{
+						renderNodes.Add(nodes[i]);
+					}
+				}
+			}
+
 			if (Skip > 0)
 			{
-				for (int i = First+Skip; i < nodes.Length; i += 1 + Skip)
+				var skipAdjust = Skip + (TakeBeforeSkip ? Take : 0);
+				for (int i = First+skipAdjust; i < nodes.Length; i += 1 + Skip)
 				{
 					int x = 0;
 					for (; x < Take; x++)
@@ -91,13 +109,14 @@ namespace VixenModules.ElementNodeFilter.SkipFilter
 		/// <inheritdoc />
 		public override bool Setup()
 		{
-			using (SkipFilterSetup setup = new SkipFilterSetup(_data.First, _data.Skip, _data.Take))
+			using (SkipFilterSetup setup = new SkipFilterSetup(_data.First, _data.Skip, _data.Take, _data.TakeBeforeSkip))
 			{
 				if (setup.ShowDialog() == DialogResult.OK)
 				{
 					_data.First = setup.First;
 					_data.Skip = setup.Skip;
 					_data.Take = setup.Take;
+					_data.TakeBeforeSkip = setup.TakeBeforeSkip;
 					return true;
 				}
 			}

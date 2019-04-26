@@ -9,7 +9,7 @@ namespace VixenModules.ElementNodeFilter.SkipFilter
 		
 		public override IModuleDataModel Clone()
 		{
-			SkipFilterData newInstance = new SkipFilterData { First = First, Skip = Skip, Take = Take};
+			SkipFilterData newInstance = new SkipFilterData { First = First, Skip = Skip, Take = Take, TakeBeforeSkip = TakeBeforeSkip};
 			return newInstance;
 		}
 
@@ -21,5 +21,8 @@ namespace VixenModules.ElementNodeFilter.SkipFilter
 
 		[DataMember]
 		public int Take { get; set; } = 1;
+
+		[DataMember]
+		public bool TakeBeforeSkip { get; set; } = false;
 	}
 }
