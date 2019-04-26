@@ -42,6 +42,7 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 		{
 			_transformService = this.GetServiceLocator().TryResolveType<IStandardTransformService>();
 			Filters = new FastObservableCollection<IChainableElementNodeFilter>();
+			Filters.CollectionChanged += Filters_CollectionChanged;
 			SelectedItems = new ObservableCollection<IChainableElementNodeFilter>();
 			SelectedItems.CollectionChanged += SelectedItems_CollectionChanged;
 			InformationLink = InfoLink;
@@ -49,13 +50,16 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 			IsActive = true;
 		}
 
-		private void SelectedItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+		private void Filters_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
 		{
-			var viewModelBase = this as ViewModelBase;
-			var commandManager = viewModelBase.GetViewModelCommandManager();
-			commandManager.InvalidateCommands();
+			UpdateCommandStates();
 		}
 
+		private void SelectedItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+		{
+			UpdateCommandStates();
+		}
+		
 		#region EffectNode property
 
 		/// <summary>
@@ -292,6 +296,39 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 		}
 
 		#endregion
+
+		#region ClearTransforms command
+
+		private Command _clearTransformsCommand;
+
+		/// <summary>
+		/// Gets the ClearTransforms command.
+		/// </summary>
+		public Command ClearTransformsCommand
+		{
+			get { return _clearTransformsCommand ?? (_clearTransformsCommand = new Command(ClearTransforms, CanClearTransforms)); }
+		}
+
+		/// <summary>
+		/// Method to invoke when the ClearTransforms command is executed.
+		/// </summary>
+		public void ClearTransforms()
+		{
+			Filters.Clear();
+			OnFiltersChanged(new FiltersChangedEvent(FilterChangeType.Remove));
+		}
+
+		/// <summary>
+		/// Method to check whether the ClearTransforms command can be executed.
+		/// </summary>
+		/// <returns><c>true</c> if the command can be executed; otherwise <c>false</c></returns>
+		private bool CanClearTransforms()
+		{
+			return Filters.Any();
+		}
+
+		#endregion
+
 
 		#region Preview command
 

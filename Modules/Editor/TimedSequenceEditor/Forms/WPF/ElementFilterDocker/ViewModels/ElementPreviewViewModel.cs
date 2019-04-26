@@ -21,21 +21,18 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 			TargetNodes = new FastObservableCollection<IElementNode>(editorViewModel.EffectNode.Effect.UnFilteredTargetNodes);
 			EditorViewModel = editorViewModel;
 			editorViewModel.EffectNode.Effect.PropertyChanged += EffectOnPropertyChanged;
+			EditorViewModel.Filters.CollectionChanged += Filters_CollectionChanged;
 			UpdateTransformedNodes();
 		}
 
-		private void EffectOnPropertyChanged(object sender, PropertyChangedEventArgs e)
-		{
-			if (e.PropertyName.Equals("TargetNodes"))
-			{
-				UpdateTransformedNodes();
-			}
-		}
-
+		#region Overrides of BaseTransformEditorViewModel
+		
 		internal override void OnFiltersChanged(FiltersChangedEvent e)
 		{
 			EditorViewModel.OnFiltersChanged(e);
 		}
+
+		#endregion
 
 		#region Overrides of ViewModelBase
 
@@ -44,6 +41,7 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 		{
 			EditorViewModel.EffectNode.Effect.PropertyChanged -= EffectOnPropertyChanged;
 			SelectedItems.CollectionChanged -= SelectedItems_CollectionChanged;
+			EditorViewModel.Filters.CollectionChanged -= Filters_CollectionChanged;
 			return base.CloseAsync();
 		}
 
@@ -198,20 +196,62 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 
 		#endregion
 
+		#region ClearTransforms command
+
+		private Command _clearTransformsCommand;
+
+		/// <summary>
+		/// Gets the ClearTransforms command.
+		/// </summary>
+		public Command ClearTransformsCommand
+		{
+			get { return _clearTransformsCommand ?? (_clearTransformsCommand = new Command(ClearTransforms, CanClearTransforms)); }
+		}
+
+		/// <summary>
+		/// Method to invoke when the ClearTransforms command is executed.
+		/// </summary>
+		private void ClearTransforms()
+		{
+			EditorViewModel.ClearTransforms();
+		}
+
+		/// <summary>
+		/// Method to check whether the ClearTransforms command can be executed.
+		/// </summary>
+		/// <returns><c>true</c> if the command can be executed; otherwise <c>false</c></returns>
+		private bool CanClearTransforms()
+		{
+			return Filters.Any();
+		}
+
+		#endregion
+
 		#endregion
 
 		#region Events
 
 		private void SelectedItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
 		{
-			var viewModelBase = this as ViewModelBase;
-			var commandManager = viewModelBase.GetViewModelCommandManager();
-			commandManager.InvalidateCommands();
+			UpdateCommandStates();
+		}
+
+		private void Filters_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+		{
+			UpdateCommandStates();
+		}
+
+		private void EffectOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName.Equals("TargetNodes"))
+			{
+				UpdateTransformedNodes();
+			}
 		}
 
 		#endregion
 
-		
+
 
 		private void UpdateTransformedNodes()
 		{

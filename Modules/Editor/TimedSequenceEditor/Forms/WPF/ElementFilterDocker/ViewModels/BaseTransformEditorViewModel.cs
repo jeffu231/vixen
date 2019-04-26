@@ -10,5 +10,11 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 		{
 
 		}
+		protected void UpdateCommandStates()
+		{
+			var viewModelBase = this as ViewModelBase;
+			var commandManager = viewModelBase.GetViewModelCommandManager();
+			commandManager.InvalidateCommands();
+		}
 	}
 }

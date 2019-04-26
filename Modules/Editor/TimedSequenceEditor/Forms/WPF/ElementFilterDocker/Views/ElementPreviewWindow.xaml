@@ -73,10 +73,12 @@
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="1*"></ColumnDefinition>
 							<ColumnDefinition Width="1*"></ColumnDefinition>
+							<ColumnDefinition Width="1*"></ColumnDefinition>
 						</Grid.ColumnDefinitions>
 						<Button Grid.Column="0" Grid.Row="0" Content="Add" Margin="5" Command="{Binding AddFilterCommand}"></Button>
 						<Button Grid.Column="1" Grid.Row="0" Content="Remove" Margin="5" Command="{Binding RemoveFilterCommand}"
 						        CommandParameter="{Binding ElementName=LbFilters, Path=SelectedItem}"></Button>
+						<Button Grid.Column="2" Grid.Row="0" Content="Clear" Margin="5" Command="{Binding ClearTransformsCommand}"/>
 					</Grid>
 				</Border>
 			</Border>

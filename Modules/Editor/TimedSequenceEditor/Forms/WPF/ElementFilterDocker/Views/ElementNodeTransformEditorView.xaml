@@ -52,6 +52,7 @@
 				<ColumnDefinition Width="1*"></ColumnDefinition>
 				<ColumnDefinition Width="1*"></ColumnDefinition>
 				<ColumnDefinition Width="1*"></ColumnDefinition>
+				<ColumnDefinition Width="1*"></ColumnDefinition>
 			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto"></RowDefinition>
@@ -62,12 +63,13 @@
 					<views:ElementNodeFilterView/>
 				</DataTemplate>
 			</Grid.Resources>
-			<Button Grid.Column="0" Grid.Row="0" Content="Add" Margin="5" Command="{Binding AddFilterCommand}"></Button>
+			<Button Grid.Column="0" Grid.Row="0" Content="Add" Margin="5" Command="{Binding AddFilterCommand}"/>
 			<Button Grid.Column="1" Grid.Row="0" Content="Remove" Margin="5" Command="{Binding RemoveFilterCommand}"
-	                                CommandParameter="{Binding ElementName=LblFilters, Path=SelectedItem}"></Button>
-			<Button Grid.Column="2" Grid.Row="0" Content="Visualize" Margin="5" Command="{Binding PreviewCommand}"
-			        CommandParameter="{Binding ElementName=LblFilters, Path=SelectedItem}"></Button>
-			<ListBox Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" Name="LblFilters" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" 
+	                                CommandParameter="{Binding ElementName=LblFilters, Path=SelectedItem}"/>
+			<Button Grid.Column="2" Grid.Row="0" Content="Clear" Margin="5" Command="{Binding ClearTransformsCommand}"/>
+			<Button Grid.Column="3" Grid.Row="0" Content="Visualize" Margin="5" Command="{Binding PreviewCommand}"
+			        CommandParameter="{Binding ElementName=LblFilters, Path=SelectedItem}"/>
+			<ListBox Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="1" Name="LblFilters" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" 
 	                                 ItemsSource="{Binding Filters}"  
 	                                 Style="{StaticResource SimpleListBoxStyle}"
 	                                 ItemTemplate="{StaticResource ElementNodeFilterRow}" 
