@@ -358,7 +358,7 @@ namespace VixenModules.Effect.LipSync
 			}
 			//_thePic.Source = PictureSource.File;
 			_thePic.TargetNodes = TargetNodes;
-			_thePic.CacheElementEnumerator();
+			_thePic.CacheElementEnumerator(TargetNodes);
 			_thePic.StringOrientation = Orientation;
 			_thePic.ScaleToGrid = ScaleToGrid;
 			_thePic.ScalePercent = ScalePercent;

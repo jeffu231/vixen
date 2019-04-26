@@ -39,9 +39,9 @@ namespace VixenModules.Effect.Effect
 		private bool _elementsCached;
 		private List<Element> _cachedElements;
 
-		public void CacheElementEnumerator()
+		public void CacheElementEnumerator(IElementNode[] targetNodes)
 		{
-			_cachedElements = TargetNodes.First().Distinct().ToList();
+			_cachedElements = targetNodes.First().Distinct().ToList();
 			_elementsCached = true;
 		}
 
@@ -58,25 +58,28 @@ namespace VixenModules.Effect.Effect
 
 		protected override void _PreRender(CancellationTokenSource tokenSource = null)
 		{
-			if (TargetPositioning == TargetPositioningType.Strings)
-			{
-				ConfigureStringBuffer();
-			}
-			else
-			{
-				ConfigureVirtualBuffer();
-			}
 			
-			SetupRender();
-			int bufferSize = StringPixelCounts.Sum();
-			EffectIntents data = new EffectIntents(bufferSize);
+			//int bufferSize = StringPixelCounts.Sum();
+			EffectIntents data = new EffectIntents();
 			foreach (IElementNode node in TargetNodes)
 			{
 				if (node != null)
+				{
+					if (TargetPositioning == TargetPositioningType.Strings)
+					{
+						CalculateStringCounts(new[] { node });
+						ConfigureStringBuffer();
+					}
+					else
+					{
+						ConfigureVirtualBuffer(new[] { node });
+					}
+					SetupRender();
 					RenderNode(node, ref data);
+					CleanUpRender();
+				}
 			}
 			_elementData = data;
-			CleanUpRender();
 			ElementLocations = null;
 		}
 
@@ -211,15 +214,15 @@ namespace VixenModules.Effect.Effect
 			return nodes.Count();
 		}
 
-		protected IEnumerable<IElementNode> FindLeafParents()
+		protected IEnumerable<IElementNode> FindLeafParents(IElementNode[] targetNodes)
 		{
 			var nodes = new List<IElementNode>();
 			var nonLeafElements = Enumerable.Empty<IElementNode>();
 
-			if (TargetNodes.FirstOrDefault() != null)
+			if (targetNodes.FirstOrDefault() != null)
 			{
-				nonLeafElements = TargetNodes.SelectMany(x => x.GetNonLeafEnumerator());
-				foreach (var elementNode in TargetNodes)
+				nonLeafElements = targetNodes.SelectMany(x => x.GetNonLeafEnumerator());
+				foreach (var elementNode in targetNodes)
 				{
 					foreach (var leafNode in elementNode.GetLeafEnumerator())
 					{
@@ -239,7 +242,7 @@ namespace VixenModules.Effect.Effect
 			{
 				SetOrientation();
 			}
-			CalculateStringCounts();
+			//CalculateStringCounts();
 		}
 
 		protected void SetOrientation()
@@ -259,17 +262,17 @@ namespace VixenModules.Effect.Effect
 			_bufferWiOffset = 0;
 		}
 
-		private void CalculateStringCounts()
+		private void CalculateStringCounts(IElementNode[] targetNodes)
 		{
-			var nodes = FindLeafParents();
+			var nodes = FindLeafParents(targetNodes);
 			CalculatePixelsPerString(nodes);
 			MaxPixelsPerString = StringPixelCounts.Concat(new[] {0}).Max();
 			StringCount = CalculateMaxStringCount(nodes);
 		}
 
-		private void ConfigureVirtualBuffer()
+		private void ConfigureVirtualBuffer(IElementNode[] targetNodes)
 		{
-			ElementLocations = TargetNodes.SelectMany(x => x.GetLeafEnumerator()).Select(x => new ElementLocation(x)).ToList();
+			ElementLocations = targetNodes.SelectMany(x => x.GetLeafEnumerator()).Select(x => new ElementLocation(x)).ToList();
 			var xMax = ElementLocations.Max(p => p.X);
 			var xMin = ElementLocations.Min(p => p.X);
 			var yMax = ElementLocations.Max(p => p.Y);
