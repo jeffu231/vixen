@@ -7,7 +7,7 @@
                   xmlns:sys="clr-namespace:Vixen.Sys;assembly=Vixen"
                   xmlns:dd="urn:gong-wpf-dragdrop"
                   xmlns:behaviors="clr-namespace:Common.WPFCommon.Behaviors;assembly=WPFCommon"
-                  Width="600" Height="400">
+                  Width="600" Height="400" WindowStartupLocation="CenterOwner">
 
 	<Window.Resources>
 		<ResourceDictionary>

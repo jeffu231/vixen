@@ -8,6 +8,7 @@ using System.Windows.Forms.Integration;
 using Catel.IoC;
 using Vixen.Sys;
 using Vixen.Sys.ElementNodeFilters;
+using VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.Events;
 using VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.Services;
 using VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.ViewModels;
 using VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.Views;
@@ -67,7 +68,6 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker
 					_vm.IsActive = false;
 					_vm.EffectNode = null;
 				}
-				//_effectPropertyEditorGridEffectEffectPropertiesEditor.SelectedObjects = _elements.Select(x => x.EffectNode.Effect).ToArray();
 			}
 		}
 
@@ -76,13 +76,18 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker
 			Elements = _sequenceEditorForm.TimelineControl.SelectedElements.ToArray();
 		}
 
-		private async void _vm_FiltersChanged(object sender, EventArgs e)
+		private async void _vm_FiltersChanged(object sender, FiltersChangedEvent e)
 		{
 			await Task.Factory.StartNew(() =>
 			{
 				foreach (var element in Elements)
 				{
-					element.EffectNode.Effect.ElementNodeFilters = _vm.Filters.ToList();
+					if (e.ChangeType != FilterChangeType.Update)
+					{
+						element.EffectNode.Effect.ElementNodeFilters.Clear();
+						element.EffectNode.Effect.ElementNodeFilters.AddRange(_vm.Filters.ToList());
+					}
+					
 					element.EffectNode.Effect.FilterNodes();
 					element.UpdateNotifyContentChanged();
 				}

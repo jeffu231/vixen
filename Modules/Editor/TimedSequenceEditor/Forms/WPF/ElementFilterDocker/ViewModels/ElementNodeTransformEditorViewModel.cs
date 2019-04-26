@@ -6,18 +6,24 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms.Integration;
+using System.Windows.Interop;
+using System.Windows.Media;
 using Catel.Collections;
 using Catel.Data;
 using Catel.IoC;
 using Catel.MVVM;
+using Catel.MVVM.Views;
+using Catel.Services;
+using Catel.Windows;
 using GongSolutions.Wpf.DragDrop;
 using GongSolutions.Wpf.DragDrop.Utilities;
 using Vixen.Module;
-using Vixen.Module.ElementNodeFilter;
 using Vixen.Services;
 using Vixen.Sys.ElementNodeFilters;
 using Common.WPFCommon.Utils;
 using Vixen.Sys;
+using VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.Events;
 using VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.Services;
 using VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.Views;
 
@@ -25,7 +31,7 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 {
 	public class ElementNodeTransformEditorViewModel : BaseTransformEditorViewModel, IDropTarget, IDragSource
 	{
-		public event EventHandler<EventArgs> FiltersChanged;
+		public event EventHandler<FiltersChangedEvent> FiltersChanged;
 		private const string InfoLink = @"http://www.vixenlights.com";
 		private const string DefaultMessage = @"Select an Effect to edit";
 		private ElementPreviewWindow _previewWindow;
@@ -102,19 +108,9 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 		public FastObservableCollection<IChainableElementNodeFilter> Filters
 		{
 			get { return GetValue<FastObservableCollection<IChainableElementNodeFilter>>(FiltersProperty); }
-			set
+			private set
 			{
-				var oldValue = GetValue<FastObservableCollection<IChainableElementNodeFilter>>(FiltersProperty);
-				if (oldValue != null)
-				{
-					oldValue.CollectionChanged -= Filters_CollectionChanged;
-				}
 				SetValue(FiltersProperty, value);
-				if (value != null)
-				{
-					value.CollectionChanged += Filters_CollectionChanged;
-				}
-				
 			}
 		}
 
@@ -125,8 +121,13 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 
 		private void UpdateFilterProperty()
 		{
-			Filters = _effectNode != null ? new FastObservableCollection<IChainableElementNodeFilter>(_effectNode.Effect.ElementNodeFilters)
-				: new FastObservableCollection<IChainableElementNodeFilter>();
+			var disposable = Filters.SuspendChangeNotifications(SuspensionMode.Mixed);
+			Filters.Clear();
+			if (_effectNode != null)
+			{
+				Filters.AddRange(_effectNode.Effect.ElementNodeFilters);
+			}
+			disposable.Dispose();
 		}
 
 		#endregion
@@ -231,7 +232,9 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 		/// </summary>
 		internal void AddFilter()
 		{
-			var filter = StandardFilters.FirstOrDefault();
+			var filter = StandardFilters.First(x => Filters.All(f => f.FilterTypeId != x.TypeId)) ??
+			             StandardFilters.FirstOrDefault();
+
 			if (filter != null)
 			{
 				var index = Filters.Count;
@@ -242,7 +245,7 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 					ChainLevel = index
 				});
 
-				//OnFiltersChanged(new EventArgs());
+				OnFiltersChanged(new FiltersChangedEvent(FilterChangeType.Add));
 			}
 			
 		}
@@ -276,7 +279,7 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 		internal void RemoveFilter(IChainableElementNodeFilter filter)
 		{
 			Filters.Remove(filter);
-			//OnFiltersChanged(new EventArgs());
+			OnFiltersChanged(new FiltersChangedEvent(FilterChangeType.Remove));
 		}
 
 		/// <summary>
@@ -308,6 +311,30 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 		private void Preview()
 		{
 			_previewWindow = new ElementPreviewWindow(this);
+			var viewManager = ServiceLocator.Default.ResolveType<IViewManager>();
+			if (viewManager.GetViewsOfViewModel(this).First() is Visual view)
+			{
+				var presentationSource = (HwndSource)PresentationSource.FromVisual(view);
+
+				if (presentationSource != null)
+				{
+					ElementHost host = System.Windows.Forms.Control.FromChildHandle(presentationSource.Handle) as ElementHost;
+					
+					var parent = host.Parent;
+					while (parent.Parent != null)
+					{
+						parent = parent.Parent;
+					}
+					
+					WindowInteropHelper helper = new WindowInteropHelper(_previewWindow);
+					helper.Owner = parent.Handle;
+
+				}
+				
+
+				
+				
+			}
 			_previewWindow.ShowDialog();
 		}
 
@@ -326,19 +353,12 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 
 		#region Events
 
-		internal override void OnFiltersChanged(EventArgs args)
+		internal override void OnFiltersChanged(FiltersChangedEvent args)
 		{
 			FiltersChanged?.Invoke(this, args);
 		}
 
-		private void Filters_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-		{
-			//ConfigureViewModels();
-			OnFiltersChanged(new EventArgs());
-		}
-
 		#endregion
-
 
 		#region Implementation of IDropTarget
 
@@ -455,7 +475,7 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 					}
 				}
 
-				OnFiltersChanged(new EventArgs());
+				OnFiltersChanged(new FiltersChangedEvent(FilterChangeType.Mixed));
 			}
 		}
 

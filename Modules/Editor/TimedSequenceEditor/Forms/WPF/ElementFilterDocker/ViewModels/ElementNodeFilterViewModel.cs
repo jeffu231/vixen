@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Windows.Markup;
 using Catel.Data;
 using Catel.MVVM;
 using Vixen.Module;
 using Vixen.Sys.ElementNodeFilters;
+using VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.Events;
 using VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.Services;
 
 namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.ViewModels
@@ -167,7 +165,7 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 		{
 			if (ParentViewModel is BaseTransformEditorViewModel pm)
 			{
-				pm.OnFiltersChanged(new EventArgs());
+				pm.OnFiltersChanged(new FiltersChangedEvent(FilterChangeType.Update));
 			}
 		}
 	}

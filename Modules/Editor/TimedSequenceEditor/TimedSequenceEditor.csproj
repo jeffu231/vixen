@@ -205,6 +205,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ElementTransformModelCandidate.cs" />
+    <Compile Include="Forms\WPF\ElementFilterDocker\Events\FilterChangeType.cs" />
+    <Compile Include="Forms\WPF\ElementFilterDocker\Events\FiltersChangedEvent.cs" />
     <Compile Include="PastingMode.cs" />
     <Compile Include="AudacityImportDialog.cs">
       <SubType>Form</SubType>

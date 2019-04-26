@@ -10,6 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using NLog;
+using Vixen.Attributes;
 using Vixen.Marks;
 using Vixen.Module.ElementNodeFilter;
 using Vixen.Module.Media;
@@ -20,6 +21,11 @@ using Vixen.Sys.ElementNodeFilters;
 namespace Vixen.Module.Effect
 {
 	[Serializable]
+	[IgnoreProperty("TargetNodes", true)]
+	[IgnoreProperty("UnFilteredTargetNodes", true)]
+	[IgnoreProperty("ParameterValues", true)]
+	[IgnoreProperty("ElementNodeFilters", true)]
+	[IgnoreProperty("TimeSpan", true)]
 	public abstract class EffectModuleInstanceBase : ModuleInstanceBase, IEffectModuleInstance,
 		IEqualityComparer<IEffectModuleInstance>,
 		IEquatable<IEffectModuleInstance>,
@@ -140,9 +146,9 @@ namespace Vixen.Module.Effect
 			set
 			{
 				_elementNodeFilters = value;
-				OnPropertyChanged();
 				IsDirty = true;
 				FilterNodes();
+				OnPropertyChanged();
 			}
 		}
 
@@ -221,7 +227,6 @@ namespace Vixen.Module.Effect
 			return effectIntents;
 		}
 
-		[Browsable(false)]
 		public void FilterNodes()
 		{
 			var filteredNodes = _unFilteredTargetNodes.ToArray();

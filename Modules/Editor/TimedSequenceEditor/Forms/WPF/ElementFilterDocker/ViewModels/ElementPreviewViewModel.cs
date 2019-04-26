@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Catel.Collections;
@@ -7,6 +7,7 @@ using Catel.Data;
 using Catel.MVVM;
 using Vixen.Sys;
 using Vixen.Sys.ElementNodeFilters;
+using VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.Events;
 
 namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.ViewModels
 {
@@ -19,19 +20,36 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 			SelectedItems.CollectionChanged += SelectedItems_CollectionChanged;
 			TargetNodes = new FastObservableCollection<IElementNode>(editorViewModel.EffectNode.Effect.UnFilteredTargetNodes);
 			EditorViewModel = editorViewModel;
-			Filters = editorViewModel.Filters;
-			TransformedNodes = new FastObservableCollection<IElementNode>();
-			editorViewModel.FiltersChanged += EditorViewModel_FiltersChanged;
-			UpdateTransformedNodesAsync();
+			editorViewModel.EffectNode.Effect.PropertyChanged += EffectOnPropertyChanged;
+			UpdateTransformedNodes();
 		}
 
-		protected override void UninitializeModel(string modelProperty, object model, ModelCleanUpMode modelCleanUpMode)
+		private void EffectOnPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			EditorViewModel.FiltersChanged -= EditorViewModel_FiltersChanged;
-			SelectedItems.CollectionChanged -= SelectedItems_CollectionChanged;
-			base.UninitializeModel(modelProperty, model, modelCleanUpMode);
+			if (e.PropertyName.Equals("TargetNodes"))
+			{
+				UpdateTransformedNodes();
+			}
 		}
 
+		internal override void OnFiltersChanged(FiltersChangedEvent e)
+		{
+			EditorViewModel.OnFiltersChanged(e);
+		}
+
+		#region Overrides of ViewModelBase
+
+		/// <inheritdoc />
+		protected override Task CloseAsync()
+		{
+			EditorViewModel.EffectNode.Effect.PropertyChanged -= EffectOnPropertyChanged;
+			SelectedItems.CollectionChanged -= SelectedItems_CollectionChanged;
+			return base.CloseAsync();
+		}
+
+		#endregion
+
+		
 		#region TargetNodes model property
 
 		/// <summary>
@@ -69,27 +87,16 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 		public static readonly PropertyData TransformedNodesProperty = RegisterProperty("TransformedNodes", typeof(FastObservableCollection<IElementNode>));
 
 		#endregion
-
 		
 		#region Filters property
 
 		/// <summary>
-		/// Gets or sets the Filters value.
+		/// Gets the Filters value.
 		/// </summary>
 		[Model]
-		public FastObservableCollection<IChainableElementNodeFilter> Filters
-		{
-			get { return GetValue<FastObservableCollection<IChainableElementNodeFilter>>(FiltersProperty); }
-			set { SetValue(FiltersProperty, value); }
-		}
-
-		/// <summary>
-		/// Filters property data.
-		/// </summary>
-		public static readonly PropertyData FiltersProperty = RegisterProperty("Filters", typeof(FastObservableCollection<IChainableElementNodeFilter>));
+		public FastObservableCollection<IChainableElementNodeFilter> Filters => EditorViewModel.Filters;
 
 		#endregion
-
 
 		#region EditorViewModel property
 
@@ -191,12 +198,9 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 
 		#endregion
 
-		#region Events
+		#endregion
 
-		private async void EditorViewModel_FiltersChanged(object sender, EventArgs e)
-		{
-			await UpdateTransformedNodesAsync();
-		}
+		#region Events
 
 		private void SelectedItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
 		{
@@ -205,29 +209,13 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 			commandManager.InvalidateCommands();
 		}
 
-		internal override void OnFiltersChanged(EventArgs args)
-		{
-			EditorViewModel.OnFiltersChanged(args);
-		}
-
 		#endregion
 
-		#endregion
+		
 
-		private async Task UpdateTransformedNodesAsync()
+		private void UpdateTransformedNodes()
 		{
-			await Task.Factory.StartNew(() =>
-			{
-				var nodes = TargetNodes.ToArray();
-				foreach (var transformer in Filters)
-				{
-					nodes = transformer.ElementNodeFilter.Filter(nodes);
-				}
-
-				TransformedNodes.Clear();
-				TransformedNodes.AddItems(nodes);
-				Console.Out.WriteLine("Transform Done!");
-			});
+			TransformedNodes = new FastObservableCollection<IElementNode>(EditorViewModel.EffectNode.Effect.TargetNodes);
 		}
 	}
 }

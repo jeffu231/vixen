@@ -886,6 +886,10 @@ namespace VixenModules.Editor.EffectEditor
 				var propertyAttributes = PropertyGridUtils.GetAttributes<BrowsablePropertyAttribute>(SelectedObject);
 				browsableProperties = new List<BrowsablePropertyAttribute>(propertyAttributes);
 
+				// Collect IgnoredPropertyAttribute items
+				var ignoreAttributes = PropertyGridUtils.GetAttributes<IgnorePropertyAttribute>(SelectedObject);
+				ignoreProperties = new List<IgnorePropertyAttribute>(ignoreAttributes);
+
 				// Collect categories and properties
 				var properties = CollectProperties(currentObjects);
 
@@ -987,6 +991,7 @@ namespace VixenModules.Editor.EffectEditor
 
 		private List<BrowsablePropertyAttribute> browsableProperties = new List<BrowsablePropertyAttribute>();
 		private List<BrowsableCategoryAttribute> browsableCategories = new List<BrowsableCategoryAttribute>();
+		private List<IgnorePropertyAttribute> ignoreProperties = new List<IgnorePropertyAttribute>();
 
 		private IEffect[] currentObjects;
 
@@ -1201,6 +1206,8 @@ namespace VixenModules.Editor.EffectEditor
 			// Check browsable restrictions
 			//if (!ShoudDisplayProperty(descriptor)) return null;
 
+			if (IsPropertyIgnored(descriptor)) return null;
+
 			var dpDescriptor = DependencyPropertyDescriptor.FromProperty(descriptor);
 			// Provide additional checks for dependency properties
 			if (dpDescriptor != null)
@@ -1228,6 +1235,20 @@ namespace VixenModules.Editor.EffectEditor
 			return item;
 		}
 
+		private bool IsPropertyIgnored(PropertyDescriptor propertyDescriptor)
+		{
+			if (propertyDescriptor == null) return true;
+
+			// Check the explicit declaration
+			var attribute = ignoreProperties.FirstOrDefault(item => item.PropertyName == propertyDescriptor.Name);
+			if (attribute != null) return attribute.Ignore;
+
+			// Check the wildcard
+			var wildcard = ignoreProperties.FirstOrDefault(item => item.PropertyName == IgnorePropertyAttribute.All);
+			if (wildcard != null) return wildcard.Ignore;
+
+			return false;
+		}
 		private bool ShoudDisplayProperty(PropertyDescriptor propertyDescriptor)
 		{
 			Debug.Assert(propertyDescriptor != null);
