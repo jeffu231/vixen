@@ -19,6 +19,8 @@ namespace Vixen.Sys.ElementNodeFilters
 		Guid FilterTypeId { get; set; }
 
 		IElementNodeFilterInstance ElementNodeFilter { get; set; }
+
+		IChainableElementNodeFilter Clone();
 	}
 
 	[DataContract]

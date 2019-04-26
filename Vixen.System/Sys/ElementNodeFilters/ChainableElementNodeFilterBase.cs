@@ -127,6 +127,12 @@ namespace Vixen.Sys.ElementNodeFilters
 		#endregion
 
 
+		#region Implementation of ICloneable
 
+
+		public abstract IChainableElementNodeFilter Clone();
+
+
+		#endregion
 	}
 }

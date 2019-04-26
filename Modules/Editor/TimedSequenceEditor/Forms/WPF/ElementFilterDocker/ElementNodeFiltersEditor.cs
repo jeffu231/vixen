@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -8,10 +9,12 @@ using System.Windows.Forms.Integration;
 using Catel.IoC;
 using Vixen.Sys;
 using Vixen.Sys.ElementNodeFilters;
+using VixenModules.Editor.EffectEditor;
 using VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.Events;
 using VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.Services;
 using VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.ViewModels;
 using VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.Views;
+using VixenModules.Editor.TimedSequenceEditor.Undo;
 using WeifenLuo.WinFormsUI.Docking;
 using Element = Common.Controls.Timeline.Element;
 
@@ -78,10 +81,14 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker
 
 		private async void _vm_FiltersChanged(object sender, FiltersChangedEvent e)
 		{
+			Dictionary<Element, Tuple<Object, PropertyDescriptor>> elementValues = new Dictionary<Element, Tuple<object, PropertyDescriptor>>();
 			await Task.Factory.StartNew(() =>
 			{
+				//The undo portion of this needs further work because it will only work with the top level filters.
+				//The internal data is modified in place before it gets to us and additional logic is required.
 				foreach (var element in Elements)
 				{
+					var oldValue = CloneChainableElementNodeFilters(element.EffectNode.Effect.ElementNodeFilters);
 					if (e.ChangeType != FilterChangeType.Update)
 					{
 						element.EffectNode.Effect.ElementNodeFilters.Clear();
@@ -89,9 +96,29 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker
 					}
 					
 					element.EffectNode.Effect.FilterNodes();
+					var propertyData = MetadataRepository.GetProperties(element.EffectNode.Effect).FirstOrDefault(x => x.PropertyType == typeof(List<IChainableElementNodeFilter>));
+					if (propertyData != null)
+					{
+						elementValues.Add(element, new Tuple<object, PropertyDescriptor>(oldValue, propertyData.Descriptor));
+					}
+
 					element.UpdateNotifyContentChanged();
 				}
 			});
+
+			if (elementValues.Any())
+			{
+				var undo = new EffectsPropertyModifiedUndoAction(elementValues);
+				_sequenceEditorForm.AddEffectsModifiedToUndo(undo);
+			}
+
+		}
+
+		private List<IChainableElementNodeFilter> CloneChainableElementNodeFilters(List<IChainableElementNodeFilter> filters)
+		{
+			List<IChainableElementNodeFilter> newList = new List<IChainableElementNodeFilter>(filters.Count);
+			newList.AddRange(filters.Select(x => x.Clone()));
+			return newList;
 		}
 
 		/// <summary>
