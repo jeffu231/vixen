@@ -9,10 +9,14 @@ namespace VixenModules.ElementNodeFilter.GroupFilter
 		
 		public override IModuleDataModel Clone()
 		{
-			GroupFilterData newInstance = new GroupFilterData();
+			GroupFilterData newInstance = new GroupFilterData{SingleGroup = SingleGroup, ElementsPerGroup = ElementsPerGroup};
 			return newInstance;
 		}
 
-		
+		[DataMember]
+		public bool SingleGroup { get; set; } = true;
+
+		[DataMember]
+		public int ElementsPerGroup { get; set; } = 1;
 	}
 }

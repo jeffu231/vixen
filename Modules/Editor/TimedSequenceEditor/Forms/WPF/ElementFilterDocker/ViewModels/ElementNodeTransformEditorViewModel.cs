@@ -236,7 +236,7 @@ namespace VixenModules.Editor.TimedSequenceEditor.Forms.WPF.ElementFilterDocker.
 		/// </summary>
 		internal void AddFilter()
 		{
-			var filter = StandardFilters.First(x => Filters.All(f => f.FilterTypeId != x.TypeId)) ??
+			var filter = StandardFilters.FirstOrDefault(x => Filters.All(f => f.FilterTypeId != x.TypeId)) ??
 			             StandardFilters.FirstOrDefault();
 
 			if (filter != null)
