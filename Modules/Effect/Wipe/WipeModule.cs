@@ -48,64 +48,69 @@ namespace VixenModules.Effect.Wipe
 		{
 			_elementData = new EffectIntents();
 
-			List<IElementNode[]> renderNodes = new List<IElementNode[]>();
-			List<Tuple<IElementNode, int, int, int>> renderedNodes = TargetNodes.SelectMany(x => x.GetLeafEnumerator())
-				.Select(s =>
-				{
-					var prop = s.Properties.Get(LocationDescriptor._typeId);
-					if (prop != null)
+			foreach (var elementNode in TargetNodes)
+			{
+				List<Tuple<IElementNode, int, int, int>> renderedNodes = elementNode.GetLeafEnumerator()
+					.Select(s =>
 					{
-						return new Tuple<IElementNode, int, int, int>(s, ((LocationData)prop.ModuleData).X,
-							((LocationData)prop.ModuleData).Y, ((LocationData)prop.ModuleData).Z);
-					}
-					return new Tuple<IElementNode, int, int, int>(null, -1, -1, -1);
-				})
-				.Where(s => s.Item2 > 0)
-				.ToList();
+						var prop = s.Properties.Get(LocationDescriptor._typeId);
+						if (prop != null)
+						{
+							return new Tuple<IElementNode, int, int, int>(s, ((LocationData)prop.ModuleData).X,
+								((LocationData)prop.ModuleData).Y, ((LocationData)prop.ModuleData).Z);
+						}
+						return new Tuple<IElementNode, int, int, int>(null, -1, -1, -1);
+					})
+					.Where(s => s.Item2 > 0)
+					.ToList();
 
-			if (!renderedNodes.Any()) return;
+				if (!renderedNodes.Any()) return;
 
-			_maxX = renderedNodes.Max(m => m.Item2);
-			_maxY = renderedNodes.Max(m => m.Item3);
-			_minX = renderedNodes.Min(m => m.Item2);
-			_minY = renderedNodes.Min(m => m.Item3);
-			_bufferWidth = _maxX - _minX;
-			_bufferHeight = _maxY - _minY;
-			_midX = _bufferWidth / 2;
-			_midY = _bufferHeight / 2;
+				_maxX = renderedNodes.Max(m => m.Item2);
+				_maxY = renderedNodes.Max(m => m.Item3);
+				_minX = renderedNodes.Min(m => m.Item2);
+				_minY = renderedNodes.Min(m => m.Item3);
+				_bufferWidth = _maxX - _minX;
+				_bufferHeight = _maxY - _minY;
+				_midX = _bufferWidth / 2;
+				_midY = _bufferHeight / 2;
 
-			switch (Direction)
-			{
-				case WipeDirection.DiagonalUp:
-				case WipeDirection.DiagonalDown:
-					renderNodes = GetRenderedDiagonal(renderedNodes);
-					break;
-				case WipeDirection.Vertical:
-				case WipeDirection.Horizontal:
-					renderNodes = GetRenderedLRUD(renderedNodes);
-					break;
-				case WipeDirection.Circle:
-					renderNodes = GetRenderedCircle(renderedNodes);
-					break;
-				case WipeDirection.Dimaond:
-					renderNodes = GetRenderedDiamond(renderedNodes);
-					break;
-				case WipeDirection.Burst:
-					renderNodes = GetRenderedRectangle(renderedNodes);
-					break;
-			}
+				List<IElementNode[]> renderNodes = new List<IElementNode[]>();
 
-			switch (WipeMovement)
-			{
-				case WipeMovement.Count:
-					RenderCount(renderNodes, tokenSource);
-					break;
-				case WipeMovement.PulseLength:
-					RenderPulseLength(renderNodes, tokenSource);
-					break;
-				case WipeMovement.Movement:
-					RenderMovement(renderNodes, tokenSource);
-					break;
+				switch (Direction)
+				{
+					case WipeDirection.DiagonalUp:
+					case WipeDirection.DiagonalDown:
+						renderNodes = GetRenderedDiagonal(renderedNodes);
+						break;
+					case WipeDirection.Vertical:
+					case WipeDirection.Horizontal:
+						renderNodes = GetRenderedLRUD(renderedNodes);
+						break;
+					case WipeDirection.Circle:
+						renderNodes = GetRenderedCircle(renderedNodes);
+						break;
+					case WipeDirection.Dimaond:
+						renderNodes = GetRenderedDiamond(renderedNodes);
+						break;
+					case WipeDirection.Burst:
+						renderNodes = GetRenderedRectangle(renderedNodes);
+						break;
+				}
+
+				switch (WipeMovement)
+				{
+					case WipeMovement.Count:
+						RenderCount(renderNodes, tokenSource);
+						break;
+					case WipeMovement.PulseLength:
+						RenderPulseLength(renderNodes, tokenSource);
+						break;
+					case WipeMovement.Movement:
+						RenderMovement(renderNodes, tokenSource);
+						break;
+				}
+
 			}
 		}
 
