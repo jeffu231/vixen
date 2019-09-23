@@ -76,7 +76,7 @@ namespace VixenModules.Effect.Effect
 		/// <inheritdoc />
 		public void SetPixel(int x, int y, HSV hsv)
 		{
-			Color color = hsv.ToRGB().ToArgb();
+			Color color = hsv.ToRGB();
 			SetPixel(x, y, color);
 		}
 

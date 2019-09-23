@@ -12,22 +12,25 @@ namespace Vixen.Data.Policy
 
 		public override void Handle(IntentsDataFlowData obj)
 		{
-			//IntentChangeCollection intentChanges = null;
-			//IIntent[] newState = obj.Value.Select(x => x.Intent).ToArray();
+			IntentChangeCollection intentChanges = null;
+			var newState = obj.Value.ToArray();
 
-			//if (_OutputHasStateToCompare) {
-			//	if (_OutputStateDiffersFrom(newState)) {
-			//		IEnumerable<IIntent> addedIntents = newState.Except(OutputCurrentState);
-			//		IEnumerable<IIntent> removedIntents = OutputCurrentState.Except(newState);
-			//		intentChanges = new IntentChangeCollection(addedIntents, removedIntents);
-			//	}
-			//}
-			//else {
-			//	intentChanges = new IntentChangeCollection(newState, null);
-			//}
+			if (_OutputHasStateToCompare)
+			{
+				if (_OutputStateDiffersFrom(newState))
+				{
+					IEnumerable<IIntentState> addedIntents = newState.Except(OutputCurrentState);
+					IEnumerable<IIntentState> removedIntents = OutputCurrentState.Except(newState);
+					intentChanges = new IntentChangeCollection(addedIntents, removedIntents);
+				}
+			}
+			else
+			{
+				intentChanges = new IntentChangeCollection(newState, null);
+			}
 
-			//OutputCurrentState = newState.ToArray();
-			//Result = intentChanges;
+			OutputCurrentState = newState.ToArray();
+			Result = intentChanges;
 		}
 
 		public override void Handle(CommandDataFlowData obj)

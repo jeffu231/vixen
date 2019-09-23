@@ -205,7 +205,7 @@ namespace VixenModules.Effect.ImageToVideo
             }
             catch (Exception e)
             {
-                Logging.Error("Exception rendering the visualization for the ImageToVideo effect.", e);
+                Logging.Error(e, "Exception rendering the visualization for the ImageToVideo effect.");
             }
         }
     }

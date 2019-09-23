@@ -480,7 +480,7 @@ namespace VixenModules.Effect.Effect
             return effectIntents;
         }
 
-        protected EffectIntents RenderNodeByVideo(ElementNode node, ref EffectIntents effectIntents)
+        protected EffectIntents RenderNodeByVideo(IElementNode node, ref EffectIntents effectIntents)
         {
             int nFrames = GetNumberFrames();
             if (nFrames <= 0 | BufferWi == 0 || BufferHt == 0) return new EffectIntents();
@@ -661,7 +661,7 @@ namespace VixenModules.Effect.Effect
 	        return !_frameSize.IsEmpty;
         }
 
-        protected Size GetElementVideoSize(ElementNode node)
+        protected Size GetElementVideoSize(IElementNode node)
         {
             if (node != null && node.Properties.Contains(VideoDescriptor.ModuleId))
             {

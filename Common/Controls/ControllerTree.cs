@@ -528,6 +528,7 @@ namespace Common.Controls
 				sc.OutputCount = outputCount;
 				VixenSystem.SmartOutputControllers.Add(sc);
 				PopulateControllerTree(sc);
+				//AddControllerToTree(sc);
 			}
 			else
 			{
@@ -539,7 +540,6 @@ namespace Common.Controls
 			}
 
 			//PopulateControllerTree(oc);
-			AddControllerToTree(oc);
 			OnControllersChanged();
 
 			return true;
