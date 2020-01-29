@@ -217,12 +217,6 @@
     <Compile Update="InvalidAudioPathDialog.Designer.cs">
       <DependentUpon>InvalidAudioPathDialog.cs</DependentUpon>
     </Compile>
-    <Compile Update="MarkManager.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="MarkManager.Designer.cs">
-      <DependentUpon>MarkManager.cs</DependentUpon>
-    </Compile>
     <Compile Update="MarkTapper.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -327,9 +321,6 @@
     </EmbeddedResource>
     <EmbeddedResource Update="InvalidAudioPathDialog.resx">
       <DependentUpon>InvalidAudioPathDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="MarkManager.resx">
-      <DependentUpon>MarkManager.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Update="MarkTapper.resx">
       <DependentUpon>MarkTapper.cs</DependentUpon>
