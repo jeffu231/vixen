@@ -229,6 +229,10 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: _releaseNotesMd
+          
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: _releaseNotesMd
       
       - name: Create release
         id: create_release
@@ -238,7 +242,7 @@ jobs:
         with:
           tag_name: ${{ needs.setup.outputs.release_tag }}
           release_name: ${{ needs.setup.outputs.release_tag }}
-          body_path: _releaseNotesMd\"Release Notes.md"
+          body_path: _releaseNotesMd\Release Notes.md
           draft: false
           prerelease: ${{ needs.setup.outputs.pre_release }}
       
